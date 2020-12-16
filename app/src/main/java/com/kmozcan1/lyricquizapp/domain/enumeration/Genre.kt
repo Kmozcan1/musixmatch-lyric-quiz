@@ -1,4 +1,4 @@
-package com.kmozcan1.lyricquizapp.domain.enum
+package com.kmozcan1.lyricquizapp.domain.enumeration
 
 import com.fasterxml.jackson.annotation.JsonProperty
 

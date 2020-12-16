@@ -1,7 +1,7 @@
 package com.kmozcan1.lyricquizapp.domain.model
 
-import com.kmozcan1.lyricquizapp.domain.enum.Genre
-import com.kmozcan1.lyricquizapp.domain.enum.NumberOfQuestions
+import com.kmozcan1.lyricquizapp.domain.enumeration.Genre
+import com.kmozcan1.lyricquizapp.domain.enumeration.NumberOfQuestions
 
 /**
  * Created by Kadir Mert Özcan on 14-Dec-20.
