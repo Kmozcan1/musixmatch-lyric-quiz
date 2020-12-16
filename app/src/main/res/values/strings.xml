@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Lyric Quiz App</string>
+    <string name="user_name_invalid">User name cannot be empty</string>
+    <string name="user_name">User Name</string>
+    <string name="leader_board">Leader Board</string>
+    <string name="start_quiz">Start Quiz</string>
+</resources>
