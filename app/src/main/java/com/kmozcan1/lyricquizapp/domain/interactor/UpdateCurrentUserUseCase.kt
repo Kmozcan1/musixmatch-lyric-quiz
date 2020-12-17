@@ -12,7 +12,7 @@ import javax.inject.Inject
  */
 class UpdateCurrentUserUseCase @Inject constructor(
     private val sharedPreferencesRepository: SharedPreferencesRepository
-) : CompletableUseCase<UpdateCurrentUserUseCase.Params>() {
+    ) : CompletableUseCase<UpdateCurrentUserUseCase.Params>() {
 
     data class Params(val userName: String)
 

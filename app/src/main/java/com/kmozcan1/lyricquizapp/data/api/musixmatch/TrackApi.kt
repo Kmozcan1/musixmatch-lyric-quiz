@@ -37,7 +37,7 @@ interface TrackApi {
         @retrofit2.http.Query("callback") callback: String?,
         @retrofit2.http.Query("f_has_lyrics") fHasLyrics: String?,
         @retrofit2.http.Query("page") page: BigDecimal?,
-        @retrofit2.http.Query("page_size") pageSize: BigDecimal?
+        @retrofit2.http.Query("page_size") pageSize: BigDecimal?,
     ): Single<InlineResponse200>
     /**
      * 

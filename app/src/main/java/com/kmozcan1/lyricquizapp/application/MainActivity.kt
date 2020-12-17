@@ -20,7 +20,4 @@ class MainActivity : AppCompatActivity() {
         val navController = navHostFragment.navController
     }
 
-    fun onClick() {
-
-    }
 }
