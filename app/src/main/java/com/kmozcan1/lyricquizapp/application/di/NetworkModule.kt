@@ -1,6 +1,7 @@
 package com.kmozcan1.lyricquizapp.application.di
 
 import com.kmozcan1.lyricquizapp.BuildConfig
+import com.kmozcan1.lyricquizapp.data.api.musixmatch.LyricsApi
 import com.kmozcan1.lyricquizapp.data.api.musixmatch.TrackApi
 import com.kmozcan1.lyricquizapp.data.tools.GeneratedCodeConverters
 import dagger.Module
@@ -12,6 +13,8 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Converter
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 
 /**
@@ -29,15 +32,19 @@ object NetworkModule {
 
     var url = HttpUrl.Builder()
         .scheme("https")
-        .host("api.musixmatch.com/ws/1.1/")
-        .addQueryParameter("apikey", apiKey)
+        .host("api.musixmatch.com")
+        .addPathSegment("ws")
+        .addPathSegment("1.1")
+        .addQueryParameter("apiKey", apiKey)
+        .addPathSegment("")
         .build()
 
 
     @Provides
     @Singleton
-    fun providesConverterFactory(): Converter.Factory {
-        return GeneratedCodeConverters.converterFactory()
+
+    fun providesRxJava3CallAdapterFactory(): RxJava3CallAdapterFactory {
+        return RxJava3CallAdapterFactory.create()
     }
 
     @Singleton
@@ -54,19 +61,29 @@ object NetworkModule {
             .build()
     }
 
+    @Provides
+    @Singleton
+    fun providesMoshiConverterFactory(): Converter.Factory {
+        return MoshiConverterFactory.create()
+    }
+
+
     // May provide the baseURL later
     @Provides
     @Singleton
     fun providesRetrofit(
-        converterFactory: Converter.Factory,
+        moshiConverterFactory: Converter.Factory,
+        callAdapterFactory: RxJava3CallAdapterFactory,
         okHttpClient: OkHttpClient
     ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(url)
-            .addConverterFactory(converterFactory)
+            .addConverterFactory(moshiConverterFactory)
+            .addCallAdapterFactory(callAdapterFactory)
             .client(okHttpClient)
             .build()
     }
+
 
     @Singleton
     @Provides
@@ -75,4 +92,15 @@ object NetworkModule {
     ): TrackApi {
         return retrofit.create(TrackApi::class.java)
     }
+
+    @Singleton
+    @Provides
+    fun provideLyricsApi(
+            retrofit: Retrofit
+    ): LyricsApi {
+        return retrofit.create(LyricsApi::class.java)
+    }
+
+
+
 }

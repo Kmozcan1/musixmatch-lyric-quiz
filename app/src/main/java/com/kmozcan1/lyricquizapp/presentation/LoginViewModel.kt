@@ -4,7 +4,7 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.kmozcan1.lyricquizapp.domain.interactor.UpdateCurrentUserUseCase
-import com.kmozcan1.lyricquizapp.domain.model.User
+import com.kmozcan1.lyricquizapp.domain.model.domainmodel.User
 import com.kmozcan1.lyricquizapp.domain.model.viewstate.LoginViewState
 
 class LoginViewModel @ViewModelInject constructor(
@@ -14,8 +14,6 @@ class LoginViewModel @ViewModelInject constructor(
     val loginViewState: MutableLiveData<LoginViewState> by lazy {
         MutableLiveData<LoginViewState>()
     }
-
-
 
     fun updateCurrentUser(userName: String) {
         try {

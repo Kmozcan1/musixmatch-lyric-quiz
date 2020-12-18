@@ -10,79 +10,10 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import java.math.BigDecimal
 
-/**
- * a song in the Musixmatch database
- * @property instrumental 
- * @property albumCoverart350x350 
- * @property firstReleaseDate 
- * @property trackIsrc 
- * @property explicit 
- * @property trackEditUrl 
- * @property numFavourite 
- * @property albumCoverart500x500 
- * @property albumName 
- * @property trackRating 
- * @property trackShareUrl 
- * @property trackSoundcloudId 
- * @property artistName 
- * @property albumCoverart800x800 
- * @property albumCoverart100x100 
- * @property trackNameTranslationList
- * @property trackName 
- * @property restricted 
- * @property hasSubtitles 
- * @property updatedTime 
- * @property subtitleId 
- * @property lyricsId 
- * @property trackSpotifyId 
- * @property hasLyrics 
- * @property artistId 
- * @property albumId 
- * @property artistMbid 
- * @property secondaryGenres
- * @property commontrackVanityId 
- * @property trackId 
- * @property trackXboxmusicId 
- * @property primaryGenres
- * @property trackLength 
- * @property trackMbid 
- * @property commontrackId 
- */
 @JsonClass(generateAdapter = true)
 data class ATrackObject(
-    @Json(name = "instrumental") @field:Json(name = "instrumental") var instrumental: BigDecimal? = null,
-    @Json(name = "album_coverart_350x350") @field:Json(name = "album_coverart_350x350") var albumCoverart350x350: String? = null,
-    @Json(name = "first_release_date") @field:Json(name = "first_release_date") var firstReleaseDate: String? = null,
-    @Json(name = "track_isrc") @field:Json(name = "track_isrc") var trackIsrc: String? = null,
-    @Json(name = "explicit") @field:Json(name = "explicit") var explicit: BigDecimal? = null,
-    @Json(name = "track_edit_url") @field:Json(name = "track_edit_url") var trackEditUrl: String? = null,
-    @Json(name = "num_favourite") @field:Json(name = "num_favourite") var numFavourite: BigDecimal? = null,
-    @Json(name = "album_coverart_500x500") @field:Json(name = "album_coverart_500x500") var albumCoverart500x500: String? = null,
-    @Json(name = "album_name") @field:Json(name = "album_name") var albumName: String? = null,
-    @Json(name = "track_rating") @field:Json(name = "track_rating") var trackRating: BigDecimal? = null,
-    @Json(name = "track_share_url") @field:Json(name = "track_share_url") var trackShareUrl: String? = null,
-    @Json(name = "track_soundcloud_id") @field:Json(name = "track_soundcloud_id") var trackSoundcloudId: BigDecimal? = null,
-    @Json(name = "artist_name") @field:Json(name = "artist_name") var artistName: String? = null,
-    @Json(name = "album_coverart_800x800") @field:Json(name = "album_coverart_800x800") var albumCoverart800x800: String? = null,
-    @Json(name = "album_coverart_100x100") @field:Json(name = "album_coverart_100x100") var albumCoverart100x100: String? = null,
-    @Json(name = "track_name_translation_list") @field:Json(name = "track_name_translation_list") var trackNameTranslationList: List<String>? = null,
-    @Json(name = "track_name") @field:Json(name = "track_name") var trackName: String? = null,
-    @Json(name = "restricted") @field:Json(name = "restricted") var restricted: BigDecimal? = null,
-    @Json(name = "has_subtitles") @field:Json(name = "has_subtitles") var hasSubtitles: BigDecimal? = null,
-    @Json(name = "updated_time") @field:Json(name = "updated_time") var updatedTime: String? = null,
-    @Json(name = "subtitle_id") @field:Json(name = "subtitle_id") var subtitleId: BigDecimal? = null,
-    @Json(name = "lyrics_id") @field:Json(name = "lyrics_id") var lyricsId: BigDecimal? = null,
-    @Json(name = "track_spotify_id") @field:Json(name = "track_spotify_id") var trackSpotifyId: String? = null,
-    @Json(name = "has_lyrics") @field:Json(name = "has_lyrics") var hasLyrics: BigDecimal? = null,
-    @Json(name = "artist_id") @field:Json(name = "artist_id") var artistId: BigDecimal? = null,
-    @Json(name = "album_id") @field:Json(name = "album_id") var albumId: BigDecimal? = null,
-    @Json(name = "artist_mbid") @field:Json(name = "artist_mbid") var artistMbid: String? = null,
-    @Json(name = "secondary_genres") @field:Json(name = "secondary_genres") var secondaryGenres: TrackSecondaryGenres? = null,
-    @Json(name = "commontrack_vanity_id") @field:Json(name = "commontrack_vanity_id") var commontrackVanityId: String? = null,
-    @Json(name = "track_id") @field:Json(name = "track_id") var trackId: BigDecimal? = null,
-    @Json(name = "track_xboxmusic_id") @field:Json(name = "track_xboxmusic_id") var trackXboxmusicId: String? = null,
-    @Json(name = "primary_genres") @field:Json(name = "primary_genres") var primaryGenres: TrackPrimaryGenres? = null,
-    @Json(name = "track_length") @field:Json(name = "track_length") var trackLength: BigDecimal? = null,
-    @Json(name = "track_mbid") @field:Json(name = "track_mbid") var trackMbid: String? = null,
-    @Json(name = "commontrack_id") @field:Json(name = "commontrack_id") var commontrackId: BigDecimal? = null
-)
+    @Json(name = "artist_name") var artistName: String? = null,
+    @Json(name = "artist_id") var artistId: BigDecimal? = null,
+    @Json(name = "track_id") var trackId: BigDecimal? = null,
+    @Json(name = "lyrics_id") var lyricsId: BigDecimal? = null
+    )

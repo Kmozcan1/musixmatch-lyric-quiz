@@ -1,11 +1,11 @@
-package com.kmozcan1.lyricquizapp.domain.model
+package com.kmozcan1.lyricquizapp.domain.model.domainmodel
 
 /**
  * Created by Kadir Mert Özcan on 14-Dec-20.
  */
 data class User(
     val name: String,
-    val quizSettings: QuizSettings ?= QuizSettings.default
+    val quizSettings: QuizSettings?= QuizSettings.default
 ) {
 
     companion object {

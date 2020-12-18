@@ -3,8 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
-        <variable name="loginFragment" type="com.kmozcan1.lyricquizapp.ui.LoginFragment"/>
-    </data><androidx.constraintlayout.widget.ConstraintLayout
+        <variable name="homeFragment" type="com.kmozcan1.lyricquizapp.ui.HomeFragment"/>
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/frameLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"

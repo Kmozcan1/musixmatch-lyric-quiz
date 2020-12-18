@@ -17,7 +17,7 @@ abstract class SingleUseCase<Results, in Params> : Disposable {
 
     abstract fun buildObservable(params: Params? = null): Single<Results>
 
-    fun execute(params: Params, onSuccess: Consumer<Results>, onError: Consumer<Throwable> ? = null) {
+    fun execute(params: Params?, onSuccess: Consumer<Results>, onError: Consumer<Throwable>) {
         disposables += buildObservable(params)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -25,6 +25,7 @@ abstract class SingleUseCase<Results, in Params> : Disposable {
             .doOnError(onError)
             .subscribe()
     }
+
 
 
     override fun dispose() {

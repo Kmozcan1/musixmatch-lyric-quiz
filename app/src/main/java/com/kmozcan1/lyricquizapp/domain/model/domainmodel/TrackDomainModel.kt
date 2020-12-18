@@ -1,11 +1,11 @@
-package com.kmozcan1.lyricquizapp.domain.model
+package com.kmozcan1.lyricquizapp.domain.model.domainmodel
+
+import java.math.BigDecimal
 
 /**
  * Created by Kadir Mert Özcan on 17-Dec-20.
  */
-data class Track(val trackId: Int, val poster: String) {
-
-}
+data class TrackDomainModel(val trackId: BigDecimal?, val lyricsId: BigDecimal?, val artistId: BigDecimal?, val artistName: String?)
 
 /*
 * data class ATrackObject(

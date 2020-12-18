@@ -1,8 +1,8 @@
 
 package com.kmozcan1.lyricquizapp.domain.datasource
 
-import com.kmozcan1.lyricquizapp.domain.model.QuizResult
-import com.kmozcan1.lyricquizapp.domain.model.User
+import com.kmozcan1.lyricquizapp.domain.model.domainmodel.QuizResult
+import com.kmozcan1.lyricquizapp.domain.model.domainmodel.User
 
 /**
  * Created by Kadir Mert Özcan on 14-Dec-20.

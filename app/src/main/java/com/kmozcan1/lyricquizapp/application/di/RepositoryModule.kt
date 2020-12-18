@@ -1,10 +1,13 @@
 package com.kmozcan1.lyricquizapp.application.di
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.kmozcan1.lyricquizapp.data.api.musixmatch.LyricsApi
 import com.kmozcan1.lyricquizapp.data.api.musixmatch.TrackApi
+import com.kmozcan1.lyricquizapp.data.repository.LyricsRepositoryImpl
 import com.kmozcan1.lyricquizapp.data.repository.SharedPreferencesRepositoryImpl
 import com.kmozcan1.lyricquizapp.data.repository.TrackRepositoryImpl
 import com.kmozcan1.lyricquizapp.domain.datasource.SharedPreferencesDataSource
+import com.kmozcan1.lyricquizapp.domain.repository.LyricsRepository
 import com.kmozcan1.lyricquizapp.domain.repository.SharedPreferencesRepository
 import com.kmozcan1.lyricquizapp.domain.repository.TrackRepository
 import dagger.Module
@@ -33,4 +36,10 @@ object RepositoryModule {
         trackApi: TrackApi
     ) : TrackRepository =
         TrackRepositoryImpl(trackApi)
+
+    @Provides
+    fun provideLyricsRepositoryImpl(
+        lyricsApi: LyricsApi
+    ) : LyricsRepository =
+        LyricsRepositoryImpl(lyricsApi)
 }

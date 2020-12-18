@@ -1,4 +1,4 @@
-package com.kmozcan1.lyricquizapp.domain.model
+package com.kmozcan1.lyricquizapp.domain.model.domainmodel
 
 import com.kmozcan1.lyricquizapp.domain.enumeration.Genre
 import com.kmozcan1.lyricquizapp.domain.enumeration.NumberOfQuestions

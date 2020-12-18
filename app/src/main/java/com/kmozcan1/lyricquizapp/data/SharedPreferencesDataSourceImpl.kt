@@ -3,8 +3,8 @@ package com.kmozcan1.lyricquizapp.data
 import android.content.Context
 import android.content.SharedPreferences
 import com.kmozcan1.lyricquizapp.domain.datasource.SharedPreferencesDataSource
-import com.kmozcan1.lyricquizapp.domain.model.QuizResult
-import com.kmozcan1.lyricquizapp.domain.model.User
+import com.kmozcan1.lyricquizapp.domain.model.domainmodel.QuizResult
+import com.kmozcan1.lyricquizapp.domain.model.domainmodel.User
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
