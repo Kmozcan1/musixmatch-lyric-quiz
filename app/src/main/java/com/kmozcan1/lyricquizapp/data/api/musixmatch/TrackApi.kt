@@ -6,10 +6,7 @@
 
 package com.kmozcan1.lyricquizapp.data.api.musixmatch
 
-import com.kmozcan1.lyricquizapp.domain.model.apimodel.ATrackObject
-import com.kmozcan1.lyricquizapp.domain.model.apimodel.InlineResponse200
-import com.kmozcan1.lyricquizapp.domain.model.apimodel.InlineResponse2006
-import com.kmozcan1.lyricquizapp.domain.model.apimodel.InlineResponse2009
+import com.kmozcan1.lyricquizapp.data.apimodel.InlineResponse2009
 import io.reactivex.rxjava3.core.Single
 import java.math.BigDecimal
 import retrofit2.http.GET
@@ -21,13 +18,14 @@ interface TrackApi {
     @Headers(
         "Content-Type: application/json"
     )
-    @GET("chart.tracks")
+    @GET("chart.tracks.get")
     fun chartTracksGetGet(
         @Query("format") format: String?,
         @Query("callback") callback: String?,
         @Query("page") page: BigDecimal?,
         @Query("page_size") pageSize: BigDecimal?,
         @Query("country") country: String?,
-        @Query("f_has_lyrics") fHasLyrics: String?
-    ): Single<List<ATrackObject>>
+        @Query("f_has_lyrics") fHasLyrics: String?,
+        @Query("apikey") apiKey: String?
+    ): Single<InlineResponse2009>
 }

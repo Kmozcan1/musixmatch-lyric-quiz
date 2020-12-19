@@ -5,7 +5,7 @@ import java.math.BigDecimal
 /**
  * Created by Kadir Mert Özcan on 17-Dec-20.
  */
-data class TrackDomainModel(val trackId: BigDecimal?, val lyricsId: BigDecimal?, val artistId: BigDecimal?, val artistName: String?)
+data class TrackDomainModel(val trackId: Int?, val artistId: Int?, val artistName: String?)
 
 /*
 * data class ATrackObject(

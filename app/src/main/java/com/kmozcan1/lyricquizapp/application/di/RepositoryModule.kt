@@ -3,6 +3,7 @@ package com.kmozcan1.lyricquizapp.application.di
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.kmozcan1.lyricquizapp.data.api.musixmatch.LyricsApi
 import com.kmozcan1.lyricquizapp.data.api.musixmatch.TrackApi
+import com.kmozcan1.lyricquizapp.data.db.QuizDatabase
 import com.kmozcan1.lyricquizapp.data.repository.LyricsRepositoryImpl
 import com.kmozcan1.lyricquizapp.data.repository.SharedPreferencesRepositoryImpl
 import com.kmozcan1.lyricquizapp.data.repository.TrackRepositoryImpl
@@ -33,13 +34,16 @@ object RepositoryModule {
 
     @Provides
     fun provideTrackRepositoryImpl(
-        trackApi: TrackApi
+        quizDatabase: QuizDatabase,
+        trackApi: TrackApi,
+        apiKey: String
     ) : TrackRepository =
-        TrackRepositoryImpl(trackApi)
+        TrackRepositoryImpl(quizDatabase, trackApi, apiKey)
 
     @Provides
     fun provideLyricsRepositoryImpl(
-        lyricsApi: LyricsApi
+        lyricsApi: LyricsApi,
+        apiKey: String
     ) : LyricsRepository =
-        LyricsRepositoryImpl(lyricsApi)
+        LyricsRepositoryImpl(lyricsApi, apiKey)
 }

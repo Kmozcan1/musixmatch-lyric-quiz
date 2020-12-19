@@ -1,7 +1,6 @@
 package com.kmozcan1.lyricquizapp.domain.repository
 
-import com.kmozcan1.lyricquizapp.domain.model.apimodel.ALyricsObject
-import com.kmozcan1.lyricquizapp.domain.model.domainmodel.TrackDomainModel
+import com.kmozcan1.lyricquizapp.data.apimodel.ALyricsObject
 import io.reactivex.rxjava3.core.Single
 
 /**
@@ -11,5 +10,5 @@ import io.reactivex.rxjava3.core.Single
  */
 interface LyricsRepository {
     // returns a list of ALyricsObjects for each track in the list
-    fun getLyricsForTracks(tracks: List<TrackDomainModel>): Single<ALyricsObject>
+    fun getLyricsForTrack(tracks: Int): Single<ALyricsObject?>
 }

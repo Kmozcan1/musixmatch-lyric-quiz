@@ -1,7 +1,6 @@
 package com.kmozcan1.lyricquizapp.domain.mapper
 
-import com.kmozcan1.lyricquizapp.domain.model.apimodel.ALyricsObject
-import com.kmozcan1.lyricquizapp.domain.model.apimodel.ATrackObject
+import com.kmozcan1.lyricquizapp.data.apimodel.ALyricsObject
 import com.kmozcan1.lyricquizapp.domain.model.domainmodel.LyricsDomainModel
 import javax.inject.Inject
 
@@ -13,7 +12,8 @@ class LyricsRepositoryToDomainModelMapper @Inject constructor() : Mapper<LyricsD
     override fun map(lyricsRepositoryObject: ALyricsObject?) =
             lyricsRepositoryObject?.let {
                 LyricsDomainModel(
-                        lyricsBody = lyricsRepositoryObject.lyricsBody
+                    lyricsBody = lyricsRepositoryObject.lyricsBody,
+                    trackId = lyricsRepositoryObject.trackId
                 )
             }
 }

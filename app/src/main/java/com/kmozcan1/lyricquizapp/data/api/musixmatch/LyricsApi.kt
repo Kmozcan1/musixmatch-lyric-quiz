@@ -6,32 +6,14 @@
 
 package com.kmozcan1.lyricquizapp.data.api.musixmatch
 
-import com.kmozcan1.lyricquizapp.domain.model.apimodel.InlineResponse2007
+import com.kmozcan1.lyricquizapp.data.apimodel.InlineResponse2007
 import io.reactivex.rxjava3.core.Single
 import retrofit2.http.GET
 import retrofit2.http.Headers
+import retrofit2.http.Query
 
 @JvmSuppressWildcards
 interface LyricsApi {
-    /**
-     * 
-     * 
-     * The endpoint is owned by defaultname service owner
-     * @param format output format: json, jsonp, xml. (optional, default to json)
-     * @param callback jsonp callback (optional)
-     * @param qTrack The song title (optional)
-     * @param qArtist The song artist (optional)
-     */
-    @Headers(
-        "Content-Type: application/json"
-    )
-    @GET("matcher.lyrics.get")
-    fun matcherLyricsGetGet(
-        @retrofit2.http.Query("format") format: String?,
-        @retrofit2.http.Query("callback") callback: String?,
-        @retrofit2.http.Query("q_track") qTrack: String?,
-        @retrofit2.http.Query("q_artist") qArtist: String?
-    ): Single<InlineResponse2007>
     /**
      * 
      * 
@@ -46,7 +28,6 @@ interface LyricsApi {
     @GET("track.lyrics.get")
     fun trackLyricsGetGet(
         @retrofit2.http.Query("track_id") trackId: String,
-        @retrofit2.http.Query("format") format: String?,
-        @retrofit2.http.Query("callback") callback: String?
+        @Query("apikey") apiKey: String?
     ): Single<InlineResponse2007>
 }

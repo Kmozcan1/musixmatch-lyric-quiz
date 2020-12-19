@@ -1,0 +1,108 @@
+package com.kmozcan1.lyricquizapp.presentation
+
+import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import com.kmozcan1.lyricquizapp.domain.enumeration.Country
+import com.kmozcan1.lyricquizapp.domain.enumeration.QuizDifficulty
+import com.kmozcan1.lyricquizapp.domain.interactor.CountdownUseCase
+import com.kmozcan1.lyricquizapp.domain.interactor.GenerateQuizUseCase
+import com.kmozcan1.lyricquizapp.domain.model.domainmodel.Question
+import com.kmozcan1.lyricquizapp.domain.model.viewstate.LoginViewState
+import com.kmozcan1.lyricquizapp.domain.model.viewstate.QuizViewState
+import kotlin.properties.Delegates
+
+class QuizViewModel @ViewModelInject constructor(
+    private val createQuizUseCase: GenerateQuizUseCase,
+    private val countdownUseCase: CountdownUseCase
+) : ViewModel() {
+
+    // LiveData to observe ViewState
+    val quizViewState: LiveData<QuizViewState>
+        get() = _quizViewState
+    private val _quizViewState = MutableLiveData<QuizViewState>()
+    private fun setQuizViewState(value: QuizViewState) {
+        _quizViewState.postValue(value)
+    }
+
+    // LiveData to observe the question and options
+    val questionLiveData: LiveData<Question>
+        get() = _questionLiveData
+    private val _questionLiveData = MutableLiveData<Question>()
+    private fun setQuestionLiveData(value: Question) {
+        _questionLiveData.postValue(value)
+    }
+
+    // LiveData to observe the timer
+    val timerLiveData: LiveData<String>
+        get() = _timerLiveData
+    private val _timerLiveData = MutableLiveData<String>()
+    private fun setTimerLiveData(value: String) {
+        _timerLiveData.postValue(value)
+    }
+
+    private lateinit var questionList: List<Question>
+
+    private var timeLimit by Delegates.notNull<Long>()
+
+    private var questionIndex = 0
+
+    // Creates the quest and starts asking questions onSuccess
+    fun createQuiz() {
+        setQuizViewState(QuizViewState.isLoading())
+        createQuizUseCase.execute(
+            params = GenerateQuizUseCase.Params(Country.US, QuizDifficulty.DEFAULT),
+            onSuccess = {
+                quiz ->
+                questionList = quiz.questions
+                timeLimit = quiz.timeLimit
+                setQuizViewState(QuizViewState.success())
+                askQuestion()
+            },
+            onError = {
+                it.printStackTrace()
+                setQuizViewState(QuizViewState.error(it))
+            }
+        )
+    }
+
+    private fun askQuestion() {
+        if (questionIndex == questionList.size) {
+            finalizeQuest()
+        } else {
+            startTimer()
+            val currentQuestion = questionList[questionIndex]
+            setQuestionLiveData(currentQuestion)
+            questionIndex++
+        }
+
+    }
+
+    private fun startTimer() {
+        countdownUseCase.execute(
+            params = CountdownUseCase.Params(timeLimit),
+            onComplete = { askQuestion() },
+            onNext = { remaining -> setTimerLiveData(remaining.toString()) },
+            onError = {
+                it as Throwable
+                it.printStackTrace()
+                setQuizViewState(QuizViewState.error(it))
+            }
+        )
+    }
+
+    fun checkAnswer(selectedOption: String) {
+        countdownUseCase.dispose()
+        if (selectedOption == questionLiveData.value?.correctAnswer?.name) {
+
+        } else {
+
+        }
+        askQuestion()
+    }
+
+    private fun finalizeQuest() {
+
+    }
+}

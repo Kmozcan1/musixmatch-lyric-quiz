@@ -1,11 +1,18 @@
 package com.kmozcan1.lyricquizapp.domain.interactor
 
+import com.kmozcan1.lyricquizapp.domain.Constants.NUMBER_OF_TRACKS_TO_FETCH
 import com.kmozcan1.lyricquizapp.domain.enumeration.Country
+import com.kmozcan1.lyricquizapp.domain.enumeration.QuizDifficulty
+import com.kmozcan1.lyricquizapp.domain.factory.QuizManagerFactory
+import com.kmozcan1.lyricquizapp.domain.interactor.base.FlowableUseCase
 import com.kmozcan1.lyricquizapp.domain.interactor.base.SingleUseCase
-import com.kmozcan1.lyricquizapp.domain.manager.QuizManager
-import com.kmozcan1.lyricquizapp.domain.model.domainmodel.TrackDomainModel
+import com.kmozcan1.lyricquizapp.domain.model.domainmodel.LyricsDomainModel
+import com.kmozcan1.lyricquizapp.domain.model.domainmodel.Quiz
+import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Single
-import java.math.BigDecimal
+import io.reactivex.rxjava3.subjects.PublishSubject
+import io.reactivex.rxjava3.subjects.SingleSubject
+import io.reactivex.rxjava3.subjects.Subject
 import javax.inject.Inject
 
 /**
@@ -13,23 +20,30 @@ import javax.inject.Inject
  */
 
 class GenerateQuizUseCase @Inject constructor(
-        private val getTracksFromChartUseCase: GetTracksFromChartUseCase,
-        private val getLyricsUseCase: GetLyricsUseCase,
-        private val quizManager: QuizManager
-) : SingleUseCase<Int, GenerateQuizUseCase.Params>() {
+    private val getTracksFromDatabaseUseCase: GetTracksFromDatabaseUseCase,
+    private val getLyricsUseCase: GetLyricsUseCase,
+    private val quizManagerFactory: QuizManagerFactory
+) : SingleUseCase<Quiz, GenerateQuizUseCase.Params>() {
     data class Params(
             val country: Country,
-            val questionCount: Int
+            val quizDifficulty: QuizDifficulty
     )
 
-    override fun buildObservable(params: Params?): Single<Int> {
-        getTracksFromChartUseCase.buildObservable(
-            GetTracksFromChartUseCase.Params(params!!.country, params.questionCount))
-                .flatMap {
-                    getLyricsUseCase.buildObservable(
-                        GetLyricsUseCase.Params(quizManager.selectTracks(it, params.questionCount))
-                    )
-                }
-        return Single.just(1)
+    override fun buildObservable(params: Params?): Single<Quiz> {
+        val quizManager = quizManagerFactory.createQuizWith(params!!.quizDifficulty)
+        val lyricsList = mutableListOf<LyricsDomainModel>()
+        var quiz: Quiz?
+        val quizSubject: SingleSubject<Quiz> = SingleSubject.create()
+        getTracksFromDatabaseUseCase.buildObservable().toFlowable().flatMap { tracks ->
+            getLyricsUseCase.buildObservable(
+                GetLyricsUseCase.Params(quizManager.selectTracks((tracks)))
+            ).doOnNext { lyrics ->
+                lyricsList.add(lyrics)
+            }.doOnComplete{
+                quiz = quizManager.generateQuiz(lyricsList)
+                quizSubject.onSuccess(quiz)
+            }
+        }.subscribe()
+        return quizSubject
     }
 }

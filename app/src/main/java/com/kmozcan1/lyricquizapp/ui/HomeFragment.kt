@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import com.kmozcan1.lyricquizapp.R
 import com.kmozcan1.lyricquizapp.databinding.HomeFragmentBinding
 import com.kmozcan1.lyricquizapp.presentation.HomeViewModel
@@ -36,7 +37,10 @@ class HomeFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
-        viewModel.test()
+    }
+
+    fun onStartQuizButton(v: View) {
+        findNavController().navigate(R.id.action_homeFragment_to_quizFragment)
     }
 
 }

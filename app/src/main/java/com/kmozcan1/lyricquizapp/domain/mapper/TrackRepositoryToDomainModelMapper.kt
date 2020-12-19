@@ -1,7 +1,7 @@
 package com.kmozcan1.lyricquizapp.domain.mapper
 
 import com.kmozcan1.lyricquizapp.domain.model.domainmodel.TrackDomainModel
-import com.kmozcan1.lyricquizapp.domain.model.apimodel.ATrackObject
+import com.kmozcan1.lyricquizapp.data.apimodel.ATrackObject
 import javax.inject.Inject
 
 /**
@@ -14,9 +14,8 @@ class TrackRepositoryToDomainModelMapper @Inject constructor() : Mapper<TrackDom
     override fun map(trackRepositoryObject: ATrackObject?) =
         trackRepositoryObject?.let {
             TrackDomainModel(
-                trackId = trackRepositoryObject.trackId,
-                lyricsId = trackRepositoryObject.lyricsId,
-                artistId = trackRepositoryObject.artistId,
+                trackId = trackRepositoryObject.trackId?.toInt(),
+                artistId = trackRepositoryObject.artistId?.toInt(),
                 artistName = trackRepositoryObject.artistName
             )
         }

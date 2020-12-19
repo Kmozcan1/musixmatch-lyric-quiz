@@ -6,8 +6,8 @@
 
 package com.kmozcan1.lyricquizapp.data.api.musixmatch
 
-import com.kmozcan1.lyricquizapp.domain.model.apimodel.InlineResponse2001
-import com.kmozcan1.lyricquizapp.domain.model.apimodel.InlineResponse2003
+import com.kmozcan1.lyricquizapp.data.apimodel.InlineResponse2001
+import com.kmozcan1.lyricquizapp.data.apimodel.InlineResponse2003
 import io.reactivex.rxjava3.core.Single
 import java.math.BigDecimal
 import retrofit2.http.GET
