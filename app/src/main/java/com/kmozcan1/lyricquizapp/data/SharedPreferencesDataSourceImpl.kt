@@ -6,6 +6,7 @@ import com.kmozcan1.lyricquizapp.domain.datasource.SharedPreferencesDataSource
 import com.kmozcan1.lyricquizapp.domain.model.domainmodel.QuizResult
 import com.kmozcan1.lyricquizapp.domain.model.domainmodel.User
 import dagger.hilt.android.qualifiers.ApplicationContext
+import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject
 
 /**
@@ -22,6 +23,7 @@ class SharedPreferencesDataSourceImpl @Inject constructor(
     companion object {
         // Pref keys
         private const val CURRENT_USER = "currentUser"
+        private const val DEFAULT = "DEFAULT"
     }
 
     private val currentUserData: SharedPreferences by lazy {
@@ -42,15 +44,10 @@ class SharedPreferencesDataSourceImpl @Inject constructor(
             putString(CURRENT_USER, userName)
             apply()
         }
-        /*objectMapper.writeValueAsString(user).also {
-            userListDataEditor.putString(user.name, it)
-            userListDataEditor.putString(CURRENT_USER, it)
-        }
-        userListDataEditor.apply()*/
     }
 
-    override fun getCurrentUser(): User {
-        TODO("Not yet implemented")
+    override fun getCurrentUser(): Single<String> {
+        return Single.just(currentUserData.getString(CURRENT_USER, DEFAULT))
     }
 
     override fun addQuizResult(quizResult: QuizResult) {

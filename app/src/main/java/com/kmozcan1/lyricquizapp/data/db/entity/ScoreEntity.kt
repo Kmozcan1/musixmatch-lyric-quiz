@@ -11,14 +11,14 @@ import androidx.room.PrimaryKey
 data class ScoreEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    @ColumnInfo(name = USER_ID)
-    var userId: Int? = null,
+    @ColumnInfo(name = USER_NAME)
+    var userName: String? = null,
     @ColumnInfo(name = SCORE)
     var score: Int? = null
 ){
     companion object{
         const val TABLE_NAME = "scores"
-        const val USER_ID = "userId"
+        const val USER_NAME = "userName"
         const val SCORE = "score"
     }
 }

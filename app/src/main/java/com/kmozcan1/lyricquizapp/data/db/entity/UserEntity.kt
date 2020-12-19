@@ -2,12 +2,13 @@ package com.kmozcan1.lyricquizapp.data.db.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 /**
  * Created by Kadir Mert Özcan on 20-Dec-20.
  */
-@Entity(tableName = UserEntity.TABLE_NAME)
+@Entity(tableName = UserEntity.TABLE_NAME, indices = [Index(value = ["name"], unique = true)])
 data class UserEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
