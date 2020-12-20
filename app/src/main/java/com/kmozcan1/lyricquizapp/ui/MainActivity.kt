@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import com.kmozcan1.lyricquizapp.R
-import com.kmozcan1.lyricquizapp.presentation.viewstate.MainViewState
+import com.kmozcan1.lyricquizapp.presentation.viewstate.SplashViewState
 import com.kmozcan1.lyricquizapp.presentation.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -13,7 +13,7 @@ import dagger.hilt.android.AndroidEntryPoint
  */
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    private var viewState: MainViewState? = null
+    private var viewState: SplashViewState? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
 

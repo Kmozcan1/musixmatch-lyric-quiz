@@ -21,7 +21,7 @@ class OptionsView : ConstraintLayout {
 
     private var optionButtonClickListener: OptionButtonClickListener? = null
     private val buttonList = mutableListOf<Button>()
-
+    var buttonsAreSet: Boolean = false
 
     constructor(context: Context) : super(context) {
         init(context)
@@ -95,6 +95,7 @@ class OptionsView : ConstraintLayout {
                 ConstraintSet.LEFT,
                 0
             )
+            buttonsAreSet = true
             set.constrainHeight(button.id, 200)
             set.applyTo(this)
             buttonList.add(button)
@@ -103,6 +104,7 @@ class OptionsView : ConstraintLayout {
 
     fun renameOptionButtons(options: List<ArtistDomainModel>) {
         for (i in buttonList.indices) {
+            buttonList[i].refreshDrawableState()
             buttonList[i].text = options[i].name
         }
     }

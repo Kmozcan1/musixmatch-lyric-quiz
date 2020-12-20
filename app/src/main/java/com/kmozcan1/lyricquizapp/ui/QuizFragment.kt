@@ -76,6 +76,9 @@ class QuizFragment : Fragment() {
                         viewState.isScorePosted -> {
                             showScoreScreen()
                         }
+                        viewState.isQuizFinished -> {
+                            hideOptionView()
+                        }
                     }
                 }
             }
@@ -84,12 +87,13 @@ class QuizFragment : Fragment() {
 
     private fun questionObserver() = Observer<Question> {
         it.let { question ->
-            if (binding.quizOptionsView.visibility == View.GONE) {
+            if (!binding.quizOptionsView.buttonsAreSet) {
                 binding.quizOptionsView.setOptionButtons(question.options)
-                binding.quizOptionsView.visibility = View.VISIBLE
-            } else {
+                binding.quizOptionsView.visibility = View.VISIBLE }
+            else {
                 binding.quizOptionsView.renameOptionButtons(question.options)
                 binding.quizOptionsView.isEnabled = true
+
             }
             binding.questionTextView.text = question.lyric
         }
@@ -104,15 +108,13 @@ class QuizFragment : Fragment() {
     private fun scoreObserver() = Observer<String> {
         it.let { score ->
             binding.scoreTextView.text = score
-            binding.finalScoreTextView.text = getString(R.string.final_score, score)
-            binding.quizOptionsView.isEnabled = false
-            binding.quizOptionsView.visibility = View.GONE
         }
     }
 
     private fun optionButtonClickListener() = object : OptionsView.OptionButtonClickListener {
         override fun onOptionButtonClicked(artistName: String) {
-            binding.quizOptionsView.isEnabled = false
+            //TODO Workaround for pressed button not being changed
+            binding.quizOptionsView.isClickable = false
             viewModel.checkAnswer(artistName)
         }
     }
@@ -125,7 +127,14 @@ class QuizFragment : Fragment() {
         findNavController().navigate(R.id.action_quizFragment_to_homeFragment)
     }
 
+    fun hideOptionView() {
+        binding.quizOptionsView.visibility = View.GONE
+    }
+
     fun showScoreScreen() {
         binding.scoreScreen.visibility = View.VISIBLE
+        binding.finalScoreTextView.text = getString(R.string.final_score, binding.scoreTextView.text)
+        binding.quizOptionsView.isEnabled = false
+        binding.quizOptionsView.visibility = View.GONE
     }
 }

@@ -112,6 +112,7 @@ class QuizViewModel @ViewModelInject constructor(
     }
 
     private fun finalizeQuest() {
+        setQuizViewState(QuizViewState.onQuizFinished())
         scoreLiveData.value?.let { score ->
             InsertScoreUseCase.Params(score.toInt()) }?.let { params ->
             insertScoreUseCase.execute(

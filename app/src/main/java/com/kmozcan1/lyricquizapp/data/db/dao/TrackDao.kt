@@ -12,14 +12,17 @@ import io.reactivex.rxjava3.core.Single
 @Dao
 interface TrackDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertTrackEntity(entity:TrackEntity) : Completable
+    fun insertTrackEntity(entity: TrackEntity) : Completable
 
     @Query("SELECT * FROM ${TrackEntity.TABLE_NAME}")
     fun getAllTrackEntities(): Single<List<TrackEntity>>
 
     @Delete
-    fun deleteTrackEntity(person:TrackEntity) : Completable
+    fun deleteTrackEntity(person: TrackEntity) : Completable
+
+    @Query("DELETE FROM ${TrackEntity.TABLE_NAME}")
+    fun nukeTable() : Completable
 
     @Update
-    fun updateTrackEntity(person:TrackEntity) : Completable
+    fun updateTrackEntity(person: TrackEntity) : Completable
 }

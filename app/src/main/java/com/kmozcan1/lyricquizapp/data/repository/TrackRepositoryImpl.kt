@@ -51,4 +51,8 @@ class TrackRepositoryImpl @Inject constructor(
     override fun getAllTracksFromDatabase(): Single<List<TrackEntity>> {
         return quizDatabase.trackDao().getAllTrackEntities()
     }
+
+    override fun nukeTable(): Completable {
+        return quizDatabase.trackDao().nukeTable()
+    }
 }

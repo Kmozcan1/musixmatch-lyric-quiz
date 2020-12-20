@@ -19,7 +19,7 @@ abstract class CompletableUseCase<in Params> : Disposable {
 
     abstract fun buildObservable(params: Params? = null): Completable
 
-    fun execute(params: Params, onComplete: () -> Unit = {}, onError: Consumer<Throwable>? = null) {
+    fun execute(params: Params?, onComplete: () -> Unit = {}, onError: Consumer<Throwable>? = null) {
         disposables += buildObservable(params)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

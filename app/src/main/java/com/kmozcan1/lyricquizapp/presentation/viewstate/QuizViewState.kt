@@ -10,7 +10,8 @@ data class QuizViewState (
     val hasError: Boolean = false,
     val errorMessage: String? = null,
     val isSuccess: Boolean = false,
-    val isScorePosted: Boolean = false
+    val isScorePosted: Boolean = false,
+    val isQuizFinished: Boolean = false
 ) {
 
     private lateinit var question: Question
@@ -33,6 +34,11 @@ data class QuizViewState (
         fun onScorePosted() : QuizViewState = QuizViewState(
             isSuccess = true,
             isScorePosted = true
+        )
+
+        fun onQuizFinished() : QuizViewState = QuizViewState(
+            isSuccess = true,
+            isQuizFinished = true
         )
 
     }
