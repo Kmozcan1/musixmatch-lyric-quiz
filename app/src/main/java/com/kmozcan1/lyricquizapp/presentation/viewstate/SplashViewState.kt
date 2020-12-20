@@ -8,6 +8,7 @@ data class SplashViewState (
         val hasError: Boolean = false,
         val errorMessage: String? = null,
         val isSuccess: Boolean = false,
+        val isLoggedIn: Boolean = false
 ) {
     companion object {
         fun onLoading() : SplashViewState = SplashViewState(
@@ -18,13 +19,18 @@ data class SplashViewState (
         fun onSuccess() : SplashViewState = SplashViewState(
                 hasError = false,
                 isLoading = false,
-                isSuccess = true,
+                isSuccess = true
         )
 
         fun onError(e: Throwable): SplashViewState = SplashViewState(
                 hasError = true,
                 errorMessage = e.message,
                 isSuccess = false
+        )
+
+        fun onLoggedIn(isLoggedIn: Boolean) : SplashViewState = SplashViewState(
+                isSuccess = true,
+                isLoggedIn = isLoggedIn
         )
     }
 

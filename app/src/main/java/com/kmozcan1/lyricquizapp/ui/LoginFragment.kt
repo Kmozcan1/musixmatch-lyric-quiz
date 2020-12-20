@@ -42,7 +42,6 @@ class LoginFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
-        viewModel.checkIfLoggedIn()
         viewModel.loginViewState.observe(viewLifecycleOwner, observeViewState())
     }
 
@@ -51,22 +50,22 @@ class LoginFragment : Fragment() {
     }
 
     private fun observeViewState() = Observer<LoginViewState> { viewState ->
-        if (viewState.hasError) {
+        when {
+            viewState.hasError -> {
                 Toast.makeText(
-                    this.activity,
-                    viewState.errorMessage,
-                    Toast.LENGTH_LONG
+                        this.activity,
+                        viewState.errorMessage,
+                        Toast.LENGTH_LONG
                 )
-                    .show()
-            } else if (viewState.isSuccess) {
+                        .show()
+            }
+            viewState.isSuccess -> {
                 // Login after button click
                 if (viewState.isLoginSuccess) {
                     findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
                 }
                 // If the a user was already logged in
-                else if (viewState.isLoggedIn) {
-                    findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
-                }
             }
+        }
     }
 }

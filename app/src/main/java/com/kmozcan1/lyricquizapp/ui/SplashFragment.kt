@@ -58,8 +58,14 @@ class SplashFragment : Fragment() {
                 findNavController().navigateUp()
             }
             viewState.isSuccess -> {
-                binding.frameLayout.visibility = View.GONE
-                findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
+                when {
+                    viewState.isLoggedIn -> {
+                        findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
+                    }
+                    !viewState.isLoggedIn -> {
+                        findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
+                    }
+                }
             }
         }
     }

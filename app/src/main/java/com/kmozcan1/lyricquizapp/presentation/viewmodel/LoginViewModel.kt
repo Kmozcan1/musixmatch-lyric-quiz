@@ -23,21 +23,6 @@ class LoginViewModel @ViewModelInject constructor(
         _loginViewState.postValue(value)
     }
 
-    fun checkIfLoggedIn () {
-        getCurrentUserUseCase.execute(
-            GetCurrentUserUseCase.Params(),
-            onSuccess = { userName ->
-                if (userName.isNotBlank()) {
-                    setLoginViewState(LoginViewState.onLoggedIn(true))
-                }
-            },
-            onError = {
-                it.printStackTrace()
-                setLoginViewState(LoginViewState.onError(it))
-            }
-        )
-    }
-
     fun login(userName: String) {
         updateCurrentUserUseCase.execute(
             UpdateCurrentUserUseCase.Params(userName),
