@@ -6,9 +6,9 @@
 
 package com.kmozcan1.lyricquizapp.data.api.musixmatch
 
-import com.kmozcan1.lyricquizapp.domain.model.apimodel.InlineResponse20010
-import com.kmozcan1.lyricquizapp.domain.model.apimodel.InlineResponse2002
-import com.kmozcan1.lyricquizapp.domain.model.apimodel.InlineResponse2004
+import com.kmozcan1.lyricquizapp.data.apimodel.InlineResponse20010
+import com.kmozcan1.lyricquizapp.data.apimodel.InlineResponse2002
+import com.kmozcan1.lyricquizapp.data.apimodel.InlineResponse2004
 import io.reactivex.rxjava3.core.Single
 import java.math.BigDecimal
 import retrofit2.http.GET

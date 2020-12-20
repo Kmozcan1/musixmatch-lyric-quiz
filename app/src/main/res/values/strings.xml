@@ -4,4 +4,10 @@
     <string name="user_name">User Name</string>
     <string name="leader_board">Leader Board</string>
     <string name="start_quiz">Start Quiz</string>
+    <string name="logout">Logout</string>
+    <string name="scoreLabel">Score</string>
+    <string name="timerLabel">Remaining</string>
+    <string name="final_score">Final Score: %s</string>
+    <string name="main_menu">Main Menu</string>
+    <string name="login">Login</string>
 </resources>

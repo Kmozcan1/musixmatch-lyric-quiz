@@ -23,4 +23,12 @@ class SharedPreferencesRepositoryImpl @Inject constructor(
             Completable.error(e)
         }
     }
+
+    override fun getCurrentUser(): Single<String> {
+        return try {
+            sharedPreferencesDataSource.getCurrentUser()
+        } catch (e: Exception) {
+            Single.error(e)
+        }
+    }
 }

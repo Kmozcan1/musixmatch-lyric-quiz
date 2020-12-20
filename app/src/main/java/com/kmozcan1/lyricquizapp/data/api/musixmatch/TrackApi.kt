@@ -6,139 +6,26 @@
 
 package com.kmozcan1.lyricquizapp.data.api.musixmatch
 
-import com.kmozcan1.lyricquizapp.domain.model.apimodel.InlineResponse200
-import com.kmozcan1.lyricquizapp.domain.model.apimodel.InlineResponse2006
-import com.kmozcan1.lyricquizapp.domain.model.apimodel.InlineResponse2009
+import com.kmozcan1.lyricquizapp.data.apimodel.InlineResponse2009
 import io.reactivex.rxjava3.core.Single
 import java.math.BigDecimal
 import retrofit2.http.GET
 import retrofit2.http.Headers
+import retrofit2.http.Query
 
 @JvmSuppressWildcards
 interface TrackApi {
-    /**
-     * 
-     * 
-     * The endpoint is owned by defaultname service owner
-     * @param albumId The musiXmatch album id (required)
-     * @param format output format: json, jsonp, xml. (optional, default to json)
-     * @param callback jsonp callback (optional)
-     * @param fHasLyrics When set, filter only contents with lyrics (optional)
-     * @param page Define the page number for paginated results (optional)
-     * @param pageSize Define the page size for paginated results.Range is 1 to 100. (optional)
-     */
-    @Headers(
-        "Content-Type: application/json"
-    )
-    @GET("album.tracks.get")
-    fun albumTracksGetGet(
-        @retrofit2.http.Query("album_id") albumId: String,
-        @retrofit2.http.Query("format") format: String?,
-        @retrofit2.http.Query("callback") callback: String?,
-        @retrofit2.http.Query("f_has_lyrics") fHasLyrics: String?,
-        @retrofit2.http.Query("page") page: BigDecimal?,
-        @retrofit2.http.Query("page_size") pageSize: BigDecimal?
-    ): Single<InlineResponse200>
-    /**
-     * 
-     * 
-     * The endpoint is owned by defaultname service owner
-     * @param format output format: json, jsonp, xml. (optional, default to json)
-     * @param callback jsonp callback (optional)
-     * @param page Define the page number for paginated results (optional)
-     * @param pageSize Define the page size for paginated results.Range is 1 to 100. (optional)
-     * @param country A valid ISO 3166 country code (optional, default to us)
-     * @param fHasLyrics When set, filter only contents with lyrics (optional)
-     */
     @Headers(
         "Content-Type: application/json"
     )
     @GET("chart.tracks.get")
     fun chartTracksGetGet(
-        @retrofit2.http.Query("format") format: String?,
-        @retrofit2.http.Query("callback") callback: String?,
-        @retrofit2.http.Query("page") page: BigDecimal?,
-        @retrofit2.http.Query("page_size") pageSize: BigDecimal?,
-        @retrofit2.http.Query("country") country: String?,
-        @retrofit2.http.Query("f_has_lyrics") fHasLyrics: String?
-    ): Single<InlineResponse2009>
-    /**
-     * 
-     * 
-     * The endpoint is owned by defaultname service owner
-     * @param format output format: json, jsonp, xml. (optional, default to json)
-     * @param callback jsonp callback (optional)
-     * @param qArtist The song artist (optional)
-     * @param qTrack The song title (optional)
-     * @param fHasLyrics When set, filter only contents with lyrics (optional)
-     * @param fHasSubtitle When set, filter only contents with subtitles (optional)
-     */
-    @Headers(
-        "Content-Type: application/json"
-    )
-    @GET("matcher.track.get")
-    fun matcherTrackGetGet(
-        @retrofit2.http.Query("format") format: String?,
-        @retrofit2.http.Query("callback") callback: String?,
-        @retrofit2.http.Query("q_artist") qArtist: String?,
-        @retrofit2.http.Query("q_track") qTrack: String?,
-        @retrofit2.http.Query("f_has_lyrics") fHasLyrics: BigDecimal?,
-        @retrofit2.http.Query("f_has_subtitle") fHasSubtitle: BigDecimal?
-    ): Single<InlineResponse2006>
-    /**
-     * 
-     * 
-     * The endpoint is owned by defaultname service owner
-     * @param trackId The musiXmatch track id (required)
-     * @param format output format: json, jsonp, xml. (optional, default to json)
-     * @param callback jsonp callback (optional)
-     */
-    @Headers(
-        "Content-Type: application/json"
-    )
-    @GET("track.get")
-    fun trackGetGet(
-        @retrofit2.http.Query("track_id") trackId: String,
-        @retrofit2.http.Query("format") format: String?,
-        @retrofit2.http.Query("callback") callback: String?
-    ): Single<InlineResponse2006>
-    /**
-     * 
-     * 
-     * The endpoint is owned by defaultname service owner
-     * @param format output format: json, jsonp, xml. (optional, default to json)
-     * @param callback jsonp callback (optional)
-     * @param qTrack The song title (optional)
-     * @param qArtist The song artist (optional)
-     * @param qLyrics Any word in the lyrics (optional)
-     * @param fArtistId When set, filter by this artist id (optional)
-     * @param fMusicGenreId When set, filter by this music category id (optional)
-     * @param fLyricsLanguage Filter by the lyrics language (en,it,..) (optional)
-     * @param fHasLyrics When set, filter only contents with lyrics (optional)
-     * @param sArtistRating Sort by our popularity index for artists (asc|desc) (optional)
-     * @param sTrackRating Sort by our popularity index for tracks (asc|desc) (optional)
-     * @param quorumFactor Search only a part of the given query string.Allowed range is (0.1 – 0.9) (optional, default to 1)
-     * @param pageSize Define the page size for paginated results.Range is 1 to 100. (optional)
-     * @param page Define the page number for paginated results (optional)
-     */
-    @Headers(
-        "Content-Type: application/json"
-    )
-    @GET("track.search")
-    fun trackSearchGet(
-        @retrofit2.http.Query("format") format: String?,
-        @retrofit2.http.Query("callback") callback: String?,
-        @retrofit2.http.Query("q_track") qTrack: String?,
-        @retrofit2.http.Query("q_artist") qArtist: String?,
-        @retrofit2.http.Query("q_lyrics") qLyrics: String?,
-        @retrofit2.http.Query("f_artist_id") fArtistId: BigDecimal?,
-        @retrofit2.http.Query("f_music_genre_id") fMusicGenreId: BigDecimal?,
-        @retrofit2.http.Query("f_lyrics_language") fLyricsLanguage: BigDecimal?,
-        @retrofit2.http.Query("f_has_lyrics") fHasLyrics: BigDecimal?,
-        @retrofit2.http.Query("s_artist_rating") sArtistRating: String?,
-        @retrofit2.http.Query("s_track_rating") sTrackRating: String?,
-        @retrofit2.http.Query("quorum_factor") quorumFactor: BigDecimal?,
-        @retrofit2.http.Query("page_size") pageSize: BigDecimal?,
-        @retrofit2.http.Query("page") page: BigDecimal?
+        @Query("format") format: String?,
+        @Query("callback") callback: String?,
+        @Query("page") page: BigDecimal?,
+        @Query("page_size") pageSize: BigDecimal?,
+        @Query("country") country: String?,
+        @Query("f_has_lyrics") fHasLyrics: String?,
+        @Query("apikey") apiKey: String?
     ): Single<InlineResponse2009>
 }

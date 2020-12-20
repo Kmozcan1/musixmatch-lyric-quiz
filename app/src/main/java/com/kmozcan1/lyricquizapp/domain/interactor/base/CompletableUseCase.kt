@@ -7,6 +7,7 @@ import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.functions.Consumer
 import io.reactivex.rxjava3.kotlin.plusAssign
 import io.reactivex.rxjava3.schedulers.Schedulers
+import timber.log.Timber
 
 /**
  * Created by Kadir Mert Özcan on 15-Dec-20.
@@ -18,13 +19,13 @@ abstract class CompletableUseCase<in Params> : Disposable {
 
     abstract fun buildObservable(params: Params? = null): Completable
 
-    fun execute(params: Params, onComplete: () -> Unit = {}, onError: Consumer<Throwable>? = null) {
+    fun execute(params: Params?, onComplete: () -> Unit = {}, onError: Consumer<Throwable>? = null) {
         disposables += buildObservable(params)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnComplete(onComplete)
             .doOnError(onError)
-            .subscribe()
+            .subscribe({}, Timber::w)
     }
 
     override fun dispose() {
