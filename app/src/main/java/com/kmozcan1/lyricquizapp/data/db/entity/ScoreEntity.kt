@@ -12,7 +12,7 @@ data class ScoreEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     @ColumnInfo(name = USER_NAME)
-    var userName: String? = null,
+    var userName: String,
     @ColumnInfo(name = SCORE)
     var score: Int? = null
 ){

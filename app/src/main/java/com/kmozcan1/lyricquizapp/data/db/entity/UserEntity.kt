@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 /**
  * Created by Kadir Mert Özcan on 20-Dec-20.
  */
-@Entity(tableName = UserEntity.TABLE_NAME, indices = [Index(value = ["name"], unique = true)])
+@Entity(tableName = UserEntity.TABLE_NAME, indices = [Index(value = ["userName"], unique = true)])
 data class UserEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,

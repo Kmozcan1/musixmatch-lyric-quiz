@@ -1,6 +1,7 @@
 package com.kmozcan1.lyricquizapp.domain.manager
 
 
+import com.kmozcan1.lyricquizapp.domain.Constants.DISCLAIMER_LINE
 import com.kmozcan1.lyricquizapp.domain.Constants.NUMBER_OF_OPTIONS
 import com.kmozcan1.lyricquizapp.domain.Constants.NUMBER_OF_TRACKS_TO_FETCH
 import com.kmozcan1.lyricquizapp.domain.enumeration.QuizDifficulty
@@ -18,9 +19,7 @@ import com.kmozcan1.lyricquizapp.domain.manager.QuizManager.DefaultQuizRuleConst
 import com.kmozcan1.lyricquizapp.domain.manager.QuizManager.DefaultQuizRuleConstants.DEFAULT_TIER_TWO_WEIGHT
 import com.kmozcan1.lyricquizapp.domain.manager.QuizManager.DefaultQuizRuleConstants.DEFAULT_TIME_LIMIT
 import com.kmozcan1.lyricquizapp.domain.model.domainmodel.*
-import java.math.BigDecimal
 import java.util.concurrent.ThreadLocalRandom
-import javax.inject.Inject
 import kotlin.properties.Delegates
 import kotlin.random.Random
 
@@ -135,7 +134,8 @@ class QuizManager constructor(private val difficulty: QuizDifficulty) {
 
     // Returns a random lyric to ask as a question
     private fun selectQuestionLyrics(lyrics: LyricsDomainModel): String {
-        val lyricLines = lyrics.lyricsBody?.lines()
+        val lyricLines = lyrics.lyricsBody?.lines()!!.toMutableList()
+        lyricLines.remove(DISCLAIMER_LINE)
         val possibleQuestions = lyricLines?.filter {
                 line -> line.length >= quizRules.minimumLineLength
         }?.toMutableList()

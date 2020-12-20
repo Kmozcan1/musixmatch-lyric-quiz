@@ -11,7 +11,7 @@ import io.reactivex.rxjava3.core.Single
 interface UserRepository {
     fun insertUserEntity(userName: String) : Completable
 
-    fun getUserEntity(userName: String): Single<List<UserEntity>>
+    fun getUserEntity(userName: String): Single<UserEntity>
 
     fun deleteUserEntity(userModel: UserDomainModel) : Completable
 

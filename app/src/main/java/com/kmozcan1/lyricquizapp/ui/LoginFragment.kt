@@ -6,10 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.kmozcan1.lyricquizapp.R
 import com.kmozcan1.lyricquizapp.databinding.LoginFragmentBinding
+import com.kmozcan1.lyricquizapp.domain.model.viewstate.LoginViewState
 import com.kmozcan1.lyricquizapp.presentation.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -40,22 +42,31 @@ class LoginFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
+        viewModel.checkIfLoggedIn()
+        viewModel.loginViewState.observe(viewLifecycleOwner, observeViewState())
     }
 
     fun onLoginButtonClick(v: View) {
-        viewModel.updateCurrentUser(binding.userNameEditText.text.toString())
-        viewModel.loginViewState.observe(this, {
-            it?.let { viewState ->
-                if (viewState.hasError) {
-                    Toast.makeText(this.activity,
-                        viewState.errorMessage,
-                        Toast.LENGTH_LONG)
-                        .show()
-                } else {
+        viewModel.login(binding.userNameEditText.text.toString())
+    }
+
+    private fun observeViewState() = Observer<LoginViewState> { viewState ->
+        if (viewState.hasError) {
+                Toast.makeText(
+                    this.activity,
+                    viewState.errorMessage,
+                    Toast.LENGTH_LONG
+                )
+                    .show()
+            } else if (viewState.isSuccess) {
+                // Login after button click
+                if (viewState.isLoginSuccess) {
+                    findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+                }
+                // If the a user was already logged in
+                else if (viewState.isLoggedIn) {
                     findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
                 }
             }
-        })
-
     }
 }

@@ -11,14 +11,8 @@ import io.reactivex.rxjava3.core.Single
 @Dao
 interface UserDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertUserEntity(userName: String) : Completable
+    fun insertUserEntity(userEntity: UserEntity) : Completable
 
-    @Query("SELECT * FROM ${UserEntity.TABLE_NAME} WHERE userName = :userName")
-    fun getUserEntity(userName: String): Single<List<UserEntity>>
-
-    @Delete
-    fun deleteUserEntity(user: UserEntity) : Completable
-
-    @Update
-    fun updateUserEntity(user: UserEntity) : Completable
+    @Query("SELECT * FROM ${UserEntity.TABLE_NAME} WHERE userName = :userName LIMIT 1")
+    fun getUserEntity(userName: String): Single<UserEntity>
 }

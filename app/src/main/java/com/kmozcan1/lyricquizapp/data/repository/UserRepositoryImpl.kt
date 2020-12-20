@@ -12,10 +12,10 @@ class UserRepositoryImpl  @Inject constructor(private val quizDatabase: QuizData
     : UserRepository {
 
     override fun insertUserEntity(userName: String): Completable {
-        return quizDatabase.userDao().insertUserEntity(userName)
+        return quizDatabase.userDao().insertUserEntity(UserEntity(userName = userName))
     }
 
-    override fun getUserEntity(userName: String): Single<List<UserEntity>> {
+    override fun getUserEntity(userName: String): Single<UserEntity> {
         return quizDatabase.userDao().getUserEntity(userName)
     }
 

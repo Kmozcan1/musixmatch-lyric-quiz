@@ -42,6 +42,14 @@ class QuizViewModel @ViewModelInject constructor(
         _timerLiveData.postValue(value)
     }
 
+    // LiveData to observe the score
+    val scoreLiveData: LiveData<String>
+        get() = _scoreLiveData
+    private val _scoreLiveData = MutableLiveData<String>()
+    private fun setScoreLiveData(value: String) {
+        _scoreLiveData.postValue(value)
+    }
+
     private lateinit var questionList: List<Question>
 
     private var timeLimit by Delegates.notNull<Long>()
@@ -58,6 +66,7 @@ class QuizViewModel @ViewModelInject constructor(
                 questionList = quiz.questions
                 timeLimit = quiz.timeLimit
                 setQuizViewState(QuizViewState.success())
+                setScoreLiveData(0.toString())
                 askQuestion()
             },
             onError = {
@@ -92,12 +101,11 @@ class QuizViewModel @ViewModelInject constructor(
         )
     }
 
+    //TODO move the app logic to the domain layer
     fun checkAnswer(selectedOption: String) {
         countdownUseCase.dispose()
         if (selectedOption == questionLiveData.value?.correctAnswer?.name) {
-
-        } else {
-
+            setScoreLiveData((scoreLiveData.value?.toInt()?.plus(timerLiveData.value?.toInt()!!)).toString())
         }
         askQuestion()
     }

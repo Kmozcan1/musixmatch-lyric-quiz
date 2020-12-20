@@ -43,4 +43,9 @@ class HomeFragment : Fragment() {
         findNavController().navigate(R.id.action_homeFragment_to_quizFragment)
     }
 
+    fun onLogoutButton(v: View) {
+        viewModel.logout()
+        findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
+    }
+
 }

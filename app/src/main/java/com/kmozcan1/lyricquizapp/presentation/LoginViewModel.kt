@@ -1,39 +1,67 @@
 package com.kmozcan1.lyricquizapp.presentation
 
 import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.kmozcan1.lyricquizapp.domain.interactor.GetCurrentUserUseCase
+import com.kmozcan1.lyricquizapp.domain.interactor.RegisterUserUseCase
 import com.kmozcan1.lyricquizapp.domain.interactor.UpdateCurrentUserUseCase
 import com.kmozcan1.lyricquizapp.domain.model.domainmodel.User
 import com.kmozcan1.lyricquizapp.domain.model.viewstate.LoginViewState
+import com.kmozcan1.lyricquizapp.domain.model.viewstate.QuizViewState
 
 class LoginViewModel @ViewModelInject constructor(
-    private val updateCurrentUserUseCase: UpdateCurrentUserUseCase
+    private val updateCurrentUserUseCase: UpdateCurrentUserUseCase,
+    private val registerUserUseCase: RegisterUserUseCase,
+    private val getCurrentUserUseCase: GetCurrentUserUseCase
 ): ViewModel() {
 
-    val loginViewState: MutableLiveData<LoginViewState> by lazy {
-        MutableLiveData<LoginViewState>()
+    // LiveData to observe ViewState
+    val loginViewState: LiveData<LoginViewState>
+        get() = _loginViewState
+    private val _loginViewState = MutableLiveData<LoginViewState>()
+    private fun setLoginViewState(value: LoginViewState) {
+        _loginViewState.postValue(value)
     }
 
-    fun updateCurrentUser(userName: String) {
-        try {
-            User(userName)
-            updateCurrentUserUseCase.execute(
-                UpdateCurrentUserUseCase.Params(userName),
-                onComplete = {
-                    loginViewState.value = LoginViewState.success()
-                },
-                onError = {
-                    it.printStackTrace()
-                    loginViewState.value = LoginViewState.error(it)
-                })
-        } catch (e: IllegalArgumentException ) {
-            loginViewState.value = loginViewState.value?.copy(
-                isLoading = false,
-                errorMessage = e.message,
-                hasError = true
-            )
-        }
+    fun checkIfLoggedIn () {
+        getCurrentUserUseCase.execute(
+            GetCurrentUserUseCase.Params(),
+            onSuccess = { userName ->
+                if (userName.isNotBlank()) {
+                    setLoginViewState(LoginViewState.loggedIn(true))
+                }
+            },
+            onError = {
+                it.printStackTrace()
+                setLoginViewState(LoginViewState.error(it))
+            }
+        )
+    }
+
+    fun login(userName: String) {
+        updateCurrentUserUseCase.execute(
+            UpdateCurrentUserUseCase.Params(userName),
+            onComplete = {
+                registerUser(userName)
+            },
+            onError = {
+                it.printStackTrace()
+                setLoginViewState(LoginViewState.error(it))
+            })
+    }
+
+    private fun registerUser(userName: String) {
+        registerUserUseCase.execute(
+            RegisterUserUseCase.Params(userName),
+            onComplete = {
+                setLoginViewState(LoginViewState.isLoginSuccess(true))
+            },
+            onError = {
+                setLoginViewState(LoginViewState.error(it))
+            }
+        )
     }
 
 

@@ -4,13 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.kmozcan1.lyricquizapp.data.api.musixmatch.LyricsApi
 import com.kmozcan1.lyricquizapp.data.api.musixmatch.TrackApi
 import com.kmozcan1.lyricquizapp.data.db.QuizDatabase
-import com.kmozcan1.lyricquizapp.data.repository.LyricsRepositoryImpl
-import com.kmozcan1.lyricquizapp.data.repository.SharedPreferencesRepositoryImpl
-import com.kmozcan1.lyricquizapp.data.repository.TrackRepositoryImpl
+import com.kmozcan1.lyricquizapp.data.repository.*
 import com.kmozcan1.lyricquizapp.domain.datasource.SharedPreferencesDataSource
-import com.kmozcan1.lyricquizapp.domain.repository.LyricsRepository
-import com.kmozcan1.lyricquizapp.domain.repository.SharedPreferencesRepository
-import com.kmozcan1.lyricquizapp.domain.repository.TrackRepository
+import com.kmozcan1.lyricquizapp.domain.repository.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -46,4 +42,16 @@ object RepositoryModule {
         apiKey: String
     ) : LyricsRepository =
         LyricsRepositoryImpl(lyricsApi, apiKey)
+
+    @Provides
+    fun provideUserRepositoryImpl(
+        quizDatabase: QuizDatabase
+    ) : UserRepository =
+        UserRepositoryImpl(quizDatabase)
+
+    @Provides
+    fun provideScoreRepositoryImpl(
+        quizDatabase: QuizDatabase
+    ) : ScoreRepository =
+        ScoreRepositoryImpl(quizDatabase)
 }

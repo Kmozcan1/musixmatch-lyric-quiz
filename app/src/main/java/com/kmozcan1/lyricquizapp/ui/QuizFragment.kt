@@ -46,6 +46,8 @@ class QuizFragment : Fragment() {
         viewModel.questionLiveData.observe(viewLifecycleOwner, questionObserver())
         // Observe the timer
         viewModel.timerLiveData.observe(viewLifecycleOwner, timerObserver())
+        // Observe the score
+        viewModel.scoreLiveData.observe(viewLifecycleOwner, scoreObserver())
         // Set listener for generated buttons
         binding.quizOptionsView.setOptionButtonClickListener(buttonClickListener())
         viewModel.createQuiz()
@@ -75,7 +77,7 @@ class QuizFragment : Fragment() {
     }
 
     private fun questionObserver() = Observer<Question> {
-        it?.let { question ->
+        it.let { question ->
             if (binding.quizOptionsView.visibility == View.GONE) {
                 binding.quizOptionsView.setOptionButtons(question.options)
                 binding.quizOptionsView.visibility = View.VISIBLE
@@ -87,8 +89,14 @@ class QuizFragment : Fragment() {
     }
 
     private fun timerObserver() = Observer<String> {
-        it?.let { time ->
+        it.let { time ->
             binding.timerTextView.text = time
+        }
+    }
+
+    private fun scoreObserver() = Observer<String> {
+        it.let { score ->
+            binding.scoreTextView.text = score
         }
     }
 
