@@ -1,4 +1,4 @@
-package com.kmozcan1.lyricquizapp.presentation
+package com.kmozcan1.lyricquizapp.presentation.viewmodel
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
@@ -24,11 +24,11 @@ class HomeViewModel @ViewModelInject constructor(
     fun getUserProfile() {
         getUserProfileUseCase.execute(
             onSuccess = { scoreList ->
-                setHomeViewState(HomeViewState.hasScoreList(scoreList))
+                setHomeViewState(HomeViewState.onScoreList(scoreList))
             },
             onError = {
                 it.printStackTrace()
-                setHomeViewState(HomeViewState.error(it))
+                setHomeViewState(HomeViewState.onError(it))
             }
         )
     }
@@ -45,7 +45,7 @@ class HomeViewModel @ViewModelInject constructor(
             },
             onError = {
                 it.printStackTrace()
-                setHomeViewState(HomeViewState.error(it))
+                setHomeViewState(HomeViewState.onError(it))
             }
         )
     }

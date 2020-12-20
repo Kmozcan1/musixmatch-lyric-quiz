@@ -1,4 +1,4 @@
-package com.kmozcan1.lyricquizapp.presentation
+package com.kmozcan1.lyricquizapp.presentation.viewmodel
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
@@ -7,9 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.kmozcan1.lyricquizapp.domain.interactor.GetCurrentUserUseCase
 import com.kmozcan1.lyricquizapp.domain.interactor.RegisterUserUseCase
 import com.kmozcan1.lyricquizapp.domain.interactor.UpdateCurrentUserUseCase
-import com.kmozcan1.lyricquizapp.domain.model.domainmodel.User
 import com.kmozcan1.lyricquizapp.domain.model.viewstate.LoginViewState
-import com.kmozcan1.lyricquizapp.domain.model.viewstate.QuizViewState
 
 class LoginViewModel @ViewModelInject constructor(
     private val updateCurrentUserUseCase: UpdateCurrentUserUseCase,
@@ -30,12 +28,12 @@ class LoginViewModel @ViewModelInject constructor(
             GetCurrentUserUseCase.Params(),
             onSuccess = { userName ->
                 if (userName.isNotBlank()) {
-                    setLoginViewState(LoginViewState.loggedIn(true))
+                    setLoginViewState(LoginViewState.onLoggedIn(true))
                 }
             },
             onError = {
                 it.printStackTrace()
-                setLoginViewState(LoginViewState.error(it))
+                setLoginViewState(LoginViewState.onError(it))
             }
         )
     }
@@ -48,7 +46,7 @@ class LoginViewModel @ViewModelInject constructor(
             },
             onError = {
                 it.printStackTrace()
-                setLoginViewState(LoginViewState.error(it))
+                setLoginViewState(LoginViewState.onError(it))
             })
     }
 
@@ -59,7 +57,7 @@ class LoginViewModel @ViewModelInject constructor(
                 setLoginViewState(LoginViewState.isLoginSuccess(true))
             },
             onError = {
-                setLoginViewState(LoginViewState.error(it))
+                setLoginViewState(LoginViewState.onError(it))
             }
         )
     }

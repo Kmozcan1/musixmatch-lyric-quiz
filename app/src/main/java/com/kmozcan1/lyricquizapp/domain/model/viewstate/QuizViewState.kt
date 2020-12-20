@@ -10,27 +10,30 @@ data class QuizViewState (
     val hasError: Boolean = false,
     val errorMessage: String? = null,
     val isSuccess: Boolean = false,
-    val currentQuestion: Question? = null
+    val isScorePosted: Boolean = false
 ) {
 
     private lateinit var question: Question
 
     companion object {
-        fun isLoading() : QuizViewState = QuizViewState(
-            isLoading = true,
-            isSuccess = false
+        fun onLoading() : QuizViewState = QuizViewState(
+            isLoading = true
         )
 
-        fun success() : QuizViewState = QuizViewState(
-            hasError = false,
-            isLoading = false,
-            isSuccess = true,
+        fun onSuccess() : QuizViewState = QuizViewState(
+            isSuccess = true
         )
 
-        fun error(e: Throwable): QuizViewState = QuizViewState(
+        fun onError(e: Throwable): QuizViewState = QuizViewState(
             hasError = true,
             errorMessage = e.message,
             isSuccess = false
         )
+
+        fun onScorePosted() : QuizViewState = QuizViewState(
+            isSuccess = true,
+            isScorePosted = true
+        )
+
     }
 }

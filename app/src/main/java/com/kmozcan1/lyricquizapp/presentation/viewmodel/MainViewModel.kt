@@ -1,4 +1,4 @@
-package com.kmozcan1.lyricquizapp.presentation
+package com.kmozcan1.lyricquizapp.presentation.viewmodel
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
@@ -39,7 +39,7 @@ class MainViewModel @ViewModelInject constructor(
                 },
                 onError = {
                     it.printStackTrace()
-                    setMainViewState(MainViewState.error(it))
+                    setMainViewState(MainViewState.onError(it))
                 }
         )
     }
@@ -47,10 +47,10 @@ class MainViewModel @ViewModelInject constructor(
     private fun addTracksToDatabase(trackList: List<TrackDomainModel>) {
         addTracksToDatabaseUseCase.execute(
                 params = AddTracksToDatabaseUseCase.Params(trackList),
-                onComplete = { setMainViewState(MainViewState.success()) },
+                onComplete = { setMainViewState(MainViewState.onSuccess()) },
                 onError = {
                     it.printStackTrace()
-                    setMainViewState(MainViewState.error(it))
+                    setMainViewState(MainViewState.onError(it))
                 }
         )
     }

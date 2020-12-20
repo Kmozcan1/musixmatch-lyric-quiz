@@ -1,17 +1,11 @@
 package com.kmozcan1.lyricquizapp.ui
 
-import android.content.res.Resources
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import com.kmozcan1.lyricquizapp.R
 import com.kmozcan1.lyricquizapp.domain.model.viewstate.MainViewState
-import com.kmozcan1.lyricquizapp.presentation.MainViewModel
-import com.kmozcan1.lyricquizapp.presentation.QuizViewModel
+import com.kmozcan1.lyricquizapp.presentation.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 /**

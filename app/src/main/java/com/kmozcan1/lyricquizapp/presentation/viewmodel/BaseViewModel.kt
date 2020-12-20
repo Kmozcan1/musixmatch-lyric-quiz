@@ -1,4 +1,4 @@
-package com.kmozcan1.lyricquizapp.presentation
+package com.kmozcan1.lyricquizapp.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import io.reactivex.rxjava3.disposables.CompositeDisposable

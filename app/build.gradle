@@ -15,14 +15,14 @@ generateSwagger {
 }
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion '30.0.0'
+    compileSdkVersion 30
+    buildToolsVersion '30.0.2'
     ndkVersion '22.0.7026061'
 
     defaultConfig {
         applicationId 'com.kmozcan1.lyricquizapp'
         minSdkVersion 21
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode 1
         versionName '1.0'
         vectorDrawables.useSupportLibrary = true
@@ -76,6 +76,9 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
+
+    // Data Binding
+    kapt "com.android.databinding:compiler:3.1.4"
 
     // Unit Test
     testImplementation 'junit:junit:4.13.1'
@@ -134,4 +137,5 @@ dependencies {
 
 kapt {
     correctErrorTypes true
+    generateStubs true
 }

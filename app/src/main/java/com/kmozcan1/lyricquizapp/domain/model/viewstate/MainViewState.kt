@@ -12,18 +12,18 @@ data class MainViewState (
         val isSuccess: Boolean = false,
 ) {
     companion object {
-        fun isLoading() : MainViewState = MainViewState(
+        fun onLoading() : MainViewState = MainViewState(
                 isLoading = true,
                 isSuccess = false
         )
 
-        fun success() : MainViewState = MainViewState(
+        fun onSuccess() : MainViewState = MainViewState(
                 hasError = false,
                 isLoading = false,
                 isSuccess = true,
         )
 
-        fun error(e: Throwable): MainViewState = MainViewState(
+        fun onError(e: Throwable): MainViewState = MainViewState(
                 hasError = true,
                 errorMessage = e.message,
                 isSuccess = false

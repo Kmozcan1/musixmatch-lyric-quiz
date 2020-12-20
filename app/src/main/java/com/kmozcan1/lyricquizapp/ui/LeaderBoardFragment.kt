@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.kmozcan1.lyricquizapp.R
-import com.kmozcan1.lyricquizapp.presentation.LeaderBoardViewModel
+import com.kmozcan1.lyricquizapp.presentation.viewmodel.LeaderBoardViewModel
 
 class LeaderBoardFragment : Fragment() {
 

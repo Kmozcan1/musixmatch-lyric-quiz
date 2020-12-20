@@ -12,16 +12,16 @@ data class LoginViewState (
     var isLoginSuccess: Boolean = false
 ) {
     companion object {
-        fun success() : LoginViewState = LoginViewState(
+        fun onSuccess() : LoginViewState = LoginViewState(
             isSuccess = true
         )
 
-        fun error(e: Throwable): LoginViewState = LoginViewState(
+        fun onError(e: Throwable): LoginViewState = LoginViewState(
             hasError = true,
             errorMessage = e.message,
         )
 
-        fun loggedIn(isLoggedIn: Boolean) : LoginViewState = LoginViewState(
+        fun onLoggedIn(isLoggedIn: Boolean) : LoginViewState = LoginViewState(
             isSuccess = true,
             isLoggedIn = isLoggedIn
         )

@@ -1,4 +1,4 @@
-package com.kmozcan1.lyricquizapp.presentation
+package com.kmozcan1.lyricquizapp.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 
