@@ -12,7 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kmozcan1.lyricquizapp.R
 import com.kmozcan1.lyricquizapp.databinding.HomeFragmentBinding
-import com.kmozcan1.lyricquizapp.domain.model.viewstate.HomeViewState
+import com.kmozcan1.lyricquizapp.presentation.viewstate.HomeViewState
 import com.kmozcan1.lyricquizapp.presentation.adapter.ScoreListAdapter
 import com.kmozcan1.lyricquizapp.presentation.adapter.setAdapterWithCustomDivider
 import com.kmozcan1.lyricquizapp.presentation.viewmodel.HomeViewModel
@@ -78,6 +78,10 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+    }
+
+    fun onLeaderBoardButton(v: View) {
+        findNavController().navigate(R.id.action_homeFragment_to_leaderboardFragment)
     }
 
     fun onStartQuizButton(v: View) {

@@ -17,7 +17,7 @@ interface ScoreDao {
     @Query("SELECT * FROM ${ScoreEntity.TABLE_NAME} WHERE userName = :userName ORDER BY score LIMIT 10" )
     fun getLastTenUserScores(userName: String): Single<List<ScoreEntity>>
 
-    @Query("SELECT * FROM ${ScoreEntity.TABLE_NAME} ORDER BY score LIMIT 20")
+    @Query("SELECT * FROM ${ScoreEntity.TABLE_NAME} ORDER BY score DESC LIMIT 25")
     fun getTopScores(): Single<List<ScoreEntity>>
 
 }

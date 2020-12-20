@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.kmozcan1.lyricquizapp.domain.interactor.GetCurrentUserUseCase
 import com.kmozcan1.lyricquizapp.domain.interactor.RegisterUserUseCase
 import com.kmozcan1.lyricquizapp.domain.interactor.UpdateCurrentUserUseCase
-import com.kmozcan1.lyricquizapp.domain.model.viewstate.LoginViewState
+import com.kmozcan1.lyricquizapp.presentation.viewstate.LoginViewState
 
 class LoginViewModel @ViewModelInject constructor(
     private val updateCurrentUserUseCase: UpdateCurrentUserUseCase,

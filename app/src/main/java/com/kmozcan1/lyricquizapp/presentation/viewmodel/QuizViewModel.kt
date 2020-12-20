@@ -10,7 +10,7 @@ import com.kmozcan1.lyricquizapp.domain.interactor.CountdownUseCase
 import com.kmozcan1.lyricquizapp.domain.interactor.GenerateQuizUseCase
 import com.kmozcan1.lyricquizapp.domain.interactor.InsertScoreUseCase
 import com.kmozcan1.lyricquizapp.domain.model.domainmodel.Question
-import com.kmozcan1.lyricquizapp.domain.model.viewstate.QuizViewState
+import com.kmozcan1.lyricquizapp.presentation.viewstate.QuizViewState
 import kotlin.properties.Delegates
 
 class QuizViewModel @ViewModelInject constructor(

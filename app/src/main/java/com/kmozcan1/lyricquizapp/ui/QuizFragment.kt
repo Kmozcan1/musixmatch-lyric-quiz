@@ -12,7 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.kmozcan1.lyricquizapp.R
 import com.kmozcan1.lyricquizapp.databinding.QuizFragmentBinding
 import com.kmozcan1.lyricquizapp.domain.model.domainmodel.Question
-import com.kmozcan1.lyricquizapp.domain.model.viewstate.QuizViewState
+import com.kmozcan1.lyricquizapp.presentation.viewstate.QuizViewState
 import com.kmozcan1.lyricquizapp.presentation.viewmodel.QuizViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -104,7 +104,7 @@ class QuizFragment : Fragment() {
     private fun scoreObserver() = Observer<String> {
         it.let { score ->
             binding.scoreTextView.text = score
-            binding.finalScoreTextView.text = score
+            binding.finalScoreTextView.text = getString(R.string.final_score, score)
             binding.quizOptionsView.isEnabled = false
             binding.quizOptionsView.visibility = View.GONE
         }

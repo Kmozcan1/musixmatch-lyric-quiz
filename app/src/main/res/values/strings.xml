@@ -7,6 +7,7 @@
     <string name="logout">Logout</string>
     <string name="scoreLabel">Score</string>
     <string name="timerLabel">Remaining</string>
-    <string name="final_score">Final Score: </string>
+    <string name="final_score">Final Score: %s</string>
     <string name="main_menu">Main Menu</string>
+    <string name="login">Login</string>
 </resources>

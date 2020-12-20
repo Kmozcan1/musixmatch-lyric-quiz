@@ -9,7 +9,7 @@ import com.kmozcan1.lyricquizapp.domain.enumeration.Country
 import com.kmozcan1.lyricquizapp.domain.interactor.AddTracksToDatabaseUseCase
 import com.kmozcan1.lyricquizapp.domain.interactor.GetTracksFromApiUseCase
 import com.kmozcan1.lyricquizapp.domain.model.domainmodel.TrackDomainModel
-import com.kmozcan1.lyricquizapp.domain.model.viewstate.MainViewState
+import com.kmozcan1.lyricquizapp.presentation.viewstate.MainViewState
 
 /**
  * Created by Kadir Mert Özcan on 19-Dec-20.

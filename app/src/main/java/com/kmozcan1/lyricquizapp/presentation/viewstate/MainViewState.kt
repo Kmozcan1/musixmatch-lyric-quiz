@@ -1,6 +1,4 @@
-package com.kmozcan1.lyricquizapp.domain.model.viewstate
-
-import com.kmozcan1.lyricquizapp.domain.model.domainmodel.Question
+package com.kmozcan1.lyricquizapp.presentation.viewstate
 
 /**
  * Created by Kadir Mert Özcan on 19-Dec-20.

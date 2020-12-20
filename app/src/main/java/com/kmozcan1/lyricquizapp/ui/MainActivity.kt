@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import com.kmozcan1.lyricquizapp.R
-import com.kmozcan1.lyricquizapp.domain.model.viewstate.MainViewState
+import com.kmozcan1.lyricquizapp.presentation.viewstate.MainViewState
 import com.kmozcan1.lyricquizapp.presentation.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 

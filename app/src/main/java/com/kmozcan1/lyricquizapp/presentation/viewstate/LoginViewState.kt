@@ -1,4 +1,4 @@
-package com.kmozcan1.lyricquizapp.domain.model.viewstate
+package com.kmozcan1.lyricquizapp.presentation.viewstate
 
 /**
  * Created by Kadir Mert Özcan on 16-Dec-20.

@@ -5,10 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.kmozcan1.lyricquizapp.domain.interactor.*
-import com.kmozcan1.lyricquizapp.domain.model.viewstate.HomeViewState
+import com.kmozcan1.lyricquizapp.presentation.viewstate.HomeViewState
 
 class HomeViewModel @ViewModelInject constructor(
-    private val getUserFromDatabaseUseCase: GetUserFromDatabaseUseCase,
     private val getUserProfileUseCase: GetUserProfileUseCase,
     private val updateCurrentUserUseCase: UpdateCurrentUserUseCase
 ): ViewModel() {
@@ -31,10 +30,6 @@ class HomeViewModel @ViewModelInject constructor(
                 setHomeViewState(HomeViewState.onError(it))
             }
         )
-    }
-
-    fun getScoreList() {
-
     }
 
     fun logout() {

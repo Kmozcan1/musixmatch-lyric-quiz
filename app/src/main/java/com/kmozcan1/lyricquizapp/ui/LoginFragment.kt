@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.kmozcan1.lyricquizapp.R
 import com.kmozcan1.lyricquizapp.databinding.LoginFragmentBinding
-import com.kmozcan1.lyricquizapp.domain.model.viewstate.LoginViewState
+import com.kmozcan1.lyricquizapp.presentation.viewstate.LoginViewState
 import com.kmozcan1.lyricquizapp.presentation.viewmodel.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
