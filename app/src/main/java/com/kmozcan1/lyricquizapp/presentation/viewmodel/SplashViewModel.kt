@@ -45,7 +45,7 @@ class SplashViewModel @ViewModelInject constructor(
     // TODO use composite UseCase for track fetching & saving operations
     // Fetches the top tracks from the API
     private fun copyTrackFromApiToDatabase() {
-        var trackList = mutableListOf<TrackDomainModel>()
+        val trackList = mutableListOf<TrackDomainModel>()
         getTracksFromApiUseCase.execute(
             params = GetTracksFromApiUseCase.Params(
                 Country.US,

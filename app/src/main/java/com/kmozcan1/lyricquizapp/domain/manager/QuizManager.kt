@@ -1,7 +1,6 @@
 package com.kmozcan1.lyricquizapp.domain.manager
 
 
-import com.kmozcan1.lyricquizapp.domain.Constants.DISCLAIMER_LINE
 import com.kmozcan1.lyricquizapp.domain.Constants.NUMBER_OF_OPTIONS
 import com.kmozcan1.lyricquizapp.domain.Constants.NUMBER_OF_TRACKS_TO_FETCH
 import com.kmozcan1.lyricquizapp.domain.enumeration.QuizDifficulty
@@ -18,6 +17,8 @@ import com.kmozcan1.lyricquizapp.domain.manager.QuizManager.DefaultQuizRuleConst
 import com.kmozcan1.lyricquizapp.domain.manager.QuizManager.DefaultQuizRuleConstants.DEFAULT_TIER_TWO_MAX_INDEX
 import com.kmozcan1.lyricquizapp.domain.manager.QuizManager.DefaultQuizRuleConstants.DEFAULT_TIER_TWO_WEIGHT
 import com.kmozcan1.lyricquizapp.domain.manager.QuizManager.DefaultQuizRuleConstants.DEFAULT_TIME_LIMIT
+import com.kmozcan1.lyricquizapp.domain.manager.QuizManager.DefaultQuizRuleConstants.DISCLAIMER_LINE
+import com.kmozcan1.lyricquizapp.domain.manager.QuizManager.DefaultQuizRuleConstants.FILTER_REGEX_STRING
 import com.kmozcan1.lyricquizapp.domain.model.domainmodel.*
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.properties.Delegates
@@ -29,7 +30,7 @@ import kotlin.random.Random
  *
  * Created by Kadir Mert Özcan on 17-Dec-20.
  */
-class QuizManager constructor(private val difficulty: QuizDifficulty) {
+class QuizManager constructor(difficulty: QuizDifficulty) {
 
     private val artistMap = mutableMapOf<Int, ArtistDomainModel>()
     private val chosenTracksMap = mutableMapOf<Int, TrackDomainModel>()
@@ -82,7 +83,7 @@ class QuizManager constructor(private val difficulty: QuizDifficulty) {
             while (chosenTracksMap.containsKey(trackList[rand].trackId )) {
                 rand = Random.nextInt(0, trackList.size)
             }
-            var randomTrack = trackList[rand]
+            val randomTrack = trackList[rand]
             chosenTracksMap[randomTrack.trackId!!] = randomTrack
         }
 
@@ -135,14 +136,18 @@ class QuizManager constructor(private val difficulty: QuizDifficulty) {
     // Returns a random lyric to ask as a question
     private fun selectQuestionLyrics(lyrics: LyricsDomainModel): String {
         val lyricLines = lyrics.lyricsBody?.lines()!!.toMutableList()
-        lyricLines.remove(DISCLAIMER_LINE)
-        val possibleQuestions = lyricLines?.filter {
-                line -> line.length >= quizRules.minimumLineLength
-        }?.toMutableList()
+        val filterRegex = FILTER_REGEX_STRING.toRegex()
+
+        // Filter out the disclaimer lines
+        lyricLines.removeAll { line -> line == DISCLAIMER_LINE || filterRegex.matches(line)  }
+
+        // Filter out the lines that are shorter than the minimum length requirement
+        val possibleQuestions = lyricLines.filter { line -> line.length >= quizRules.minimumLineLength
+        }.toMutableList()
 
         // If a song has only one or no lyric lines that satisfy the minimum length requirement
-        // add longest 5 lyrics to the list of possible questions
-        if (possibleQuestions?.size!! <= 1) {
+        // add longest 5 lyric lines to the list of possible questions
+        if (possibleQuestions.size <= 1) {
             possibleQuestions.addAll(lyricLines.sortedBy { line -> line.length }.take(5))
         }
 
@@ -227,7 +232,13 @@ class QuizManager constructor(private val difficulty: QuizDifficulty) {
 
     // Different difficulty modes can be added in the future
     object DefaultQuizRuleConstants {
-        // Default umber of questions that will be presented to the player
+        // Used for removing the disclaimer line from the lyrics
+        const val DISCLAIMER_LINE = "******* This Lyrics is NOT for Commercial use *******"
+
+        // Regular expression string to filter out line that comes after he disclaimer
+        const val FILTER_REGEX_STRING = """^\(\ ?\d+\ ?\)"""
+
+        // Default number of questions that will be presented to the player
         const val DEFAULT_NUMBER_OF_QUESTIONS = 15
 
         // Minimum lyric line character count,
