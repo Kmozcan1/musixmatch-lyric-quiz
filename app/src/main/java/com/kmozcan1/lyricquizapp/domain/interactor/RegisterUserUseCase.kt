@@ -40,7 +40,7 @@ class RegisterUserUseCase @Inject constructor(
     }
 
     // Can stay here until the login process is more complicated
-    fun isUsernameValid(userName: String): Boolean {
+    private fun isUsernameValid(userName: String): Boolean {
         return userName.isNotBlank()
     }
 }

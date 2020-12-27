@@ -5,9 +5,12 @@
     <string name="leader_board">Leader Board</string>
     <string name="start_quiz">Start Quiz</string>
     <string name="logout">Logout</string>
-    <string name="scoreLabel">Score</string>
-    <string name="timerLabel">Remaining</string>
+    <string name="score_label">Score</string>
+    <string name="timer_label">Remaining</string>
     <string name="final_score">Final Score: %s</string>
     <string name="main_menu">Main Menu</string>
     <string name="login">Login</string>
+    <string name="no_internet_text">Please make sure you are connected to the Internet</string>
+    <string name="quiz">Quiz</string>
+    <string name="welcome">Welcome %s</string>
 </resources>

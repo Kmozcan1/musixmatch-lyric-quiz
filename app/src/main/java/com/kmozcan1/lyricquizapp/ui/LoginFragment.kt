@@ -13,35 +13,28 @@ import com.kmozcan1.lyricquizapp.R
 import com.kmozcan1.lyricquizapp.databinding.LoginFragmentBinding
 import com.kmozcan1.lyricquizapp.presentation.viewstate.LoginViewState
 import com.kmozcan1.lyricquizapp.presentation.viewmodel.LoginViewModel
+import com.kmozcan1.lyricquizapp.presentation.viewmodel.SplashViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class LoginFragment : Fragment() {
+class LoginFragment : BaseFragment<LoginFragmentBinding, LoginViewModel>() {
 
     companion object {
         fun newInstance() = LoginFragment()
     }
 
-    private lateinit var viewModel: LoginViewModel
+    override fun layoutId() = R.layout.login_fragment
 
-    private lateinit var binding: LoginFragmentBinding
+    override fun getViewModelClass(): Class<LoginViewModel> = LoginViewModel::class.java
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-
-        binding = LoginFragmentBinding.inflate(
-            inflater, container, false
-        )
+    override fun onViewBound() {
         binding.loginFragment = this
-        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
+        setSupportActionBar(false)
         viewModel.loginViewState.observe(viewLifecycleOwner, observeViewState())
     }
 
@@ -52,12 +45,7 @@ class LoginFragment : Fragment() {
     private fun observeViewState() = Observer<LoginViewState> { viewState ->
         when {
             viewState.hasError -> {
-                Toast.makeText(
-                        this.activity,
-                        viewState.errorMessage,
-                        Toast.LENGTH_LONG
-                )
-                        .show()
+                makeToast(viewState.errorMessage)
             }
             viewState.isSuccess -> {
                 // Login after button click

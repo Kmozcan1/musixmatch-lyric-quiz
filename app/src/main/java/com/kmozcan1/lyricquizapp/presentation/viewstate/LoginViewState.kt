@@ -22,9 +22,7 @@ data class LoginViewState (
 
         fun isLoginSuccess(isLoginSuccess: Boolean) : LoginViewState = LoginViewState(
             isSuccess = true,
-            isLoginSuccess = true
+            isLoginSuccess = isLoginSuccess
         )
     }
-
-
 }

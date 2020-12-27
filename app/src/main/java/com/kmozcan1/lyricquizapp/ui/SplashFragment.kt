@@ -1,60 +1,53 @@
 package com.kmozcan1.lyricquizapp.ui
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.kmozcan1.lyricquizapp.R
-import com.kmozcan1.lyricquizapp.databinding.QuizFragmentBinding
 import com.kmozcan1.lyricquizapp.databinding.SplashFragmentBinding
 import com.kmozcan1.lyricquizapp.presentation.viewmodel.SplashViewModel
-import com.kmozcan1.lyricquizapp.presentation.viewstate.LoginViewState
 import com.kmozcan1.lyricquizapp.presentation.viewstate.SplashViewState
 import dagger.hilt.android.AndroidEntryPoint
 
+
 @AndroidEntryPoint
-class SplashFragment : Fragment() {
+class SplashFragment : BaseFragment<SplashFragmentBinding, SplashViewModel>() {
 
     companion object {
         fun newInstance() = SplashFragment()
     }
 
-    private lateinit var viewModel: SplashViewModel
-    private lateinit var binding: SplashFragmentBinding
+    override fun layoutId() = R.layout.splash_fragment
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = SplashFragmentBinding.inflate(
-            inflater, container, false
-        )
+    override fun getViewModelClass(): Class<SplashViewModel> = SplashViewModel::class.java
+
+    override fun onViewBound() {
         binding.quizFragment = this
         binding.frameLayout.visibility = View.VISIBLE
-        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(SplashViewModel::class.java)
+        setSupportActionBar(false)
         viewModel.splashViewState.observe(viewLifecycleOwner, splashViewStateObserver())
-        viewModel.nukeTracksFromDatabase()
+        if (getIsConnectedToInternet()) {
+            viewModel.prepareTracks()
+        } else {
+            showConnectionWarning(true)
+        }
     }
 
     private fun splashViewStateObserver() =  Observer<SplashViewState> { viewState ->
         when {
             viewState.hasError -> {
-                Toast.makeText(
-                    this.activity,
-                    viewState.errorMessage,
-                    Toast.LENGTH_LONG
-                )
-                    .show()
+                makeToast(viewState.errorMessage)
                 findNavController().navigateUp()
             }
             viewState.isSuccess -> {
@@ -68,5 +61,22 @@ class SplashFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun showConnectionWarning(isVisible: Boolean) {
+        if (isVisible) {
+            binding.splashInternetTextView.visibility = View.VISIBLE
+        } else {
+            binding.splashInternetTextView.visibility = View.GONE
+        }
+    }
+
+    override fun onInternetConnected() {
+        showConnectionWarning(false)
+        viewModel.prepareTracks()
+    }
+
+    override fun onInternetDisconnected() {
+        showConnectionWarning(true)
     }
 }

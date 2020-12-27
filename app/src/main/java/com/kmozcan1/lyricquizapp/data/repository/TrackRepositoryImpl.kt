@@ -22,7 +22,7 @@ class TrackRepositoryImpl @Inject constructor(
     private val apiKey: String
 ): TrackRepository {
     companion object {
-        private const val HAS_LYRICS = "1";
+        private const val HAS_LYRICS = "1"
     }
 
     override fun getTracksFromChart(

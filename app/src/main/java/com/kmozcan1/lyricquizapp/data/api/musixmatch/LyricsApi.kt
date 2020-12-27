@@ -19,8 +19,6 @@ interface LyricsApi {
      * 
      * The endpoint is owned by defaultname service owner
      * @param trackId The musiXmatch track id (required)
-     * @param format output format: json, jsonp, xml. (optional, default to json)
-     * @param callback jsonp callback (optional)
      */
     @Headers(
         "Content-Type: application/json"

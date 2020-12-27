@@ -11,12 +11,12 @@ import javax.inject.Inject
  */
 class TrackRepositoryToDomainModelMapper @Inject constructor() : Mapper<TrackDomainModel?,
         ATrackObject?> {
-    override fun map(trackRepositoryObject: ATrackObject?) =
-        trackRepositoryObject?.let {
+    override fun map(repositoryModel: ATrackObject?) =
+        repositoryModel?.let {
             TrackDomainModel(
-                trackId = trackRepositoryObject.trackId?.toInt(),
-                artistId = trackRepositoryObject.artistId?.toInt(),
-                artistName = trackRepositoryObject.artistName
+                trackId = repositoryModel.trackId?.toInt(),
+                artistId = repositoryModel.artistId?.toInt(),
+                artistName = repositoryModel.artistName
             )
         }
 }

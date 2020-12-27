@@ -10,5 +10,5 @@ import io.reactivex.rxjava3.core.Single
  */
 interface LyricsRepository {
     // returns a list of ALyricsObjects for each track in the list
-    fun getLyricsForTrack(tracks: Int): Single<ALyricsObject?>
+    fun getLyricsForTrack(trackId: Int): Single<ALyricsObject?>
 }
