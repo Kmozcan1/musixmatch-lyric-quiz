@@ -17,7 +17,7 @@ class GetTracksFromDatabaseUseCase @Inject constructor(
 
     override fun buildObservable(params: Params?): Single<List<TrackDomainModel>> {
         return trackRepository.getAllTracksFromDatabase().map { response ->
-            response.mapNotNull { TrackDomainModel(it.trackId, it.artistId, it.artistName) }
+            response.map { TrackDomainModel(it.trackId, it.artistId, it.artistName) }
         }
     }
 }

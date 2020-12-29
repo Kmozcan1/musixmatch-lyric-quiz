@@ -12,35 +12,29 @@ import androidx.navigation.fragment.findNavController
 import com.kmozcan1.lyricquizapp.R
 import com.kmozcan1.lyricquizapp.databinding.QuizFragmentBinding
 import com.kmozcan1.lyricquizapp.domain.model.domainmodel.Question
+import com.kmozcan1.lyricquizapp.presentation.viewmodel.LoginViewModel
 import com.kmozcan1.lyricquizapp.presentation.viewstate.QuizViewState
 import com.kmozcan1.lyricquizapp.presentation.viewmodel.QuizViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class QuizFragment : Fragment() {
+class QuizFragment : BaseFragment<QuizFragmentBinding, QuizViewModel>() {
 
     companion object {
         fun newInstance() = QuizFragment()
     }
 
-    private lateinit var viewModel: QuizViewModel
-    private lateinit var binding: QuizFragmentBinding
+    override fun layoutId() = R.layout.quiz_fragment
 
+    override fun getViewModelClass(): Class<QuizViewModel> = QuizViewModel::class.java
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = QuizFragmentBinding.inflate(
-            inflater, container, false
-        )
+    override fun onViewBound() {
         binding.quizFragment = this
-        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(QuizViewModel::class.java)
+        setSupportActionBar(true, getString(R.string.quiz))
         // Observe ViewState
         viewModel.quizViewState.observe(viewLifecycleOwner, viewStateObserver())
         // Observe questions
@@ -55,60 +49,48 @@ class QuizFragment : Fragment() {
 
     }
 
-    private fun viewStateObserver() = Observer<QuizViewState> {
-        it?.let { viewState ->
-            when {
-                viewState.hasError -> {
-                    Toast.makeText(
-                        this.activity,
-                        viewState.errorMessage,
-                        Toast.LENGTH_LONG
-                    )
-                        .show()
-                    findNavController().navigateUp()
-                }
-                viewState.isLoading -> {
-                    binding.quizProgressBar.visibility = View.VISIBLE
-                }
-                viewState.isSuccess -> {
-                    binding.quizProgressBar.visibility = View.GONE
-                    when {
-                        viewState.isScorePosted -> {
-                            showScoreScreen()
-                        }
-                        viewState.isQuizFinished -> {
-                            hideOptionView()
-                        }
+    private fun viewStateObserver() = Observer<QuizViewState> { viewState ->
+        when {
+            viewState.hasError -> {
+                makeToast(viewState.errorMessage)
+                findNavController().navigateUp()
+            }
+            viewState.isLoading -> {
+                binding.quizProgressBar.visibility = View.VISIBLE
+            }
+            viewState.isSuccess -> {
+                binding.quizProgressBar.visibility = View.GONE
+                when {
+                    viewState.isScorePosted -> {
+                        showScoreScreen()
+                    }
+                    viewState.isQuizFinished -> {
+                        hideOptionView()
                     }
                 }
             }
         }
     }
 
-    private fun questionObserver() = Observer<Question> {
-        it.let { question ->
-            if (!binding.quizOptionsView.buttonsAreSet) {
-                binding.quizOptionsView.setOptionButtons(question.options)
-                binding.quizOptionsView.visibility = View.VISIBLE }
-            else {
-                binding.quizOptionsView.renameOptionButtons(question.options)
-                binding.quizOptionsView.isEnabled = true
+    private fun questionObserver() = Observer<Question> { question ->
+        if (!binding.quizOptionsView.buttonsAreSet) {
+            binding.quizOptionsView.setOptionButtons(question.options)
+            binding.quizOptionsView.visibility = View.VISIBLE }
+        else {
+            binding.quizOptionsView.renameOptionButtons(question.options)
+            binding.quizOptionsView.isEnabled = true
 
-            }
-            binding.questionTextView.text = question.lyric
         }
+        binding.questionTextView.text = question.lyric
+
     }
 
-    private fun timerObserver() = Observer<String> {
-        it.let { time ->
-            binding.timerTextView.text = time
-        }
+    private fun timerObserver() = Observer<String> {  time ->
+        binding.timerTextView.text = time
     }
 
-    private fun scoreObserver() = Observer<String> {
-        it.let { score ->
-            binding.scoreTextView.text = score
-        }
+    private fun scoreObserver() = Observer<String> { score ->
+        binding.scoreTextView.text = score
     }
 
     private fun optionButtonClickListener() = object : OptionsView.OptionButtonClickListener {
@@ -127,11 +109,11 @@ class QuizFragment : Fragment() {
         findNavController().navigate(R.id.action_quizFragment_to_homeFragment)
     }
 
-    fun hideOptionView() {
+    private fun hideOptionView() {
         binding.quizOptionsView.visibility = View.GONE
     }
 
-    fun showScoreScreen() {
+    private fun showScoreScreen() {
         binding.scoreScreen.visibility = View.VISIBLE
         binding.finalScoreTextView.text = getString(R.string.final_score, binding.scoreTextView.text)
         binding.quizOptionsView.isEnabled = false

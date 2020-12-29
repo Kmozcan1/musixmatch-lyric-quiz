@@ -34,12 +34,16 @@ class GenerateQuizUseCase @Inject constructor(
         val lyricsList = mutableListOf<LyricsDomainModel>()
         var quiz: Quiz?
         val quizSubject: SingleSubject<Quiz> = SingleSubject.create()
+        // First, get tracks from database
         getTracksFromDatabaseUseCase.buildObservable().toFlowable().flatMap { tracks ->
+            // Then, select random tracks and fetch their lyrics
             getLyricsUseCase.buildObservable(
                 GetLyricsUseCase.Params(quizManager.selectTracks((tracks)))
             ).doOnNext { lyrics ->
+                // Add each fetched lyrics to the lyrics list
                 lyricsList.add(lyrics)
             }.doOnComplete{
+                // Finally, finish generating the quest by choosing random options for each question
                 quiz = quizManager.generateQuiz(lyricsList)
                 quizSubject.onSuccess(quiz)
             }

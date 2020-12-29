@@ -9,11 +9,11 @@ import javax.inject.Inject
  */
 class LyricsRepositoryToDomainModelMapper @Inject constructor() : Mapper<LyricsDomainModel?,
         ALyricsObject?> {
-    override fun map(lyricsRepositoryObject: ALyricsObject?) =
-            lyricsRepositoryObject?.let {
+    override fun map(repositoryModel: ALyricsObject?) =
+            repositoryModel?.let {
                 LyricsDomainModel(
-                    lyricsBody = lyricsRepositoryObject.lyricsBody,
-                    trackId = lyricsRepositoryObject.trackId
+                    lyricsBody = repositoryModel.lyricsBody,
+                    trackId = repositoryModel.trackId
                 )
             }
 }

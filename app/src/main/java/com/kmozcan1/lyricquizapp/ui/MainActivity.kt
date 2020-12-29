@@ -1,56 +1,59 @@
 package com.kmozcan1.lyricquizapp.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.kmozcan1.lyricquizapp.R
-import com.kmozcan1.lyricquizapp.presentation.viewstate.SplashViewState
 import com.kmozcan1.lyricquizapp.presentation.viewmodel.MainViewModel
+import com.kmozcan1.lyricquizapp.presentation.viewstate.MainViewState
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 /**
  * Created by Kadir Mert Özcan on 14-Dec-20.
  */
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    private var viewState: SplashViewState? = null
+    private lateinit var viewModel: MainViewModel
+
+
+    var isConnectedToInternet: Boolean = false
+        private set
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
-
         super.onCreate(savedInstanceState)
-        val viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        // Fetch tracks and insert into db while the splash "screen" is being shown (it's just a theme)
-        /*viewModel.mainViewState.observe(this, {
-            it?.let { state ->
-                viewState = state
-                when {
-                    state.hasError -> {
-                        Toast.makeText(
-                                this,
-                                state.errorMessage,
-                                Toast.LENGTH_LONG
-                        ).show()
-                    }
-                    state.isSuccess -> {
-                        setTheme(R.style.AppTheme)
-                        setContentView(R.layout.activity_main)
-                        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-                    }
-                }
-        }
-        })*/
-        //debug
-        //viewModel.copyTrackFromApiToDatabase()
-        /*setTheme(R.style.AppTheme)
-        setContentView(R.layout.activity_main)*/
-        //val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        setTheme(R.style.AppTheme)
+        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        viewModel.mainViewState.observe(this, observeViewState())
+        viewModel.observeInternetConnection()
         setContentView(R.layout.activity_main)
     }
 
+    private fun observeViewState() = Observer<MainViewState> { viewState ->
+        when {
+            viewState.hasError -> {
+                makeToast(viewState.errorMessage)
+            }
+            viewState.onConnectionChange -> {
+                val baseFragment = supportFragmentManager.fragments.first()?.childFragmentManager?.fragments?.get(0) as BaseFragment<*, *>
+                isConnectedToInternet = viewState.isConnected
+                if (viewState.isConnected) {
+                    baseFragment.onInternetConnected()
+                } else {
+                    baseFragment.onInternetDisconnected()
+                }
+            }
+        }
+    }
 
-
-
-
+    fun makeToast(toastMessage: String?) {
+        Toast.makeText(
+                this,
+                toastMessage,
+                Toast.LENGTH_LONG
+        ).show()
+    }
 }

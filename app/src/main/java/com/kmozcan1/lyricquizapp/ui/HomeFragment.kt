@@ -19,62 +19,50 @@ import com.kmozcan1.lyricquizapp.presentation.viewmodel.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class HomeFragment : Fragment() {
+class HomeFragment : BaseFragment<HomeFragmentBinding, HomeViewModel>() {
 
     companion object {
         fun newInstance() = HomeFragment()
     }
 
-    private lateinit var viewModel: HomeViewModel
-    private lateinit var binding: HomeFragmentBinding
     private lateinit var scoreListAdapter: ScoreListAdapter
 
+    override fun layoutId(): Int = R.layout.home_fragment
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = HomeFragmentBinding.inflate(
-            inflater, container, false
-        )
+    override fun getViewModelClass(): Class<HomeViewModel> = HomeViewModel::class.java
+
+    override fun onViewBound() {
         binding.homeFragment = this
-        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         viewModel.homeViewState.observe(viewLifecycleOwner, viewStateObserver())
         viewModel.getUserProfile()
+        if (getIsConnectedToInternet()) {
+            showConnectionWarning(false)
+        } else {
+            showConnectionWarning(true)
+        }
     }
 
-    private fun viewStateObserver() = Observer<HomeViewState> {
-        it?.let { viewState ->
-            when {
-                viewState.hasError -> {
-                    Toast.makeText(
-                        this.activity,
-                        viewState.errorMessage,
-                        Toast.LENGTH_LONG
+    private fun viewStateObserver() = Observer<HomeViewState> { viewState ->
+        when {
+            viewState.hasError -> {
+                makeToast(viewState.errorMessage)
+            }
+            viewState.isLoading -> {
+            }
+            viewState.isSuccess -> {
+                if (viewState.hasUserProfile) {
+                    setSupportActionBar(true,
+                            getString(R.string.welcome, viewState.userName))
+                    scoreListAdapter = ScoreListAdapter(
+                            viewState.scoreList
                     )
-                        .show()
-                    findNavController().navigateUp()
-                }
-                viewState.isLoading -> {
-                }
-                viewState.isSuccess -> {
-                    when {
-                        viewState.hasScoreList  -> {
-                            if (viewState.scoreList != null) {
-                                scoreListAdapter = ScoreListAdapter(
-                                    viewState.scoreList
-                                )
-                                binding.userQuizHistoryRecyclerView.setAdapterWithCustomDivider(
-                                    LinearLayoutManager(context),
-                                    scoreListAdapter)
-                            }
-                        }
-                    }
+                    binding.userQuizHistoryRecyclerView.setAdapterWithCustomDivider(
+                            LinearLayoutManager(context),
+                            scoreListAdapter)
                 }
             }
         }
@@ -93,4 +81,21 @@ class HomeFragment : Fragment() {
         findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
     }
 
+    private fun showConnectionWarning(isVisible: Boolean) {
+        if (isVisible) {
+            binding.homeInternetTextView.visibility = View.VISIBLE
+            binding.startQuizButton.visibility = View.GONE
+        } else {
+            binding.homeInternetTextView.visibility = View.GONE
+            binding.startQuizButton.visibility = View.VISIBLE
+        }
+    }
+
+    override fun onInternetConnected() {
+        showConnectionWarning(false)
+    }
+
+    override fun onInternetDisconnected() {
+        showConnectionWarning(true)
+    }
 }

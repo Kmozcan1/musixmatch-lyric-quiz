@@ -11,34 +11,29 @@ data class HomeViewState (
     val errorMessage: String? = null,
     val isSuccess: Boolean = false,
     val userName: String? = null,
-    val hasScoreList: Boolean = false,
-    val scoreList: List<ScoreDomainModel>? = null
+    val hasUserProfile: Boolean = false,
+    val scoreList: List<ScoreDomainModel> = emptyList()
 ) {
     companion object {
         fun onSuccess() : HomeViewState = HomeViewState(
-            hasError = false,
-            isLoading = false,
-            isSuccess = true
+                hasError = false,
+                isLoading = false,
+                isSuccess = true
         )
 
         fun onError(e: Throwable): HomeViewState = HomeViewState(
-            hasError = true,
-            errorMessage = e.message
+                hasError = true,
+                errorMessage = e.message
         )
 
-        fun onUserName(userName: String) : HomeViewState = HomeViewState(
-            hasError = false,
-            isLoading = false,
-            isSuccess = true,
-            userName = userName
-        )
-
-        fun onScoreList(scoreList: List<ScoreDomainModel>) : HomeViewState = HomeViewState(
-            hasError = false,
-            isLoading = false,
-            isSuccess = true,
-            hasScoreList = true,
-            scoreList = scoreList
+        fun onUserProfile(userName: String,
+                          scoreList: List<ScoreDomainModel>) : HomeViewState = HomeViewState(
+                hasError = false,
+                isLoading = false,
+                isSuccess = true,
+                hasUserProfile = true,
+                userName = userName,
+                scoreList = scoreList
         )
     }
 

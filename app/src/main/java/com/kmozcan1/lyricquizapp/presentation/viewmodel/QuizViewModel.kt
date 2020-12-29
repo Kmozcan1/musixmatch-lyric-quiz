@@ -102,7 +102,7 @@ class QuizViewModel @ViewModelInject constructor(
         )
     }
 
-    //TODO move the app logic to the domain layer
+    //TODO move the app logic to the domain layer maybe?
     fun checkAnswer(selectedOption: String) {
         countdownUseCase.dispose()
         if (selectedOption == questionLiveData.value?.correctAnswer?.name) {

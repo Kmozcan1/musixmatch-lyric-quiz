@@ -19,7 +19,7 @@ class GetUserScoreHistoryUseCase @Inject constructor(
     override fun buildObservable(params: Params?): Single<List<ScoreDomainModel>> {
         return scoreRepository.getLastTenUserScoresFromDatabase(params!!.userName).map { scores ->
             scores.map { score ->
-                ScoreDomainModel(score.userName!!, score.score!!)
+                ScoreDomainModel(score.userName, score.score!!)
             }
         }
     }

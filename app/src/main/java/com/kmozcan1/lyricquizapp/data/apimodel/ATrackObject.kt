@@ -27,7 +27,6 @@ import java.math.BigDecimal
  * @property artistName
  * @property albumCoverart800x800
  * @property albumCoverart100x100
- * @property trackNameTranslationList
  * @property trackName
  * @property restricted
  * @property hasSubtitles

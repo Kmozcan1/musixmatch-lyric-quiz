@@ -33,7 +33,7 @@ class GetTracksFromApiUseCase @Inject constructor(
         if (remainder != 0) {
             apiCallCount++
         }
-        val pageSize = if (NUMBER_OF_TRACKS_TO_FETCH <= Constants.MAX_CHART_PAGE_SIZE) {
+        val pageSize = if (NUMBER_OF_TRACKS_TO_FETCH <= MAX_CHART_PAGE_SIZE) {
             NUMBER_OF_TRACKS_TO_FETCH
         } else {
             MAX_CHART_PAGE_SIZE

@@ -3,6 +3,7 @@ package com.kmozcan1.lyricquizapp.domain.interactor
 import androidx.room.rxjava3.EmptyResultSetException
 import com.kmozcan1.lyricquizapp.domain.interactor.base.SingleUseCase
 import com.kmozcan1.lyricquizapp.domain.model.domainmodel.ScoreDomainModel
+import com.kmozcan1.lyricquizapp.domain.model.domainmodel.UserDomainModel
 import com.kmozcan1.lyricquizapp.domain.repository.ScoreRepository
 import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject
@@ -12,20 +13,23 @@ import javax.inject.Inject
  */
 class GetUserProfileUseCase @Inject constructor(
     private val getUserScoreHistoryUseCase: GetUserScoreHistoryUseCase,
-    private val getUserFromDatabaseUseCase: GetUserFromDatabaseUseCase,
-    private val insertUserToDatabaseUseCase: InsertUserToDatabaseUseCase,
     private val getCurrentUserUseCase: GetCurrentUserUseCase
-) : SingleUseCase<List<ScoreDomainModel>,
+) : SingleUseCase<UserDomainModel,
         GetUserProfileUseCase.Params>() {
     data class Params(val void: Void? = null)
 
-    override fun buildObservable(params: Params?): Single<List<ScoreDomainModel>> {
+    override fun buildObservable(params: Params?): Single<UserDomainModel> {
         return getCurrentUserUseCase.buildObservable().flatMap { userName ->
             getUserScoreHistoryUseCase.buildObservable(
                 GetUserScoreHistoryUseCase.Params(userName))
-                .onErrorResumeNext { error ->
-                    if (error is EmptyResultSetException) Single.just(emptyList())
-                    else Single.error(error)
+                    .map { scoreHistory ->
+                        UserDomainModel(userName = userName, scoreHistory = scoreHistory)
+                    }
+                    .onErrorResumeNext { error ->
+                        if (error is EmptyResultSetException) Single.just(
+                                UserDomainModel(userName = userName, scoreHistory = emptyList())
+                        )
+                        else Single.error(error)
             }
         }
     }

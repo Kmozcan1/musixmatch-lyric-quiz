@@ -10,7 +10,7 @@ import com.kmozcan1.lyricquizapp.presentation.viewstate.HomeViewState
 class HomeViewModel @ViewModelInject constructor(
     private val getUserProfileUseCase: GetUserProfileUseCase,
     private val updateCurrentUserUseCase: UpdateCurrentUserUseCase
-): ViewModel() {
+    ): ViewModel() {
 
     // LiveData to observe ViewState
     val homeViewState: LiveData<HomeViewState>
@@ -20,10 +20,14 @@ class HomeViewModel @ViewModelInject constructor(
         _homeViewState.postValue(value)
     }
 
+
     fun getUserProfile() {
         getUserProfileUseCase.execute(
-            onSuccess = { scoreList ->
-                setHomeViewState(HomeViewState.onScoreList(scoreList))
+            onSuccess = { userProfile ->
+                if (userProfile.scoreHistory != null) {
+                    setHomeViewState(HomeViewState.onUserProfile(userProfile.userName,
+                            userProfile.scoreHistory))
+                }
             },
             onError = {
                 it.printStackTrace()

@@ -3,8 +3,6 @@ package com.kmozcan1.lyricquizapp.data
 import android.content.Context
 import android.content.SharedPreferences
 import com.kmozcan1.lyricquizapp.domain.datasource.SharedPreferencesDataSource
-import com.kmozcan1.lyricquizapp.domain.model.domainmodel.QuizResult
-import com.kmozcan1.lyricquizapp.domain.model.domainmodel.User
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject
@@ -23,7 +21,7 @@ class SharedPreferencesDataSourceImpl @Inject constructor(
     companion object {
         // Pref keys
         private const val CURRENT_USER = "currentUser"
-        private const val DEFAULT = "DEFAULT"
+        private const val DEFAULT = ""
     }
 
     private val currentUserData: SharedPreferences by lazy {
@@ -48,13 +46,5 @@ class SharedPreferencesDataSourceImpl @Inject constructor(
 
     override fun getCurrentUser(): Single<String> {
         return Single.just(currentUserData.getString(CURRENT_USER, DEFAULT))
-    }
-
-    override fun addQuizResult(quizResult: QuizResult) {
-        TODO("Not yet implemented")
-    }
-
-    override fun getLeaderBoard(): List<QuizResult> {
-        TODO("Not yet implemented")
     }
 }

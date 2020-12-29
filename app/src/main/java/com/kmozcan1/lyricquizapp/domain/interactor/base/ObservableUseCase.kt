@@ -19,10 +19,10 @@ import timber.log.Timber
 abstract class ObservableUseCase<Result, in Params> : Disposable {
     private lateinit var disposable: Disposable
 
-    abstract fun buildObservable(params: Params?): Observable<Result>
+    abstract fun buildObservable(params: Params? = null): Observable<Result>
 
-    fun execute(params: Params?,
-                onComplete: () -> Unit = {},
+    fun execute(params: Params? = null,
+                onComplete: () -> Unit = { },
                 onNext: Consumer<Result>? = Consumer {  },
                 onError: Consumer<Throwable>? = Consumer {  }) {
         disposable = buildObservable(params)
