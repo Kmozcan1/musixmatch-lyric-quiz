@@ -1,4 +1,4 @@
-package com.kmozcan1.lyricquizapp.ui
+package com.kmozcan1.lyricquizapp.presentation.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,6 +14,7 @@ import com.kmozcan1.lyricquizapp.databinding.LoginFragmentBinding
 import com.kmozcan1.lyricquizapp.presentation.viewstate.LoginViewState
 import com.kmozcan1.lyricquizapp.presentation.viewmodel.LoginViewModel
 import com.kmozcan1.lyricquizapp.presentation.viewmodel.SplashViewModel
+import com.kmozcan1.lyricquizapp.presentation.viewstate.LoginViewState.State.*
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -30,30 +31,32 @@ class LoginFragment : BaseFragment<LoginFragmentBinding, LoginViewModel>() {
 
     override fun onViewBound() {
         binding.loginFragment = this
+        setSupportActionBar(false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        setSupportActionBar(false)
-        viewModel.loginViewState.observe(viewLifecycleOwner, observeViewState())
+    }
+
+    override fun observe() {
+        viewModel.viewState.observe(viewLifecycleOwner, observeViewState())
+    }
+
+    private fun observeViewState() = Observer<LoginViewState> { viewState ->
+        when (viewState.state){
+            ERROR -> {
+                makeToast(viewState.errorMessage)
+            }
+            LOGIN -> {
+                navController.navigate(R.id.action_loginFragment_to_homeFragment)
+            }
+            LOADING -> {
+
+            }
+        }
     }
 
     fun onLoginButtonClick(v: View) {
         viewModel.login(binding.userNameEditText.text.toString())
-    }
-
-    private fun observeViewState() = Observer<LoginViewState> { viewState ->
-        when {
-            viewState.hasError -> {
-                makeToast(viewState.errorMessage)
-            }
-            viewState.isSuccess -> {
-                // Login after button click
-                if (viewState.isLoginSuccess) {
-                    findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
-                }
-                // If the a user was already logged in
-            }
-        }
     }
 }

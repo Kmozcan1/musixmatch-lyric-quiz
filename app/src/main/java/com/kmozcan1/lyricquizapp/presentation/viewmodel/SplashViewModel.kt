@@ -4,11 +4,7 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.kmozcan1.lyricquizapp.domain.Constants
-import com.kmozcan1.lyricquizapp.domain.enumeration.Country
 import com.kmozcan1.lyricquizapp.domain.interactor.*
-import com.kmozcan1.lyricquizapp.domain.model.domainmodel.TrackDomainModel
-import com.kmozcan1.lyricquizapp.presentation.viewstate.LoginViewState
 import com.kmozcan1.lyricquizapp.presentation.viewstate.SplashViewState
 
 class SplashViewModel @ViewModelInject constructor(
@@ -31,7 +27,7 @@ class SplashViewModel @ViewModelInject constructor(
             onComplete = { checkIfLoggedIn() },
             onError = {
                 it.printStackTrace()
-                setSplashViewState(SplashViewState.onError(it))
+                setSplashViewState(SplashViewState.error(it))
             }
         )
     }
@@ -43,16 +39,16 @@ class SplashViewModel @ViewModelInject constructor(
                 onSuccess = { userName ->
                     when {
                         userName.isNotBlank() -> {
-                            setSplashViewState(SplashViewState.onLoggedIn(true))
+                            setSplashViewState(SplashViewState.loginCheck(true))
                         }
                         else -> {
-                            setSplashViewState(SplashViewState.onLoggedIn(false))
+                            setSplashViewState(SplashViewState.loginCheck(false))
                         }
                     }
                 },
                 onError = {
                     it.printStackTrace()
-                    setSplashViewState(SplashViewState.onError(it))
+                    setSplashViewState(SplashViewState.error(it))
                 }
         )
     }

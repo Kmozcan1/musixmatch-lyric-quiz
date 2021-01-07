@@ -1,4 +1,4 @@
-package com.kmozcan1.lyricquizapp.ui
+package com.kmozcan1.lyricquizapp.presentation.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,6 +15,7 @@ import com.kmozcan1.lyricquizapp.domain.model.domainmodel.Question
 import com.kmozcan1.lyricquizapp.presentation.viewmodel.LoginViewModel
 import com.kmozcan1.lyricquizapp.presentation.viewstate.QuizViewState
 import com.kmozcan1.lyricquizapp.presentation.viewmodel.QuizViewModel
+import com.kmozcan1.lyricquizapp.presentation.viewstate.QuizViewState.State.*
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -30,13 +31,12 @@ class QuizFragment : BaseFragment<QuizFragmentBinding, QuizViewModel>() {
 
     override fun onViewBound() {
         binding.quizFragment = this
+        setSupportActionBar(true, getString(R.string.quiz))
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        setSupportActionBar(true, getString(R.string.quiz))
+    override fun observe() {
         // Observe ViewState
-        viewModel.quizViewState.observe(viewLifecycleOwner, viewStateObserver())
+        viewModel.viewState.observe(viewLifecycleOwner, viewStateObserver())
         // Observe questions
         viewModel.questionLiveData.observe(viewLifecycleOwner, questionObserver())
         // Observe the timer
@@ -45,31 +45,40 @@ class QuizFragment : BaseFragment<QuizFragmentBinding, QuizViewModel>() {
         viewModel.scoreLiveData.observe(viewLifecycleOwner, scoreObserver())
         // Set listener for generated buttons
         binding.quizOptionsView.setOptionButtonClickListener(optionButtonClickListener())
-        viewModel.createQuiz()
 
+        viewModel.createQuiz()
     }
 
     private fun viewStateObserver() = Observer<QuizViewState> { viewState ->
-        when {
-            viewState.hasError -> {
+        when (viewState.state) {
+            ERROR -> {
                 makeToast(viewState.errorMessage)
-                findNavController().navigateUp()
+                navController.navigateUp()
             }
-            viewState.isLoading -> {
+            LOADING -> {
                 binding.quizProgressBar.visibility = View.VISIBLE
             }
-            viewState.isSuccess -> {
+            QUIZ_GENERATED -> {
                 binding.quizProgressBar.visibility = View.GONE
-                when {
-                    viewState.isScorePosted -> {
-                        showScoreScreen()
-                    }
-                    viewState.isQuizFinished -> {
-                        hideOptionView()
-                    }
-                }
+            }
+            SCORE_POSTED -> {
+                showScoreScreen()
+            }
+            QUIZ_FINISHED -> {
+                hideOptionView()
             }
         }
+    }
+
+    private fun showScoreScreen() {
+        binding.scoreScreen.visibility = View.VISIBLE
+        binding.finalScoreTextView.text = getString(R.string.final_score, binding.scoreTextView.text)
+        binding.quizOptionsView.isEnabled = false
+        binding.quizOptionsView.visibility = View.GONE
+    }
+
+    private fun hideOptionView() {
+        binding.quizOptionsView.visibility = View.GONE
     }
 
     private fun questionObserver() = Observer<Question> { question ->
@@ -93,6 +102,8 @@ class QuizFragment : BaseFragment<QuizFragmentBinding, QuizViewModel>() {
         binding.scoreTextView.text = score
     }
 
+
+
     private fun optionButtonClickListener() = object : OptionsView.OptionButtonClickListener {
         override fun onOptionButtonClicked(artistName: String) {
             //TODO Workaround for pressed button not being changed
@@ -102,21 +113,15 @@ class QuizFragment : BaseFragment<QuizFragmentBinding, QuizViewModel>() {
     }
 
     fun onLeaderBoardButtonClick(v: View) {
-        findNavController().navigate(R.id.action_quizFragment_to_leaderboardFragment2)
+        navController.navigate(R.id.action_quizFragment_to_leaderboardFragment2)
     }
 
     fun onHomeButtonClick(v: View) {
-        findNavController().navigate(R.id.action_quizFragment_to_homeFragment)
+        navController.navigate(R.id.action_quizFragment_to_homeFragment)
     }
 
-    private fun hideOptionView() {
-        binding.quizOptionsView.visibility = View.GONE
-    }
-
-    private fun showScoreScreen() {
-        binding.scoreScreen.visibility = View.VISIBLE
-        binding.finalScoreTextView.text = getString(R.string.final_score, binding.scoreTextView.text)
-        binding.quizOptionsView.isEnabled = false
-        binding.quizOptionsView.visibility = View.GONE
+    override fun onDestroy() {
+        viewModel.dispose()
+        super.onDestroy()
     }
 }

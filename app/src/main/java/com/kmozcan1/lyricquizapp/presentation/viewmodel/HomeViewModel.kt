@@ -1,37 +1,24 @@
 package com.kmozcan1.lyricquizapp.presentation.viewmodel
 
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.kmozcan1.lyricquizapp.domain.interactor.*
 import com.kmozcan1.lyricquizapp.presentation.viewstate.HomeViewState
 
 class HomeViewModel @ViewModelInject constructor(
     private val getUserProfileUseCase: GetUserProfileUseCase,
     private val updateCurrentUserUseCase: UpdateCurrentUserUseCase
-    ): ViewModel() {
-
-    // LiveData to observe ViewState
-    val homeViewState: LiveData<HomeViewState>
-        get() = _homeViewState
-    private val _homeViewState = MutableLiveData<HomeViewState>()
-    private fun setHomeViewState(value: HomeViewState) {
-        _homeViewState.postValue(value)
-    }
-
+    ): BaseViewModel<HomeViewState>() {
 
     fun getUserProfile() {
         getUserProfileUseCase.execute(
             onSuccess = { userProfile ->
                 if (userProfile.scoreHistory != null) {
-                    setHomeViewState(HomeViewState.onUserProfile(userProfile.userName,
+                    setViewState(HomeViewState.userProfile(userProfile.userName,
                             userProfile.scoreHistory))
                 }
             },
             onError = {
-                it.printStackTrace()
-                setHomeViewState(HomeViewState.onError(it))
+                onError(it)
             }
         )
     }
@@ -40,12 +27,16 @@ class HomeViewModel @ViewModelInject constructor(
         updateCurrentUserUseCase.execute(
             params = UpdateCurrentUserUseCase.Params(""),
             onComplete = {
-
+                setViewState(HomeViewState.logout())
             },
             onError = {
-                it.printStackTrace()
-                setHomeViewState(HomeViewState.onError(it))
+                onError(it)
             }
         )
+    }
+
+    override fun onError(t: Throwable) {
+        t.printStackTrace()
+        setViewState(HomeViewState.error(t))
     }
 }

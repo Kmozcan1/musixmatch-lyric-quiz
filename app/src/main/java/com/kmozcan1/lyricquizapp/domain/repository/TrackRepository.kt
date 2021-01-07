@@ -15,6 +15,7 @@ import io.reactivex.rxjava3.core.Single
 
 interface TrackRepository {
     fun getTracksFromChart(country: Country, pageSize: Int, page: Int): Single<List<InlineResponse2006MessageBody>?>
+    //TODO
     fun insertTrackToDatabase(track: TrackDomainModel): Completable
     fun getAllTracksFromDatabase(): Single<List<TrackEntity>>
     fun nukeTable(): Completable

@@ -4,25 +4,30 @@ package com.kmozcan1.lyricquizapp.presentation.viewstate
  * Created by Kadir Mert Özcan on 16-Dec-20.
  */
 data class LoginViewState (
-    val isLoading: Boolean = false,
-    val hasError: Boolean = false,
+    val state: State,
     val errorMessage: String? = null,
-    val isSuccess: Boolean = false,
     var isLoginSuccess: Boolean = false
 ) {
     companion object {
-        fun onSuccess() : LoginViewState = LoginViewState(
-            isSuccess = true
+
+        fun error(e: Throwable): LoginViewState = LoginViewState(
+            state = State.ERROR,
+            errorMessage = e.message
         )
 
-        fun onError(e: Throwable): LoginViewState = LoginViewState(
-            hasError = true,
-            errorMessage = e.message,
+        fun loading(): LoginViewState = LoginViewState(
+            state = State.LOADING
         )
 
-        fun isLoginSuccess(isLoginSuccess: Boolean) : LoginViewState = LoginViewState(
-            isSuccess = true,
+        fun login(isLoginSuccess: Boolean) : LoginViewState = LoginViewState(
+            state = State.LOGIN,
             isLoginSuccess = isLoginSuccess
         )
+    }
+
+    enum class State {
+        ERROR,
+        LOADING,
+        LOGIN
     }
 }

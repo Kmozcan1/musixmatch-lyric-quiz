@@ -34,7 +34,9 @@ abstract class SingleUseCase<Results, in Params> : Disposable {
 
 
     override fun dispose() {
-        return disposables.dispose()
+        if (!disposables.isDisposed) {
+            disposables.dispose()
+        }
     }
 
     override fun isDisposed(): Boolean {

@@ -11,25 +11,25 @@ import com.kmozcan1.lyricquizapp.domain.model.domainmodel.ScoreDomainModel
  * Created by Kadir Mert Özcan on 20-Dec-20.
  */
 class ScoreListAdapter(private val scoreList: List<ScoreDomainModel>):
-    RecyclerView.Adapter<ScoreListAdapter.RecordingSettingsItemViewHolder>() {
+    RecyclerView.Adapter<ScoreListAdapter.ScoreListItemViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecordingSettingsItemViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScoreListItemViewHolder {
         val binding = bindingInflate(
             parent,
             R.layout.score_list_item)
-        return RecordingSettingsItemViewHolder(binding)
+        return ScoreListItemViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
         return scoreList.size
     }
 
-    override fun onBindViewHolder(holder: RecordingSettingsItemViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ScoreListItemViewHolder, position: Int) {
         holder.bind(scoreList[position].userName,
             scoreList[position].score)
     }
 
-    inner class RecordingSettingsItemViewHolder(
+    inner class ScoreListItemViewHolder(
         private val binding: ViewDataBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 

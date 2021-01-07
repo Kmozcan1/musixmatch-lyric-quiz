@@ -8,7 +8,7 @@
     <string name="score_label">Score</string>
     <string name="timer_label">Remaining</string>
     <string name="final_score">Final Score: %s</string>
-    <string name="main_menu">Main Menu</string>
+    <string name="main_menu">Home Page</string>
     <string name="login">Login</string>
     <string name="no_internet_text">Please make sure you are connected to the Internet</string>
     <string name="quiz">Quiz</string>

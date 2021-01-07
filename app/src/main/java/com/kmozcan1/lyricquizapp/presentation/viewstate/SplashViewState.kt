@@ -4,34 +4,30 @@ package com.kmozcan1.lyricquizapp.presentation.viewstate
  * Created by Kadir Mert Özcan on 19-Dec-20.
  */
 data class SplashViewState (
-        val isLoading: Boolean = false,
-        val hasError: Boolean = false,
-        val errorMessage: String? = null,
-        val isSuccess: Boolean = false,
-        val isLoggedIn: Boolean = false
+    val state: State,
+    val errorMessage: String? = null,
+    val isLoggedIn: Boolean = false
 ) {
     companion object {
-        fun onLoading() : SplashViewState = SplashViewState(
-                isLoading = true,
-                isSuccess = false
+        fun loading() : SplashViewState = SplashViewState(
+            state = State.LOADING
         )
 
-        fun onSuccess() : SplashViewState = SplashViewState(
-                hasError = false,
-                isLoading = false,
-                isSuccess = true
+        fun error(e: Throwable): SplashViewState = SplashViewState(
+            state = State.ERROR,
+            errorMessage = e.message,
         )
 
-        fun onError(e: Throwable): SplashViewState = SplashViewState(
-                hasError = true,
-                errorMessage = e.message,
-                isSuccess = false
+        fun loginCheck(isLoggedIn: Boolean) : SplashViewState = SplashViewState(
+            state = State.LOGIN_CHECK,
+            isLoggedIn = isLoggedIn
         )
+    }
 
-        fun onLoggedIn(isLoggedIn: Boolean) : SplashViewState = SplashViewState(
-                isSuccess = true,
-                isLoggedIn = isLoggedIn
-        )
+    enum class State {
+        LOADING,
+        ERROR,
+        LOGIN_CHECK
     }
 
 }

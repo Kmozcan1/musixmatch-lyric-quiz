@@ -4,23 +4,30 @@ package com.kmozcan1.lyricquizapp.presentation.viewstate
  * Created by Kadir Mert Özcan on 25-Dec-20.
  */
 data class MainViewState(
-        val isLoading: Boolean = false,
-        val hasError: Boolean = false,
-        val errorMessage: String? = null,
-        val onConnectionChange: Boolean = false,
-        val isConnected: Boolean = false
+    val state: State,
+    val errorMessage: String? = null,
+    val isConnected: Boolean = false
 ) {
     companion object {
-        fun onError(e: Throwable): MainViewState = MainViewState(
-                hasError = true,
-                errorMessage = e.message,
+        fun error(e: Throwable): MainViewState = MainViewState(
+            state = State.ERROR,
+            errorMessage = e.message,
         )
 
-        fun onConnectionChange(isConnected: Boolean) : MainViewState = MainViewState(
-                onConnectionChange = true,
-                isConnected = isConnected
+        fun loading(): MainViewState = MainViewState(
+            state = State.LOADING
+        )
+
+        fun connectionChange(isConnected: Boolean): MainViewState = MainViewState(
+            state = State.CONNECTION_CHANGE,
+            isConnected = isConnected
         )
     }
 
+    enum class State {
+        LOADING,
+        ERROR,
+        CONNECTION_CHANGE
+    }
 
 }

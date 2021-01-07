@@ -6,40 +6,37 @@ import com.kmozcan1.lyricquizapp.domain.model.domainmodel.Question
  * Created by Kadir Mert Özcan on 19-Dec-20.
  */
 data class QuizViewState (
-    val isLoading: Boolean = false,
-    val hasError: Boolean = false,
-    val errorMessage: String? = null,
-    val isSuccess: Boolean = false,
-    val isScorePosted: Boolean = false,
-    val isQuizFinished: Boolean = false
+    val state: State,
+    val errorMessage: String? = null
 ) {
-
-    private lateinit var question: Question
-
     companion object {
-        fun onLoading() : QuizViewState = QuizViewState(
-            isLoading = true
+        fun loading() : QuizViewState = QuizViewState(
+            state = State.LOADING
         )
 
-        fun onSuccess() : QuizViewState = QuizViewState(
-            isSuccess = true
-        )
-
-        fun onError(e: Throwable): QuizViewState = QuizViewState(
-            hasError = true,
+        fun error(e: Throwable): QuizViewState = QuizViewState(
+            state = State.ERROR,
             errorMessage = e.message,
-            isSuccess = false
         )
 
-        fun onScorePosted() : QuizViewState = QuizViewState(
-            isSuccess = true,
-            isScorePosted = true
+        fun quizGenerated(): QuizViewState = QuizViewState(
+            state = State.QUIZ_GENERATED
         )
 
-        fun onQuizFinished() : QuizViewState = QuizViewState(
-            isSuccess = true,
-            isQuizFinished = true
+        fun scorePosted() : QuizViewState = QuizViewState(
+            state = State.SCORE_POSTED
         )
 
+        fun quizFinished() : QuizViewState = QuizViewState(
+            state = State.QUIZ_FINISHED
+        )
+    }
+
+    enum class State {
+        ERROR,
+        LOADING,
+        QUIZ_GENERATED,
+        SCORE_POSTED,
+        QUIZ_FINISHED
     }
 }

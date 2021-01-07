@@ -26,13 +26,11 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-    // Find a better way to do this
-
     init {
         System.loadLibrary("native-lib")
     }
 
-    var url = HttpUrl.Builder()
+    private var url = HttpUrl.Builder()
         .scheme("https")
         .host("api.musixmatch.com")
         .addPathSegment("ws")

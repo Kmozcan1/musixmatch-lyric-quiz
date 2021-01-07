@@ -6,29 +6,31 @@ import com.kmozcan1.lyricquizapp.domain.model.domainmodel.ScoreDomainModel
  * Created by Kadir Mert Özcan on 20-Dec-20.
  */
 data class LeaderBoardViewState  (
-    val isLoading: Boolean = false,
-    val hasError: Boolean = false,
+    val state: State,
     val errorMessage: String? = null,
-    val isSuccess: Boolean = false,
-    val hasScoreList: Boolean = false,
     val scoreList: List<ScoreDomainModel>? = null
 )  {
-    fun onSuccess() : LeaderBoardViewState = LeaderBoardViewState(
-        hasError = false,
-        isLoading = false,
-        isSuccess = true
-    )
 
-    fun onError(e: Throwable): LeaderBoardViewState = LeaderBoardViewState(
-        hasError = true,
-        errorMessage = e.message
-    )
+    companion object {
+        fun error(e: Throwable): LeaderBoardViewState = LeaderBoardViewState(
+            state = State.ERROR,
+            errorMessage = e.message
+        )
 
-    fun onScoreList(scoreList: List<ScoreDomainModel>) : LeaderBoardViewState = LeaderBoardViewState(
-        hasError = false,
-        isLoading = false,
-        isSuccess = true,
-        hasScoreList = true,
-        scoreList = scoreList
-    )
+        fun scoreList(scoreList: List<ScoreDomainModel>) : LeaderBoardViewState = LeaderBoardViewState(
+            state = State.SCORE_LIST,
+            scoreList = scoreList
+        )
+
+        fun loading(): LeaderBoardViewState = LeaderBoardViewState(
+            state = State.LOADING
+        )
+    }
+
+
+    enum class State {
+        ERROR,
+        LOADING,
+        SCORE_LIST
+    }
 }

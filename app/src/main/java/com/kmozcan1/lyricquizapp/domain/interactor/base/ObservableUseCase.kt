@@ -35,10 +35,18 @@ abstract class ObservableUseCase<Result, in Params> : Disposable {
     }
 
     override fun dispose() {
-        return disposable.dispose()
+        if (this::disposable.isInitialized) {
+            if (!disposable.isDisposed) {
+                disposable.dispose()
+            }
+        }
     }
 
     override fun isDisposed(): Boolean {
-        return disposable.isDisposed
+        return if (this::disposable.isInitialized) {
+            disposable.isDisposed
+        } else {
+            true
+        }
     }
 }
