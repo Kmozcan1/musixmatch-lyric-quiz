@@ -1,4 +1,4 @@
-package com.kmozcan1.lyricquizapp.ui
+package com.kmozcan1.lyricquizapp.presentation.ui
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -18,6 +18,7 @@ import com.kmozcan1.lyricquizapp.presentation.adapter.setAdapterWithCustomDivide
 import com.kmozcan1.lyricquizapp.presentation.viewmodel.LeaderBoardViewModel
 import com.kmozcan1.lyricquizapp.presentation.viewstate.HomeViewState
 import com.kmozcan1.lyricquizapp.presentation.viewstate.LeaderBoardViewState
+import com.kmozcan1.lyricquizapp.presentation.viewstate.LeaderBoardViewState.State.*
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -34,36 +35,28 @@ class LeaderBoardFragment : BaseFragment<LeaderboardFragmentBinding, LeaderBoard
     override fun getViewModelClass(): Class<LeaderBoardViewModel> = LeaderBoardViewModel::class.java
 
     override fun onViewBound() {
-        binding.leaderBoardFragment = this
         setSupportActionBar(true, getString(R.string.leader_board))
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel.leaderBoardViewState.observe(viewLifecycleOwner, viewStateObserver())
+    override fun observe() {
+        viewModel.viewState.observe(viewLifecycleOwner, viewStateObserver())
         viewModel.getTopScores()
     }
 
     private fun viewStateObserver() = Observer<LeaderBoardViewState> { viewState ->
-        when {
-            viewState.hasError -> {
+        when (viewState.state){
+            ERROR -> {
                 makeToast(viewState.errorMessage)
-                findNavController().navigateUp()
+                navController.navigateUp()
             }
-            viewState.isLoading -> {
+            LOADING -> {
             }
-            viewState.isSuccess -> {
-                when {
-                    viewState.hasScoreList  -> {
-                        if (viewState.scoreList != null) {
-                            scoreListAdapter = ScoreListAdapter(
-                                viewState.scoreList
-                            )
-                            binding.leaderBoardRecyclerView.setAdapterWithCustomDivider(
-                                LinearLayoutManager(context),
-                                scoreListAdapter)
-                        }
-                    }
+            SCORE_LIST -> {
+                viewState.scoreList?.let {
+                    scoreListAdapter = ScoreListAdapter(viewState.scoreList)
+                    binding.leaderBoardRecyclerView.setAdapterWithCustomDivider(
+                            LinearLayoutManager(context),
+                            scoreListAdapter)
                 }
             }
         }

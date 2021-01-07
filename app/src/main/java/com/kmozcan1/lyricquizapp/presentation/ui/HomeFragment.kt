@@ -1,4 +1,4 @@
-package com.kmozcan1.lyricquizapp.ui
+package com.kmozcan1.lyricquizapp.presentation.ui
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -16,6 +16,7 @@ import com.kmozcan1.lyricquizapp.presentation.viewstate.HomeViewState
 import com.kmozcan1.lyricquizapp.presentation.adapter.ScoreListAdapter
 import com.kmozcan1.lyricquizapp.presentation.adapter.setAdapterWithCustomDivider
 import com.kmozcan1.lyricquizapp.presentation.viewmodel.HomeViewModel
+import com.kmozcan1.lyricquizapp.presentation.viewstate.HomeViewState.State.*
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -37,48 +38,58 @@ class HomeFragment : BaseFragment<HomeFragmentBinding, HomeViewModel>() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.homeViewState.observe(viewLifecycleOwner, viewStateObserver())
-        viewModel.getUserProfile()
         if (getIsConnectedToInternet()) {
             showConnectionWarning(false)
         } else {
             showConnectionWarning(true)
         }
+
+    }
+
+    override fun observe() {
+        viewModel.viewState.observe(viewLifecycleOwner, viewStateObserver())
+        viewModel.getUserProfile()
     }
 
     private fun viewStateObserver() = Observer<HomeViewState> { viewState ->
-        when {
-            viewState.hasError -> {
+        when (viewState.state){
+            ERROR -> {
                 makeToast(viewState.errorMessage)
             }
-            viewState.isLoading -> {
+            LOADING -> {
+                binding.profileProgressBar.visibility = View.VISIBLE
             }
-            viewState.isSuccess -> {
-                if (viewState.hasUserProfile) {
-                    setSupportActionBar(true,
-                            getString(R.string.welcome, viewState.userName))
-                    scoreListAdapter = ScoreListAdapter(
-                            viewState.scoreList
-                    )
-                    binding.userQuizHistoryRecyclerView.setAdapterWithCustomDivider(
-                            LinearLayoutManager(context),
-                            scoreListAdapter)
-                }
+            USER_PROFILE -> {
+                // Hide progress bar
+                binding.profileProgressBar.visibility = View.GONE
+
+                // Set ActionBar title
+                setSupportActionBar(true,
+                        getString(R.string.welcome, viewState.userName))
+                // Set list items
+                scoreListAdapter = ScoreListAdapter(
+                        viewState.scoreList
+                )
+                binding.userQuizHistoryRecyclerView.setAdapterWithCustomDivider(
+                        LinearLayoutManager(context),
+                        scoreListAdapter)
+            }
+            LOGOUT -> {
+                navController.navigate(R.id.action_homeFragment_to_loginFragment)
             }
         }
     }
 
     fun onLeaderBoardButton(v: View) {
-        findNavController().navigate(R.id.action_homeFragment_to_leaderboardFragment)
+        navController.navigate(R.id.action_homeFragment_to_leaderboardFragment)
     }
 
     fun onStartQuizButton(v: View) {
-        findNavController().navigate(R.id.action_homeFragment_to_quizFragment)
+        navController.navigate(R.id.action_homeFragment_to_quizFragment)
     }
 
     fun onLogoutButton(v: View) {
         viewModel.logout()
-        findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
     }
 
     private fun showConnectionWarning(isVisible: Boolean) {

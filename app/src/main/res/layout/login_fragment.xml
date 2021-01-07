@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
-        <variable name="loginFragment" type="com.kmozcan1.lyricquizapp.ui.LoginFragment"/>
+        <variable name="loginFragment" type="com.kmozcan1.lyricquizapp.presentation.ui.LoginFragment"/>
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.LoginFragment" >
+        tools:context=".presentation.ui.LoginFragment" >
 
         <Button
             android:id="@+id/loginButton"

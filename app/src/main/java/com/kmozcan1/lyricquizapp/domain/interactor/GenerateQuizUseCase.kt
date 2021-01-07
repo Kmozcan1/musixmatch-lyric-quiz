@@ -25,8 +25,8 @@ class GenerateQuizUseCase @Inject constructor(
     private val quizManagerFactory: QuizManagerFactory
 ) : SingleUseCase<Quiz, GenerateQuizUseCase.Params>() {
     data class Params(
-            val country: Country,
-            val quizDifficulty: QuizDifficulty
+        val country: Country = Country.US,
+        val quizDifficulty: QuizDifficulty = QuizDifficulty.DEFAULT
     )
 
     override fun buildObservable(params: Params?): Single<Quiz> {

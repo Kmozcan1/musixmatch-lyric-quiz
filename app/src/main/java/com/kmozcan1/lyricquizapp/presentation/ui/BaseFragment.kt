@@ -1,14 +1,16 @@
-package com.kmozcan1.lyricquizapp.ui
+package com.kmozcan1.lyricquizapp.presentation.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
 import javax.inject.Inject
 
 /**
@@ -20,6 +22,13 @@ abstract class BaseFragment<DataBindingClass: ViewDataBinding, ViewModelClass: V
 
     @Inject
     lateinit var mainActivity: MainActivity
+
+    @Inject
+    lateinit var navController: NavController
+
+    val appCompatActivity: AppCompatActivity by lazy {
+        activity as AppCompatActivity
+    }
 
     lateinit var binding: DataBindingClass
         private set
@@ -36,6 +45,9 @@ abstract class BaseFragment<DataBindingClass: ViewDataBinding, ViewModelClass: V
     // Called just before onCreateView is finished
     abstract fun onViewBound()
 
+    // Called just before onActivityCreated is finished
+    abstract fun observe()
+
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
@@ -50,6 +62,7 @@ abstract class BaseFragment<DataBindingClass: ViewDataBinding, ViewModelClass: V
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(getViewModelClass())
+        observe()
     }
 
     open fun onInternetConnected() { }
@@ -57,13 +70,15 @@ abstract class BaseFragment<DataBindingClass: ViewDataBinding, ViewModelClass: V
     open fun onInternetDisconnected() { }
 
     internal fun setSupportActionBar(isVisible: Boolean, title: String? = null) {
-        mainActivity.supportActionBar?.title = title
-        if (isVisible) {
-            mainActivity.supportActionBar?.show()
-        } else {
-            mainActivity.supportActionBar?.hide()
-        }
+        mainActivity.supportActionBar?.run {
+            this.title = title
 
+            if (isVisible) {
+                show()
+            } else {
+                hide()
+            }
+        }
     }
 
     internal fun makeToast(toastMessage: String?) {

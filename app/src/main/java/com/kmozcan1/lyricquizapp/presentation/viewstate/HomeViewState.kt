@@ -6,36 +6,38 @@ import com.kmozcan1.lyricquizapp.domain.model.domainmodel.ScoreDomainModel
  * Created by Kadir Mert Özcan on 20-Dec-20.
  */
 data class HomeViewState (
-    val isLoading: Boolean = false,
-    val hasError: Boolean = false,
+    val state: State,
     val errorMessage: String? = null,
-    val isSuccess: Boolean = false,
     val userName: String? = null,
-    val hasUserProfile: Boolean = false,
     val scoreList: List<ScoreDomainModel> = emptyList()
 ) {
     companion object {
-        fun onSuccess() : HomeViewState = HomeViewState(
-                hasError = false,
-                isLoading = false,
-                isSuccess = true
-        )
-
-        fun onError(e: Throwable): HomeViewState = HomeViewState(
-                hasError = true,
+        fun error(e: Throwable): HomeViewState = HomeViewState(
+                state = State.ERROR,
                 errorMessage = e.message
         )
 
-        fun onUserProfile(userName: String,
-                          scoreList: List<ScoreDomainModel>) : HomeViewState = HomeViewState(
-                hasError = false,
-                isLoading = false,
-                isSuccess = true,
-                hasUserProfile = true,
+        fun loading(): HomeViewState = HomeViewState(
+                state = State.LOADING
+        )
+
+        fun userProfile(userName: String,
+                        scoreList: List<ScoreDomainModel>): HomeViewState = HomeViewState(
+                state = State.USER_PROFILE,
                 userName = userName,
                 scoreList = scoreList
         )
+
+        fun logout(): HomeViewState = HomeViewState(
+            state = State.LOGOUT
+        )
+
     }
 
-
+    enum class State {
+        ERROR,
+        LOADING,
+        USER_PROFILE,
+        LOGOUT
+    }
 }

@@ -1,4 +1,4 @@
-package com.kmozcan1.lyricquizapp.ui
+package com.kmozcan1.lyricquizapp.presentation.ui
 
 import android.os.Bundle
 import android.widget.Toast
@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.kmozcan1.lyricquizapp.R
 import com.kmozcan1.lyricquizapp.presentation.viewmodel.MainViewModel
 import com.kmozcan1.lyricquizapp.presentation.viewstate.MainViewState
+import com.kmozcan1.lyricquizapp.presentation.viewstate.MainViewState.State.*
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -20,25 +21,27 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
 
-
     var isConnectedToInternet: Boolean = false
         private set
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        viewModel.mainViewState.observe(this, observeViewState())
+        viewModel.viewState.observe(this, observeViewState())
         viewModel.observeInternetConnection()
         setContentView(R.layout.activity_main)
     }
 
     private fun observeViewState() = Observer<MainViewState> { viewState ->
-        when {
-            viewState.hasError -> {
+        when(viewState.state) {
+            ERROR -> {
                 makeToast(viewState.errorMessage)
             }
-            viewState.onConnectionChange -> {
-                val baseFragment = supportFragmentManager.fragments.first()?.childFragmentManager?.fragments?.get(0) as BaseFragment<*, *>
+            CONNECTION_CHANGE -> {
+                // Get the active fragment
+                val baseFragment = supportFragmentManager.fragments
+                    .first()?.childFragmentManager?.fragments?.get(0) as BaseFragment<*, *>
+
                 isConnectedToInternet = viewState.isConnected
                 if (viewState.isConnected) {
                     baseFragment.onInternetConnected()

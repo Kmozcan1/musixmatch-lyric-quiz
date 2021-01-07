@@ -1,4 +1,4 @@
-package com.kmozcan1.lyricquizapp.ui
+package com.kmozcan1.lyricquizapp.presentation.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,6 +14,7 @@ import com.kmozcan1.lyricquizapp.R
 import com.kmozcan1.lyricquizapp.databinding.SplashFragmentBinding
 import com.kmozcan1.lyricquizapp.presentation.viewmodel.SplashViewModel
 import com.kmozcan1.lyricquizapp.presentation.viewstate.SplashViewState
+import com.kmozcan1.lyricquizapp.presentation.viewstate.SplashViewState.State.*
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -29,36 +30,38 @@ class SplashFragment : BaseFragment<SplashFragmentBinding, SplashViewModel>() {
     override fun getViewModelClass(): Class<SplashViewModel> = SplashViewModel::class.java
 
     override fun onViewBound() {
-        binding.quizFragment = this
-        binding.frameLayout.visibility = View.VISIBLE
+        setSupportActionBar(false)
+    }
+
+    override fun observe() {
+        viewModel.splashViewState.observe(viewLifecycleOwner, splashViewStateObserver())
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        setSupportActionBar(false)
-        viewModel.splashViewState.observe(viewLifecycleOwner, splashViewStateObserver())
         if (getIsConnectedToInternet()) {
             viewModel.prepareTracks()
-        } else {
-            showConnectionWarning(true)
         }
     }
 
     private fun splashViewStateObserver() =  Observer<SplashViewState> { viewState ->
-        when {
-            viewState.hasError -> {
+        when(viewState.state) {
+            ERROR -> {
                 makeToast(viewState.errorMessage)
-                findNavController().navigateUp()
+                navController.navigateUp()
             }
-            viewState.isSuccess -> {
+            LOGIN_CHECK -> {
                 when {
                     viewState.isLoggedIn -> {
-                        findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
+                        navController.navigate(R.id.action_splashFragment_to_homeFragment)
                     }
                     !viewState.isLoggedIn -> {
-                        findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
+                        navController.navigate(R.id.action_splashFragment_to_loginFragment)
                     }
                 }
+            }
+            LOADING -> {
+
             }
         }
     }

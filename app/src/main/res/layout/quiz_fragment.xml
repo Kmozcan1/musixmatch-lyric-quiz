@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
-        <variable name="quizFragment" type="com.kmozcan1.lyricquizapp.ui.QuizFragment"/>
+        <variable name="quizFragment" type="com.kmozcan1.lyricquizapp.presentation.ui.QuizFragment"/>
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.QuizFragment">
+        tools:context=".presentation.ui.QuizFragment">
 
         <TextView
             android:id="@+id/questionTextView"
@@ -33,7 +33,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.kmozcan1.lyricquizapp.ui.OptionsView
+        <com.kmozcan1.lyricquizapp.presentation.ui.OptionsView
             android:id="@+id/quizOptionsView"
             android:layout_width="match_parent"
             android:layout_height="0dp"

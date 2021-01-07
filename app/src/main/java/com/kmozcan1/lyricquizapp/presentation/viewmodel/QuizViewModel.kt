@@ -3,7 +3,6 @@ package com.kmozcan1.lyricquizapp.presentation.viewmodel
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.kmozcan1.lyricquizapp.domain.enumeration.Country
 import com.kmozcan1.lyricquizapp.domain.enumeration.QuizDifficulty
 import com.kmozcan1.lyricquizapp.domain.interactor.CountdownUseCase
@@ -14,19 +13,10 @@ import com.kmozcan1.lyricquizapp.presentation.viewstate.QuizViewState
 import kotlin.properties.Delegates
 
 class QuizViewModel @ViewModelInject constructor(
-    private val createQuizUseCase: GenerateQuizUseCase,
+    private val generateQuizUserCase: GenerateQuizUseCase,
     private val countdownUseCase: CountdownUseCase,
     private val insertScoreUseCase: InsertScoreUseCase
-) : ViewModel() {
-
-    // LiveData to observe ViewState
-    val quizViewState: LiveData<QuizViewState>
-        get() = _quizViewState
-    private val _quizViewState = MutableLiveData<QuizViewState>()
-    private fun setQuizViewState(value: QuizViewState) {
-        _quizViewState.postValue(value)
-    }
-
+) : BaseViewModel<QuizViewState>() {
     // LiveData to observe the question and options
     val questionLiveData: LiveData<Question>
         get() = _questionLiveData
@@ -60,20 +50,18 @@ class QuizViewModel @ViewModelInject constructor(
 
     // Creates the quest and starts asking questions onSuccess
     fun createQuiz() {
-        setQuizViewState(QuizViewState.onLoading())
-        createQuizUseCase.execute(
-            params = GenerateQuizUseCase.Params(Country.US, QuizDifficulty.DEFAULT),
-            onSuccess = {
-                quiz ->
+        setViewState(QuizViewState.loading())
+        generateQuizUserCase.execute(
+            params = GenerateQuizUseCase.Params(),
+            onSuccess = { quiz ->
                 questionList = quiz.questions
                 timeLimit = quiz.timeLimit
-                setQuizViewState(QuizViewState.onSuccess())
+                setViewState(QuizViewState.quizGenerated())
                 setScoreLiveData(0.toString())
                 askQuestion()
             },
             onError = {
-                it.printStackTrace()
-                setQuizViewState(QuizViewState.onError(it))
+                onError(it)
             }
         )
     }
@@ -96,8 +84,7 @@ class QuizViewModel @ViewModelInject constructor(
             onComplete = { askQuestion() },
             onNext = { remaining -> setTimerLiveData(remaining.toString()) },
             onError = {
-                it.printStackTrace()
-                setQuizViewState(QuizViewState.onError(it))
+                onError(it)
             }
         )
     }
@@ -112,19 +99,27 @@ class QuizViewModel @ViewModelInject constructor(
     }
 
     private fun finalizeQuest() {
-        setQuizViewState(QuizViewState.onQuizFinished())
+        setViewState(QuizViewState.quizFinished())
         scoreLiveData.value?.let { score ->
             InsertScoreUseCase.Params(score.toInt()) }?.let { params ->
             insertScoreUseCase.execute(
                 params = params,
                 onComplete = {
-                    setQuizViewState(QuizViewState.onScorePosted())
+                    setViewState(QuizViewState.scorePosted())
                 },
                 onError = {
-                    it.printStackTrace()
-                    setQuizViewState(QuizViewState.onError(it))
+                    onError(it)
                 }
             )
         }
+    }
+
+    fun dispose() {
+        countdownUseCase.dispose()
+    }
+
+    override fun onError(t: Throwable) {
+        t.printStackTrace()
+        setViewState(QuizViewState.error(t))
     }
 }

@@ -14,7 +14,7 @@ interface ScoreDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertScoreEntity(entity: ScoreEntity) : Completable
 
-    @Query("SELECT * FROM ${ScoreEntity.TABLE_NAME} WHERE userName = :userName LIMIT 10" )
+    @Query("SELECT * FROM ${ScoreEntity.TABLE_NAME} WHERE userName = :userName ORDER BY id DESC LIMIT 10" )
     fun getLastTenUserScores(userName: String): Single<List<ScoreEntity>>
 
     @Query("SELECT * FROM ${ScoreEntity.TABLE_NAME} ORDER BY score DESC LIMIT 25")

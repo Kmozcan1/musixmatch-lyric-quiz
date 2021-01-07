@@ -13,15 +13,7 @@ class LoginViewModel @ViewModelInject constructor(
     private val updateCurrentUserUseCase: UpdateCurrentUserUseCase,
     private val registerUserUseCase: RegisterUserUseCase,
     private val getCurrentUserUseCase: GetCurrentUserUseCase
-): ViewModel() {
-
-    // LiveData to observe ViewState
-    val loginViewState: LiveData<LoginViewState>
-        get() = _loginViewState
-    private val _loginViewState = MutableLiveData<LoginViewState>()
-    private fun setLoginViewState(value: LoginViewState) {
-        _loginViewState.postValue(value)
-    }
+): BaseViewModel<LoginViewState>() {
 
     fun login(userName: String) {
         updateCurrentUserUseCase.execute(
@@ -30,21 +22,26 @@ class LoginViewModel @ViewModelInject constructor(
                 registerUser(userName)
             },
             onError = {
-                it.printStackTrace()
-                setLoginViewState(LoginViewState.onError(it))
-            })
+                onError(it)
+            }
+        )
     }
 
     private fun registerUser(userName: String) {
         registerUserUseCase.execute(
             RegisterUserUseCase.Params(userName),
             onComplete = {
-                setLoginViewState(LoginViewState.isLoginSuccess(true))
+                setViewState(LoginViewState.login(true))
             },
             onError = {
-                setLoginViewState(LoginViewState.onError(it))
+                onError(it)
             }
         )
+    }
+
+    override fun onError(t: Throwable) {
+        t.printStackTrace()
+        setViewState(LoginViewState.error(t))
     }
 
 
