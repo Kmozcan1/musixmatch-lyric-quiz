@@ -3,9 +3,8 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/lightRed</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
         <item name="colorOnPrimary">@color/colorOnPrimary</item>
         <item name="android:windowBackground">@color/colorOnPrimary</item>
         <item name="android:textColorPrimary">@color/white</item>
@@ -19,6 +18,9 @@
         <item name="toolbarStyle">@style/ActionBarStyle</item>
 
         <item name="circularProgressIndicatorStyle">@style/CircularProgressStyle</item>
+
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.App.MaterialAlertDialog</item>
+
 
     </style>
 
@@ -44,7 +46,7 @@
     <style name="ThemeOverlay.App.Toolbar" parent="">
         <item name="colorPrimary">@color/colorPrimaryDark</item>
         <item name="colorPrimaryVariant">@color/colorPrimaryDark</item>
-        <item name="colorOnPrimary">@color/lightRed</item>
+        <item name="colorOnPrimary">@color/colorPrimary</item>
     </style>
 
     <!--Button styles-->
@@ -53,10 +55,10 @@
         <item name="shapeAppearance">@style/ShapeAppearance.App.SmallComponent</item>
     </style>
     <style name="ThemeOverlay.App.Button.TextButton" parent="">
-        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimary">@color/colorDarkRed</item>
     </style>
     <style name="ThemeOverlay.App.Button" parent="">
-        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimary">@color/colorDarkRed</item>
         <item name="colorOnPrimary">@color/white</item>
     </style>
     <style name="ShapeAppearance.App.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
@@ -76,6 +78,15 @@
     </style>
 
     <style name="ThemeOverlay.App.CircularProgressIndicator" parent="">
-        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimary">@color/colorDarkRed</item>
+    </style>
+
+    <!--Dialog style-->
+
+    <style name="ThemeOverlay.App.MaterialAlertDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="colorPrimary">@color/bottomNavBackground</item>
+        <item name="colorSecondary">@color/bottomNavBackground</item>
+        <item name="colorSurface">@color/bottomNavBackground</item>
+        <item name="colorOnSurface">@color/white</item>
     </style>
 </resources>

@@ -5,6 +5,7 @@ import android.view.View
 import androidx.activity.addCallback
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.kmozcan1.lyricquizapp.R
 import com.kmozcan1.lyricquizapp.databinding.QuizFragmentBinding
 import com.kmozcan1.lyricquizapp.presentation.viewstate.QuizViewState
@@ -29,7 +30,17 @@ class QuizFragment : BaseFragment<QuizFragmentBinding, QuizViewModel>() {
         super.onCreate(savedInstanceState)
 
         val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
-            var a = 1
+            MaterialAlertDialogBuilder(requireActivity())
+                .setTitle(resources.getString(R.string.quit_quiz))
+                .setMessage(resources.getString(R.string.quit_quiz_message))
+                .setNegativeButton(resources.getString(R.string.cancel)) { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .setPositiveButton(resources.getString(R.string.quit)) { dialog, _ ->
+                    navController.navigateUp()
+                    dialog.dismiss()
+                }
+                .show()
         }
 
         callback.isEnabled = true

@@ -86,7 +86,7 @@ class HomeFragment : BaseFragment<HomeFragmentBinding, HomeViewModel>() {
     private fun showConnectionWarning(isVisible: Boolean) {
         if (isVisible) {
             binding.homeInternetTextView.visibility = View.VISIBLE
-            binding.startQuizButton.visibility = View.GONE
+            binding.startQuizButton.visibility = View.INVISIBLE
         } else {
             binding.homeInternetTextView.visibility = View.GONE
             binding.startQuizButton.visibility = View.VISIBLE

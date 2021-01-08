@@ -16,4 +16,8 @@
     <string name="home">Home</string>
     <string name="logout_message">You will be returned to the login screen.</string>
     <string name="cancel">Cancel</string>
+    <string name="score_history">Score History</string>
+    <string name="quit_quiz">Quit Quiz</string>
+    <string name="quit">Quit</string>
+    <string name="quit_quiz_message">Are you sure you want to exit the quiz?</string>
 </resources>

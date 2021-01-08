@@ -1,5 +1,6 @@
 package com.kmozcan1.lyricquizapp.presentation.ui
 
+import android.content.DialogInterface
 import android.content.res.Resources
 import android.os.Bundle
 import android.view.View
@@ -55,6 +56,8 @@ class MainActivity : AppCompatActivity() {
         findViewById(R.id.bottomNavigationView)
     }
 
+    private var logoutDialog: DialogInterface? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
@@ -72,22 +75,26 @@ class MainActivity : AppCompatActivity() {
         actionBar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.logout -> {
-                    MaterialAlertDialogBuilder(this)
-                        .setTitle(resources.getString(R.string.logout))
-                        .setMessage(resources.getString(R.string.logout_message))
-                        .setNegativeButton(resources.getString(R.string.cancel)) { dialog, _ ->
-                            dialog.dismiss()
-                        }
-                        .setPositiveButton(resources.getString(R.string.logout)) { dialog, _ ->
-                            viewModel.logout()
-                            dialog.dismiss()
-                        }
-                        .show()
+                    displayLogoutAlert()
                     true
                 }
                 else -> false
             }
         }
+    }
+
+    private fun displayLogoutAlert() {
+        MaterialAlertDialogBuilder(this)
+            .setTitle(resources.getString(R.string.logout))
+            .setMessage(resources.getString(R.string.logout_message))
+            .setNegativeButton(resources.getString(R.string.cancel)) { dialog, _ ->
+                dialog.dismiss()
+            }
+            .setPositiveButton(resources.getString(R.string.logout)) { dialog, _ ->
+                viewModel.logout()
+                logoutDialog = dialog
+            }
+            .show()
     }
 
     private fun observeViewState() = Observer<MainViewState> { viewState ->
@@ -109,6 +116,7 @@ class MainActivity : AppCompatActivity() {
             }
             LOADING -> TODO()
             LOGOUT -> {
+                logoutDialog?.dismiss()
                 navController.navigate(R.id.loginFragment)
             }
         }

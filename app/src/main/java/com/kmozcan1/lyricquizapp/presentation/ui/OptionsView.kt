@@ -136,7 +136,7 @@ class OptionsView : ConstraintLayout {
                     button.text = artist.name
                     button.visibility = VISIBLE
                     button.backgroundTintList =
-                        ContextCompat.getColorStateList(context, R.color.colorPrimary)
+                        ContextCompat.getColorStateList(context, R.color.colorDarkRed)
                     buttonMap[artist.id] = button
                     refreshDrawableState()
                 }

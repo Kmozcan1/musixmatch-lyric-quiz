@@ -65,8 +65,7 @@ class SplashFragment : BaseFragment<SplashFragmentBinding, SplashViewModel>() {
 
     override fun onInternetConnected() {
         showConnectionWarning(false)
-        //viewModel.prepareTracks()
-        navController.navigate(R.id.action_splashFragment_to_loginFragment)
+        viewModel.prepareTracks()
     }
 
     override fun onInternetDisconnected() {

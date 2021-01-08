@@ -40,8 +40,8 @@
             android:hint="@string/user_name"
             android:inputType="textPersonName"
             android:paddingTop="4dp"
-            android:textColorHint="#FF2239"
-            app:boxStrokeColor="#FF2239"
+            android:textColorHint="@color/colorPrimary"
+            app:boxStrokeColor="@color/colorPrimary"
             app:hintAnimationEnabled="true"
             app:hintEnabled="true"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -49,13 +49,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:startIconDrawable="@drawable/ic_baseline_person_24"
-            app:startIconTint="#FF2239">
+            app:startIconTint="@color/colorPrimary">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/colorOnPrimary"
                 android:textColor="#FFFFFF"
+                android:maxLines="1"
+                android:inputType="text"
+                android:imeOptions="actionGo"
                 android:textSize="18sp" />
         </com.google.android.material.textfield.TextInputLayout>
 

@@ -1,9 +1,13 @@
 package com.kmozcan1.lyricquizapp.presentation.ui
 
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.widget.TextView
+import android.widget.TextView.OnEditorActionListener
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -31,13 +35,17 @@ class LoginFragment : BaseFragment<LoginFragmentBinding, LoginViewModel>() {
 
     override fun onViewBound() {
         binding.loginFragment = this
+        binding.userNameEditText.editText?.setOnKeyListener { _, keyCode, keyEvent ->
+            if (keyEvent.keyCode == KeyEvent.KEYCODE_ENTER) {
+                viewModel.login(binding.userNameEditText.editText?.text.toString())
+                return@setOnKeyListener true
+            }
+            return@setOnKeyListener false
+        }
         setSupportActionBar(false)
         showBottomNavigation(false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-    }
 
     override fun observe() {
         viewModel.viewState.observe(viewLifecycleOwner, observeViewState())
