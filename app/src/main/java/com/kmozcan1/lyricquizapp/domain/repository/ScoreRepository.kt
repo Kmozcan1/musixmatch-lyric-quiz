@@ -1,7 +1,7 @@
 package com.kmozcan1.lyricquizapp.domain.repository
 
 import com.kmozcan1.lyricquizapp.data.db.entity.ScoreEntity
-import com.kmozcan1.lyricquizapp.domain.model.domainmodel.ScoreDomainModel
+import com.kmozcan1.lyricquizapp.domain.model.ScoreDomainModel
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
 

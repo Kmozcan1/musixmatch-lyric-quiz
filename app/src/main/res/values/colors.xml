@@ -10,4 +10,5 @@
     <color name="bottomNavInactive">#ABABAB</color>
     <color name="bottomNavActive">#E25C59</color>
     <color name="bottomNavBackground">#141C1F</color>
+    <color name="colorCorrectOption">#2e7d32</color>
 </resources>

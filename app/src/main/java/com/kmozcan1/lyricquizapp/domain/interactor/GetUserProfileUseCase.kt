@@ -2,9 +2,7 @@ package com.kmozcan1.lyricquizapp.domain.interactor
 
 import androidx.room.rxjava3.EmptyResultSetException
 import com.kmozcan1.lyricquizapp.domain.interactor.base.SingleUseCase
-import com.kmozcan1.lyricquizapp.domain.model.domainmodel.ScoreDomainModel
-import com.kmozcan1.lyricquizapp.domain.model.domainmodel.UserDomainModel
-import com.kmozcan1.lyricquizapp.domain.repository.ScoreRepository
+import com.kmozcan1.lyricquizapp.domain.model.UserDomainModel
 import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject
 

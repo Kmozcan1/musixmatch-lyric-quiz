@@ -2,7 +2,7 @@ package com.kmozcan1.lyricquizapp.data.repository
 
 import com.kmozcan1.lyricquizapp.data.db.QuizDatabase
 import com.kmozcan1.lyricquizapp.data.db.entity.UserEntity
-import com.kmozcan1.lyricquizapp.domain.model.domainmodel.UserDomainModel
+import com.kmozcan1.lyricquizapp.domain.model.UserDomainModel
 import com.kmozcan1.lyricquizapp.domain.repository.UserRepository
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single

@@ -23,11 +23,13 @@ abstract class ObservableUseCase<Result, in Params> : Disposable {
 
     fun execute(params: Params? = null,
                 onComplete: () -> Unit = { },
+                onSubscribe: Consumer<in Disposable>? = Consumer { },
                 onNext: Consumer<Result>? = Consumer {  },
                 onError: Consumer<Throwable>? = Consumer {  }) {
         disposable = buildObservable(params)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe(onSubscribe)
             .doOnNext(onNext)
             .doOnComplete(onComplete)
             .doOnError(onError)

@@ -2,15 +2,13 @@ package com.kmozcan1.lyricquizapp.presentation.ui
 
 import android.content.Context
 import android.util.AttributeSet
-import android.widget.Button
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
-import androidx.databinding.BindingMethod
-import androidx.databinding.BindingMethods
+import androidx.core.content.ContextCompat
 import com.airbnb.paris.Paris
 import com.google.android.material.button.MaterialButton
 import com.kmozcan1.lyricquizapp.R
-import com.kmozcan1.lyricquizapp.domain.model.domainmodel.ArtistDomainModel
+import com.kmozcan1.lyricquizapp.domain.model.ArtistDomainModel
 
 
 /**
@@ -22,8 +20,9 @@ class OptionsView : ConstraintLayout {
 
 
     private var optionButtonClickListener: OptionButtonClickListener? = null
-    private val buttonList = mutableListOf<Button>()
+    private val buttonMap = mutableMapOf<Int, MaterialButton>()
     var buttonsAreSet: Boolean = false
+    private lateinit var correctButton: MaterialButton
 
     constructor(context: Context) : super(context) {
         init(context)
@@ -61,7 +60,7 @@ class OptionsView : ConstraintLayout {
             // Set onClickListener
             button.setOnClickListener {
                 if (optionButtonClickListener != null) {
-                    optionButtonClickListener?.onOptionButtonClicked(button.text.toString())
+                    optionButtonClickListener?.onOptionButtonClicked(options[i].id)
                 }
             }
 
@@ -103,20 +102,51 @@ class OptionsView : ConstraintLayout {
             buttonsAreSet = true
             set.constrainHeight(button.id, 200)
             set.applyTo(this)
-            buttonList.add(button)
+            buttonMap[options[i].id] = button
         }
     }
 
-    fun renameOptionButtons(options: List<ArtistDomainModel>) {
-        for (i in buttonList.indices) {
-            buttonList[i].refreshDrawableState()
-            buttonList[i].text = options[i].name
+    fun showCorrectAnswer(selectedArtistId: Int?, correctArtistId: Int) {
+        buttonMap[correctArtistId]?.backgroundTintList =
+            ContextCompat.getColorStateList(context, R.color.colorCorrectOption)
+
+        // Hide all but the correct and selected buttons
+        for ((id, button) in buttonMap) {
+            if (id != selectedArtistId && id != correctArtistId) {
+                button.visibility = INVISIBLE
+            }
+        }
+    }
+
+    fun refreshOptionButtons(options: List<ArtistDomainModel>) {
+        val buttonList = mutableListOf<MaterialButton>()
+        // Refill the buttonMap with the new set of artistIds (used for showing the correct answer)
+        for ((_, button) in buttonMap) {
+            buttonList.add(button)
+        }
+        buttonMap.clear()
+        for (i in options.indices) {
+            options[i].let{ artist ->
+                buttonList[i].let { button ->
+                    button.setOnClickListener {
+                        if (optionButtonClickListener != null) {
+                            optionButtonClickListener?.onOptionButtonClicked(options[i].id)
+                        }
+                    }
+                    button.text = artist.name
+                    button.visibility = VISIBLE
+                    button.backgroundTintList =
+                        ContextCompat.getColorStateList(context, R.color.colorPrimary)
+                    buttonMap[artist.id] = button
+                    refreshDrawableState()
+                }
+            }
         }
     }
 
     // Listener to inform fragment
     interface OptionButtonClickListener {
-        fun onOptionButtonClicked(artistName: String)
+        fun onOptionButtonClicked(artistId: Int)
     }
 
     fun setOptionButtonClickListener(optionButtonClickListener: OptionButtonClickListener?) {

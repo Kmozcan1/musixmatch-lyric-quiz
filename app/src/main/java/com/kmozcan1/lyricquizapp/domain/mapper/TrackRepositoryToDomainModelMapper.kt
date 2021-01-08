@@ -1,6 +1,6 @@
 package com.kmozcan1.lyricquizapp.domain.mapper
 
-import com.kmozcan1.lyricquizapp.domain.model.domainmodel.TrackDomainModel
+import com.kmozcan1.lyricquizapp.domain.model.TrackDomainModel
 import com.kmozcan1.lyricquizapp.data.apimodel.ATrackObject
 import javax.inject.Inject
 

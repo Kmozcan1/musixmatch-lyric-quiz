@@ -1,4 +1,4 @@
-package com.kmozcan1.lyricquizapp.domain.model.domainmodel
+package com.kmozcan1.lyricquizapp.domain.model
 
 import java.math.BigDecimal
 

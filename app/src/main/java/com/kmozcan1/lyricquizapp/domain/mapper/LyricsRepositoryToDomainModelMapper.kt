@@ -1,7 +1,7 @@
 package com.kmozcan1.lyricquizapp.domain.mapper
 
 import com.kmozcan1.lyricquizapp.data.apimodel.ALyricsObject
-import com.kmozcan1.lyricquizapp.domain.model.domainmodel.LyricsDomainModel
+import com.kmozcan1.lyricquizapp.domain.model.LyricsDomainModel
 import javax.inject.Inject
 
 /**

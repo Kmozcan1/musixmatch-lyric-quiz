@@ -1,4 +1,4 @@
-package com.kmozcan1.lyricquizapp.domain.model.domainmodel
+package com.kmozcan1.lyricquizapp.domain.model
 
 /**
  * Created by Kadir Mert Özcan on 20-Dec-20.

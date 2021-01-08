@@ -1,10 +1,9 @@
 package com.kmozcan1.lyricquizapp.domain.interactor
 
 import com.kmozcan1.lyricquizapp.domain.interactor.base.FlowableUseCase
-import com.kmozcan1.lyricquizapp.domain.interactor.base.SingleUseCase
 import com.kmozcan1.lyricquizapp.domain.mapper.LyricsRepositoryToDomainModelMapper
-import com.kmozcan1.lyricquizapp.domain.model.domainmodel.LyricsDomainModel
-import com.kmozcan1.lyricquizapp.domain.model.domainmodel.TrackDomainModel
+import com.kmozcan1.lyricquizapp.domain.model.LyricsDomainModel
+import com.kmozcan1.lyricquizapp.domain.model.TrackDomainModel
 import com.kmozcan1.lyricquizapp.domain.repository.LyricsRepository
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Single

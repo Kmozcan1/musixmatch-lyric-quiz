@@ -1,23 +1,18 @@
 package com.kmozcan1.lyricquizapp.presentation.ui
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.addCallback
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
+import androidx.lifecycle.lifecycleScope
 import com.kmozcan1.lyricquizapp.R
 import com.kmozcan1.lyricquizapp.databinding.QuizFragmentBinding
-import com.kmozcan1.lyricquizapp.domain.model.domainmodel.Question
-import com.kmozcan1.lyricquizapp.presentation.viewmodel.LoginViewModel
 import com.kmozcan1.lyricquizapp.presentation.viewstate.QuizViewState
 import com.kmozcan1.lyricquizapp.presentation.viewmodel.QuizViewModel
 import com.kmozcan1.lyricquizapp.presentation.viewstate.QuizViewState.State.*
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class QuizFragment : BaseFragment<QuizFragmentBinding, QuizViewModel>() {
@@ -50,12 +45,8 @@ class QuizFragment : BaseFragment<QuizFragmentBinding, QuizViewModel>() {
     override fun observe() {
         // Observe ViewState
         viewModel.viewState.observe(viewLifecycleOwner, viewStateObserver())
-        // Observe questions
-        viewModel.questionLiveData.observe(viewLifecycleOwner, questionObserver())
         // Observe the timer
         viewModel.timerLiveData.observe(viewLifecycleOwner, timerObserver())
-        // Observe the score
-        viewModel.scoreLiveData.observe(viewLifecycleOwner, scoreObserver())
         // Set listener for generated buttons
         binding.quizOptionsView.setOptionButtonClickListener(optionButtonClickListener())
 
@@ -73,6 +64,19 @@ class QuizFragment : BaseFragment<QuizFragmentBinding, QuizViewModel>() {
             }
             QUIZ_GENERATED -> {
                 binding.quizProgressBar.visibility = View.GONE
+                binding.scoreTextView.text = 0.toString()
+                viewModel.startQuiz()
+            }
+            QUESTION -> {
+                setOptions(viewState)
+                binding.questionTextView.text = viewState.question!!.lyric
+            }
+            ANSWER -> {
+                viewModel.stopTimer()
+                with(viewState.answer!!) {
+                    binding.scoreTextView.text = updatedScore.toString()
+                    showCorrectAnswer(selectedArtistId, correctArtistId)
+                }
             }
             SCORE_POSTED -> {
                 showScoreScreen()
@@ -83,54 +87,49 @@ class QuizFragment : BaseFragment<QuizFragmentBinding, QuizViewModel>() {
         }
     }
 
+    private fun showCorrectAnswer(selectedArtistId: Int?, correctArtistId: Int) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            binding.quizOptionsView.showCorrectAnswer(selectedArtistId, correctArtistId)
+            delay(1000)
+            viewModel.askNextQuestion()
+        }
+    }
+
+    private fun setOptions(viewState: QuizViewState) {
+        viewState.question?.let { question ->
+            with(binding.quizOptionsView) {
+                if (!buttonsAreSet) {
+                    setOptionButtons(question.options)
+                    visibility = View.VISIBLE
+                } else {
+                    refreshOptionButtons(question.options)
+                    isEnabled = true
+                }
+            }
+        }
+    }
+
     private fun showScoreScreen() {
         binding.scoreScreen.visibility = View.VISIBLE
         binding.finalScoreTextView.text = getString(R.string.final_score, binding.scoreTextView.text)
         binding.quizOptionsView.isEnabled = false
         binding.quizOptionsView.visibility = View.GONE
+        showBottomNavigation(true)
     }
 
     private fun hideOptionView() {
         binding.quizOptionsView.visibility = View.GONE
     }
 
-    private fun questionObserver() = Observer<Question> { question ->
-        if (!binding.quizOptionsView.buttonsAreSet) {
-            binding.quizOptionsView.setOptionButtons(question.options)
-            binding.quizOptionsView.visibility = View.VISIBLE }
-        else {
-            binding.quizOptionsView.renameOptionButtons(question.options)
-            binding.quizOptionsView.isEnabled = true
-
-        }
-        binding.questionTextView.text = question.lyric
-
-    }
-
     private fun timerObserver() = Observer<String> {  time ->
         binding.timerTextView.text = time
     }
 
-    private fun scoreObserver() = Observer<String> { score ->
-        binding.scoreTextView.text = score
-    }
-
-
-
     private fun optionButtonClickListener() = object : OptionsView.OptionButtonClickListener {
-        override fun onOptionButtonClicked(artistName: String) {
-            //TODO Workaround for pressed button not being changed
+        override fun onOptionButtonClicked(artistId: Int) {
             binding.quizOptionsView.isClickable = false
-            viewModel.checkAnswer(artistName)
+            viewModel.validateAnswer(artistId)
         }
-    }
-
-    fun onLeaderBoardButtonClick(v: View) {
-        navController.navigate(R.id.action_quizFragment_to_leaderboardFragment2)
-    }
-
-    fun onHomeButtonClick(v: View) {
-        navController.navigate(R.id.action_quizFragment_to_homeFragment)
     }
 
     override fun onDestroy() {

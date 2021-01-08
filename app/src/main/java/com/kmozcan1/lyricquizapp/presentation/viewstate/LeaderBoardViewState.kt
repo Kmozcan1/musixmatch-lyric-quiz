@@ -1,6 +1,6 @@
 package com.kmozcan1.lyricquizapp.presentation.viewstate
 
-import com.kmozcan1.lyricquizapp.domain.model.domainmodel.ScoreDomainModel
+import com.kmozcan1.lyricquizapp.domain.model.ScoreDomainModel
 
 /**
  * Created by Kadir Mert Özcan on 20-Dec-20.

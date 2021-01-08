@@ -3,7 +3,6 @@ package com.kmozcan1.lyricquizapp.domain.interactor
 import com.kmozcan1.lyricquizapp.domain.Constants
 import com.kmozcan1.lyricquizapp.domain.enumeration.Country
 import com.kmozcan1.lyricquizapp.domain.interactor.base.CompletableUseCase
-import com.kmozcan1.lyricquizapp.domain.model.domainmodel.TrackDomainModel
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.subjects.CompletableSubject
 import javax.inject.Inject

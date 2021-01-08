@@ -5,7 +5,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.kmozcan1.lyricquizapp.BR
 import com.kmozcan1.lyricquizapp.R
-import com.kmozcan1.lyricquizapp.domain.model.domainmodel.ScoreDomainModel
+import com.kmozcan1.lyricquizapp.domain.model.ScoreDomainModel
 
 /**
  * Created by Kadir Mert Özcan on 20-Dec-20.

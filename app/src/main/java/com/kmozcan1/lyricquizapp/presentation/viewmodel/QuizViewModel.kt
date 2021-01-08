@@ -3,27 +3,19 @@ package com.kmozcan1.lyricquizapp.presentation.viewmodel
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.kmozcan1.lyricquizapp.domain.enumeration.Country
-import com.kmozcan1.lyricquizapp.domain.enumeration.QuizDifficulty
 import com.kmozcan1.lyricquizapp.domain.interactor.CountdownUseCase
-import com.kmozcan1.lyricquizapp.domain.interactor.GenerateQuizUseCase
+import com.kmozcan1.lyricquizapp.domain.interactor.QuizUseCase
 import com.kmozcan1.lyricquizapp.domain.interactor.InsertScoreUseCase
-import com.kmozcan1.lyricquizapp.domain.model.domainmodel.Question
+import com.kmozcan1.lyricquizapp.domain.model.Question
+import com.kmozcan1.lyricquizapp.domain.model.QuizResponse
 import com.kmozcan1.lyricquizapp.presentation.viewstate.QuizViewState
 import kotlin.properties.Delegates
 
 class QuizViewModel @ViewModelInject constructor(
-    private val generateQuizUserCase: GenerateQuizUseCase,
+    private val quizUseCase: QuizUseCase,
     private val countdownUseCase: CountdownUseCase,
     private val insertScoreUseCase: InsertScoreUseCase
 ) : BaseViewModel<QuizViewState>() {
-    // LiveData to observe the question and options
-    val questionLiveData: LiveData<Question>
-        get() = _questionLiveData
-    private val _questionLiveData = MutableLiveData<Question>()
-    private fun setQuestionLiveData(value: Question) {
-        _questionLiveData.postValue(value)
-    }
 
     // LiveData to observe the timer
     val timerLiveData: LiveData<String>
@@ -31,14 +23,6 @@ class QuizViewModel @ViewModelInject constructor(
     private val _timerLiveData = MutableLiveData<String>()
     private fun setTimerLiveData(value: String) {
         _timerLiveData.postValue(value)
-    }
-
-    // LiveData to observe the score
-    val scoreLiveData: LiveData<String>
-        get() = _scoreLiveData
-    private val _scoreLiveData = MutableLiveData<String>()
-    private fun setScoreLiveData(value: String) {
-        _scoreLiveData.postValue(value)
     }
 
     private lateinit var questionList: List<Question>
@@ -51,14 +35,28 @@ class QuizViewModel @ViewModelInject constructor(
     // Creates the quest and starts asking questions onSuccess
     fun createQuiz() {
         setViewState(QuizViewState.loading())
-        generateQuizUserCase.execute(
-            params = GenerateQuizUseCase.Params(),
-            onSuccess = { quiz ->
-                questionList = quiz.questions
-                timeLimit = quiz.timeLimit
-                setViewState(QuizViewState.quizGenerated())
-                setScoreLiveData(0.toString())
-                askQuestion()
+        quizUseCase.execute(
+            params = QuizUseCase.Params(),
+            onSubscribe = {
+                quizUseCase.generateQuiz()
+            },
+            onNext = { quizResponse ->
+                when (quizResponse.responseType) {
+                    QuizResponse.ResponseType.QUIZ_GENERATED -> {
+                        timeLimit = quizResponse.timeLimit!!
+                        setViewState(QuizViewState.quizGenerated())
+                    }
+                    QuizResponse.ResponseType.QUESTION -> {
+                        setViewState(QuizViewState.question(quizResponse.question!!))
+                        startTimer()
+                    }
+                    QuizResponse.ResponseType.ANSWER -> {
+                        setViewState(QuizViewState.answer(quizResponse.answer!!))
+                    }
+                    QuizResponse.ResponseType.FINALIZE_QUIZ -> {
+                        finalizeQuest(quizResponse.finalScore!!)
+                    }
+                }
             },
             onError = {
                 onError(it)
@@ -66,22 +64,23 @@ class QuizViewModel @ViewModelInject constructor(
         )
     }
 
-    private fun askQuestion() {
-        if (questionIndex == questionList.size) {
-            finalizeQuest()
-        } else {
-            startTimer()
-            val currentQuestion = questionList[questionIndex]
-            setQuestionLiveData(currentQuestion)
-            questionIndex++
-        }
+    fun startQuiz() {
+        quizUseCase.startQuiz()
+    }
 
+    fun stopTimer() {
+        countdownUseCase.stopTimer()
+    }
+
+    fun askNextQuestion() {
+        quizUseCase.askQuestion()
     }
 
     private fun startTimer() {
+        setTimerLiveData(timeLimit.toString())
         countdownUseCase.execute(
             params = CountdownUseCase.Params(timeLimit),
-            onComplete = { askQuestion() },
+            onComplete = { validateAnswer(null) },
             onNext = { remaining -> setTimerLiveData(remaining.toString()) },
             onError = {
                 onError(it)
@@ -89,29 +88,22 @@ class QuizViewModel @ViewModelInject constructor(
         )
     }
 
-    //TODO move the app logic to the domain layer maybe?
-    fun checkAnswer(selectedOption: String) {
+    fun validateAnswer(selectedArtistId: Int?) {
+        quizUseCase.validateAnswer(selectedArtistId, timerLiveData.value!!.toInt())
         countdownUseCase.dispose()
-        if (selectedOption == questionLiveData.value?.correctAnswer?.name) {
-            setScoreLiveData((scoreLiveData.value?.toInt()?.plus(timerLiveData.value?.toInt()!!)).toString())
-        }
-        askQuestion()
     }
 
-    private fun finalizeQuest() {
-        setViewState(QuizViewState.quizFinished())
-        scoreLiveData.value?.let { score ->
-            InsertScoreUseCase.Params(score.toInt()) }?.let { params ->
-            insertScoreUseCase.execute(
-                params = params,
-                onComplete = {
-                    setViewState(QuizViewState.scorePosted())
-                },
-                onError = {
-                    onError(it)
-                }
-            )
-        }
+    private fun finalizeQuest(finalScore: Int) {
+        setViewState(QuizViewState.finalizeQuiz(finalScore))
+        insertScoreUseCase.execute(
+            params = InsertScoreUseCase.Params(finalScore),
+            onComplete = {
+                setViewState(QuizViewState.scorePosted())
+            },
+            onError = {
+                onError(it)
+            }
+        )
     }
 
     fun dispose() {

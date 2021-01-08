@@ -2,9 +2,10 @@ package com.kmozcan1.lyricquizapp.domain.interactor
 
 import com.kmozcan1.lyricquizapp.domain.interactor.CountdownUseCase.Params
 import com.kmozcan1.lyricquizapp.domain.interactor.base.ObservableUseCase
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicLong
 import javax.inject.Inject
 
 
@@ -16,17 +17,26 @@ class CountdownUseCase @Inject constructor() : ObservableUseCase<Long, Params>()
     data class Params(
         val timeLimitInSeconds: Long
     )
+
+    private var stopped: AtomicBoolean = AtomicBoolean()
     
     private lateinit var timerObservable: Observable<Long>
 
     override fun buildObservable(params: Params?): Observable<Long> {
+        stopped.set(false)
         timerObservable =  Observable.zip(
-            Observable.range(0, params!!.timeLimitInSeconds.toInt()),
-            Observable.interval(0, 1, TimeUnit.SECONDS)
-        ) { integer, _ ->
-            params.timeLimitInSeconds - integer
+            Observable.range(1, params!!.timeLimitInSeconds.toInt())
+                .takeWhile { !stopped.get() },
+            Observable.interval(1, 1, TimeUnit.SECONDS)
+                .takeWhile { !stopped.get() }
+        ) { timeElapsed, _ ->
+            params.timeLimitInSeconds - timeElapsed
         }
         return timerObservable
+    }
+
+    fun stopTimer() {
+        stopped.set(true)
     }
 
 }
