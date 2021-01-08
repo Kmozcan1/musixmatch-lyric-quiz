@@ -7,6 +7,8 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.databinding.BindingMethod
 import androidx.databinding.BindingMethods
+import com.airbnb.paris.Paris
+import com.google.android.material.button.MaterialButton
 import com.kmozcan1.lyricquizapp.R
 import com.kmozcan1.lyricquizapp.domain.model.domainmodel.ArtistDomainModel
 
@@ -48,9 +50,12 @@ class OptionsView : ConstraintLayout {
         set.clone(this)
         var previousButtonId = 0
         for (i in options.indices) {
-            val button = Button(context)
+            val button = MaterialButton(context)
             button.text = options[i].name
             button.id = generateViewId()
+
+            Paris.styleBuilder(button).add(R.style.ButtonStyle).apply()
+
             this.addView(button)
 
             // Set onClickListener

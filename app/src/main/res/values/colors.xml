@@ -9,5 +9,5 @@
     <color name="mtrl_textinput_default_box_stroke_color">#FF5353</color>
     <color name="bottomNavInactive">#ABABAB</color>
     <color name="bottomNavActive">#E25C59</color>
-    <color name="bottomNavBackground">#2D2D2D</color>
+    <color name="bottomNavBackground">#141C1F</color>
 </resources>
