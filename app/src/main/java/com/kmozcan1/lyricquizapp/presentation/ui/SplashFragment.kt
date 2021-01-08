@@ -42,9 +42,7 @@ class SplashFragment : BaseFragment<SplashFragmentBinding, SplashViewModel>() {
             LOGIN_CHECK -> {
                 when {
                     viewState.isLoggedIn -> {
-                        val navAction =  SplashFragmentDirections
-                            .actionSplashFragmentToHomeFragment(viewState.userName!!)
-                        navController.navigate(navAction)
+                        navController.navigate(R.id.action_splashFragment_to_homeFragment)
                     }
                     !viewState.isLoggedIn -> {
                         navController.navigate(R.id.action_splashFragment_to_loginFragment)

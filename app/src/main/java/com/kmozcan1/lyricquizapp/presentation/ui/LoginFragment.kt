@@ -49,9 +49,7 @@ class LoginFragment : BaseFragment<LoginFragmentBinding, LoginViewModel>() {
                 makeToast(viewState.errorMessage)
             }
             LOGIN -> {
-                val navAction =  LoginFragmentDirections
-                    .actionLoginFragmentToHomeFragment(viewState.userName!!)
-                navController.navigate(navAction)
+                navController.navigate(R.id.action_loginFragment_to_homeFragment)
             }
             LOADING -> {
 

@@ -8,6 +8,7 @@ import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavArgument
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -30,6 +31,8 @@ class MainActivity : AppCompatActivity() {
 
     var isConnectedToInternet: Boolean = false
         private set
+
+    var userName: String = ""
 
     private val navHostFragment : NavHostFragment by lazy {
         supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
@@ -62,12 +65,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun setViews() {
         setContentView(R.layout.activity_main)
-
         // Sets the bottom navigation view with the nav graph
         bottomNavigationView.setupWithNavController(navController)
         actionBar.setupWithNavController(navController, appBarConfiguration)
     }
-
 
     private fun observeViewState() = Observer<MainViewState> { viewState ->
         when(viewState.state) {

@@ -33,11 +33,8 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.kmozcan1.lyricquizapp.presentation.ui.HomeFragment"
-        android:label="Welcome {userName}"
+        android:label="@string/home"
         tools:layout="@layout/home_fragment" >
-        <argument
-            android:name="userName"
-            app:argType="string"/>
         <action
             android:id="@+id/action_homeFragment_to_quizFragment"
             app:destination="@id/quizFragment" />

@@ -30,7 +30,7 @@ class LoginViewModel @ViewModelInject constructor(
         registerUserUseCase.execute(
             RegisterUserUseCase.Params(userName),
             onComplete = {
-                setViewState(LoginViewState.login(userName))
+                setViewState(LoginViewState.login())
             },
             onError = {
                 onError(it)

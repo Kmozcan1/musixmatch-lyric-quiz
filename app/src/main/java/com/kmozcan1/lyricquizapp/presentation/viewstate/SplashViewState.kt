@@ -6,8 +6,7 @@ package com.kmozcan1.lyricquizapp.presentation.viewstate
 data class SplashViewState (
     val state: State,
     val errorMessage: String? = null,
-    val isLoggedIn: Boolean = false,
-    val userName: String? = null
+    val isLoggedIn: Boolean = false
 ) {
     companion object {
         fun loading() : SplashViewState = SplashViewState(
@@ -19,11 +18,9 @@ data class SplashViewState (
             errorMessage = e.message,
         )
 
-        fun loginCheck(isLoggedIn: Boolean, userName: String? = null) : SplashViewState = SplashViewState(
+        fun loginCheck(isLoggedIn: Boolean) : SplashViewState = SplashViewState(
             state = State.LOGIN_CHECK,
-            isLoggedIn = isLoggedIn,
-            userName = userName
-        )
+            isLoggedIn = isLoggedIn)
     }
 
     enum class State {

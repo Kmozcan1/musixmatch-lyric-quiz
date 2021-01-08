@@ -97,4 +97,8 @@ abstract class BaseFragment<DataBindingClass: ViewDataBinding, ViewModelClass: V
     internal fun getIsConnectedToInternet(): Boolean {
         return mainActivity.isConnectedToInternet
     }
+
+    internal fun setUserName(userName: String) {
+        mainActivity.userName = userName
+    }
 }

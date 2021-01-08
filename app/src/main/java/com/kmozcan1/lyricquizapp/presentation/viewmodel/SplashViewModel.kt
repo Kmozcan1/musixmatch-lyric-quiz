@@ -40,7 +40,7 @@ class SplashViewModel @ViewModelInject constructor(
                     when {
                         userName.isNotBlank() -> {
                             setSplashViewState(
-                                SplashViewState.loginCheck(true, userName))
+                                SplashViewState.loginCheck(true))
                         }
                         else -> {
                             setSplashViewState(
