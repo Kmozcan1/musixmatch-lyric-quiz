@@ -33,10 +33,6 @@ class SplashFragment : BaseFragment<SplashFragmentBinding, SplashViewModel>() {
         viewModel.splashViewState.observe(viewLifecycleOwner, splashViewStateObserver())
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-    }
-
     private fun splashViewStateObserver() =  Observer<SplashViewState> { viewState ->
         when(viewState.state) {
             ERROR -> {
@@ -46,7 +42,9 @@ class SplashFragment : BaseFragment<SplashFragmentBinding, SplashViewModel>() {
             LOGIN_CHECK -> {
                 when {
                     viewState.isLoggedIn -> {
-                        navController.navigate(R.id.action_splashFragment_to_homeFragment)
+                        val navAction =  SplashFragmentDirections
+                            .actionSplashFragmentToHomeFragment(viewState.userName!!)
+                        navController.navigate(navAction)
                     }
                     !viewState.isLoggedIn -> {
                         navController.navigate(R.id.action_splashFragment_to_loginFragment)

@@ -75,13 +75,13 @@ abstract class BaseFragment<DataBindingClass: ViewDataBinding, ViewModelClass: V
 
 
     internal fun setSupportActionBar(isVisible: Boolean, title: String? = null) {
-        mainActivity.supportActionBar?.run {
-            this.title = title
+        mainActivity.actionBar.run {
+            //this.title = title
 
-            if (isVisible) {
-                show()
+            visibility = if (isVisible) {
+                View.VISIBLE
             } else {
-                hide()
+                View.GONE
             }
         }
     }

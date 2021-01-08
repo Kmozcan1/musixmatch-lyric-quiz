@@ -4,13 +4,15 @@ import android.content.res.Resources
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.kmozcan1.lyricquizapp.R
 import com.kmozcan1.lyricquizapp.presentation.viewmodel.MainViewModel
@@ -37,6 +39,14 @@ class MainActivity : AppCompatActivity() {
         navHostFragment.navController
     }
 
+    private val appBarConfiguration: AppBarConfiguration by lazy {
+        AppBarConfiguration(setOf(R.id.homeFragment, R.id.leaderboardFragment))
+    }
+
+    val actionBar: MaterialToolbar by lazy {
+        findViewById(R.id.topAppBar)
+    }
+
     private val bottomNavigationView: BottomNavigationView by lazy {
         findViewById(R.id.bottomNavigationView)
     }
@@ -53,8 +63,9 @@ class MainActivity : AppCompatActivity() {
     private fun setViews() {
         setContentView(R.layout.activity_main)
 
-        // Sets the botton navigation view with the nav graph
+        // Sets the bottom navigation view with the nav graph
         bottomNavigationView.setupWithNavController(navController)
+        actionBar.setupWithNavController(navController, appBarConfiguration)
     }
 
 

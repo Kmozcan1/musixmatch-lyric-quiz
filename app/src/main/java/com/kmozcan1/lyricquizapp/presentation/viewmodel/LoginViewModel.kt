@@ -11,9 +11,8 @@ import com.kmozcan1.lyricquizapp.presentation.viewstate.LoginViewState
 
 class LoginViewModel @ViewModelInject constructor(
     private val updateCurrentUserUseCase: UpdateCurrentUserUseCase,
-    private val registerUserUseCase: RegisterUserUseCase,
-    private val getCurrentUserUseCase: GetCurrentUserUseCase
-): BaseViewModel<LoginViewState>() {
+    private val registerUserUseCase: RegisterUserUseCase
+    ): BaseViewModel<LoginViewState>() {
 
     fun login(userName: String) {
         updateCurrentUserUseCase.execute(
@@ -31,7 +30,7 @@ class LoginViewModel @ViewModelInject constructor(
         registerUserUseCase.execute(
             RegisterUserUseCase.Params(userName),
             onComplete = {
-                setViewState(LoginViewState.login(true))
+                setViewState(LoginViewState.login(userName))
             },
             onError = {
                 onError(it)

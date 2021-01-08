@@ -20,12 +20,15 @@ class RegisterUserUseCase @Inject constructor(
     override fun buildObservable(params: Params?): Completable {
         // Adds users to the database if they aren't registered
         return if (isUsernameValid(params?.userName!!)) {
+            // Try to get the current user from database
             getUserFromDatabaseUseCase.buildObservable(
                 GetUserFromDatabaseUseCase.Params(params.userName)
             ).onErrorResumeNext { error ->
+                // If the current user is not found in the DB, return empty string
                 if (error is EmptyResultSetException) Single.just("")
                 else Single.error(error)
             }.flatMapCompletable { name ->
+                // If the empty string is returned, add user to the database; else, complete
                 if (name == "") {
                     insertUserToDatabaseUseCase.buildObservable(
                         InsertUserToDatabaseUseCase.Params(params.userName)

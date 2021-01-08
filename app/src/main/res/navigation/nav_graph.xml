@@ -19,7 +19,7 @@
     <fragment
         android:id="@+id/quizFragment"
         android:name="com.kmozcan1.lyricquizapp.presentation.ui.QuizFragment"
-        android:label="quiz_fragment"
+        android:label="@string/quiz"
         tools:layout="@layout/quiz_fragment" >
         <action
             android:id="@+id/action_quizFragment_to_leaderboardFragment2"
@@ -33,8 +33,11 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.kmozcan1.lyricquizapp.presentation.ui.HomeFragment"
-        android:label="home_fragment"
+        android:label="Welcome {userName}"
         tools:layout="@layout/home_fragment" >
+        <argument
+            android:name="userName"
+            app:argType="string"/>
         <action
             android:id="@+id/action_homeFragment_to_quizFragment"
             app:destination="@id/quizFragment" />
@@ -50,7 +53,7 @@
     <fragment
         android:id="@+id/leaderboardFragment"
         android:name="com.kmozcan1.lyricquizapp.presentation.ui.LeaderBoardFragment"
-        android:label="leaderboard_fragment"
+        android:label="@string/leader_board"
         tools:layout="@layout/leaderboard_fragment" />
     <fragment
         android:id="@+id/splashFragment"

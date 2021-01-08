@@ -10,8 +10,13 @@
         <item name="android:windowBackground">@color/colorOnPrimary</item>
 
         <item name="bottomNavigationStyle">@style/BottomNavigationStyle</item>
+
         <item name="materialButtonStyle">@style/ButtonStyle</item>
+
+        <item name="toolbarStyle">@style/ActionBarStyle</item>
+
     </style>
+
     <style name="ToolBarStyle" parent="Theme.MaterialComponents.DayNight">
         <item name="android:textColorPrimary">@color/colorPrimary</item>
         <item name="android:textColorSecondary">@android:color/white</item>
@@ -19,36 +24,46 @@
         <item name="actionMenuTextColor">@android:color/white</item>
         <item name="android:textColorHint">@android:color/white</item>
     </style>
+
+    <!--Cold splash screen-->
     <style name="AppTheme.Launcher">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowBackground">@drawable/splash_logo_drawable</item>
     </style>
+
+    <!--Bottom nav bar styles-->
     <style name="BottomNavigationStyle" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
         <item name="materialThemeOverlay">@style/ThemeOverlay.BottomNavigationStyle</item>
     </style>
-
     <style name="ThemeOverlay.BottomNavigationStyle" parent="">
         <item name="colorPrimary">@color/bottomNavBackground</item>
     </style>
 
+    <!--Action bar styles-->
+    <style name="ActionBarStyle" parent="Widget.MaterialComponents.Toolbar.Primary">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.Toolbar</item>
+    </style>
+
+    <style name="ThemeOverlay.App.Toolbar" parent="">
+        <item name="colorPrimary">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryDark</item>
+        <item name="colorOnPrimary">@color/lightRed</item>
+    </style>
+
+    <!--Button styles-->
     <style name="ButtonStyle" parent="Widget.MaterialComponents.Button">
         <item name="materialThemeOverlay">@style/ThemeOverlay.App.Button</item>
         <item name="shapeAppearance">@style/ShapeAppearance.App.SmallComponent</item>
     </style>
-
     <style name="ThemeOverlay.App.Button.TextButton" parent="">
         <item name="colorPrimary">@color/colorPrimary</item>
     </style>
-
     <style name="ThemeOverlay.App.Button" parent="">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorOnPrimary">@color/white</item>
     </style>
-
     <style name="ShapeAppearance.App.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
-
-
 </resources>
