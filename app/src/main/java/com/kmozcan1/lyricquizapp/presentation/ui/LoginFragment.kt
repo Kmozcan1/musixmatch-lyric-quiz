@@ -32,6 +32,7 @@ class LoginFragment : BaseFragment<LoginFragmentBinding, LoginViewModel>() {
     override fun onViewBound() {
         binding.loginFragment = this
         setSupportActionBar(false)
+        showBottomNavigation(false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

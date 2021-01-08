@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#FF2239</color>
-    <color name="colorPrimaryDark">#080C0F</color>
-    <color name="colorOnPrimary">#080C0F</color>
+    <color name="colorPrimaryDark">#121212</color>
+    <color name="colorOnPrimary">#121212</color>
     <color name="lightRed">#FF5353</color>
     <color name="colorAccent">#03DAC5</color>
     <color name="white">#FFFFFF</color>
     <color name="mtrl_textinput_default_box_stroke_color">#FF5353</color>
+    <color name="bottomNavInactive">#ABABAB</color>
+    <color name="bottomNavActive">#E25C59</color>
+    <color name="bottomNavBackground">#2D2D2D</color>
 </resources>

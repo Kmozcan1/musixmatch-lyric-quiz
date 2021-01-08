@@ -32,6 +32,7 @@ class QuizFragment : BaseFragment<QuizFragmentBinding, QuizViewModel>() {
     override fun onViewBound() {
         binding.quizFragment = this
         setSupportActionBar(true, getString(R.string.quiz))
+        showBottomNavigation(false)
     }
 
     override fun observe() {

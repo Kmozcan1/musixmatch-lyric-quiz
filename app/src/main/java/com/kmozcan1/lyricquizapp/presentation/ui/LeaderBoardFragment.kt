@@ -36,6 +36,7 @@ class LeaderBoardFragment : BaseFragment<LeaderboardFragmentBinding, LeaderBoard
 
     override fun onViewBound() {
         setSupportActionBar(true, getString(R.string.leader_board))
+        showBottomNavigation(true)
     }
 
     override fun observe() {

@@ -13,4 +13,5 @@
     <string name="no_internet_text">Please make sure you are connected to the Internet</string>
     <string name="quiz">Quiz</string>
     <string name="welcome">Welcome %s</string>
+    <string name="home">Home</string>
 </resources>

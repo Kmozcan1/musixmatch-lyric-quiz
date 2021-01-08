@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import com.kmozcan1.lyricquizapp.R
 import javax.inject.Inject
 
@@ -25,14 +26,12 @@ import javax.inject.Inject
 abstract class BaseFragment<DataBindingClass: ViewDataBinding, ViewModelClass: ViewModel>
     : Fragment() {
 
-    @Inject
-    lateinit var mainActivity: MainActivity
+    private val mainActivity by lazy {
+        activity as MainActivity
+    }
 
-    @Inject
-    lateinit var navController: NavController
-
-    val appCompatActivity: AppCompatActivity by lazy {
-        activity as AppCompatActivity
+    val navController by lazy {
+        findNavController()
     }
 
     lateinit var binding: DataBindingClass
@@ -74,6 +73,7 @@ abstract class BaseFragment<DataBindingClass: ViewDataBinding, ViewModelClass: V
 
     open fun onInternetDisconnected() { }
 
+
     internal fun setSupportActionBar(isVisible: Boolean, title: String? = null) {
         mainActivity.supportActionBar?.run {
             this.title = title
@@ -84,6 +84,10 @@ abstract class BaseFragment<DataBindingClass: ViewDataBinding, ViewModelClass: V
                 hide()
             }
         }
+    }
+
+    internal fun showBottomNavigation(isVisible: Boolean) {
+        mainActivity.showBottomNavigation(isVisible)
     }
 
     internal fun makeToast(toastMessage: String?) {

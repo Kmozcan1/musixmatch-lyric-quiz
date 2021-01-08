@@ -26,6 +26,7 @@ class SplashFragment : BaseFragment<SplashFragmentBinding, SplashViewModel>() {
 
     override fun onViewBound() {
         setSupportActionBar(false)
+        showBottomNavigation(false)
     }
 
     override fun observe() {
@@ -34,9 +35,6 @@ class SplashFragment : BaseFragment<SplashFragmentBinding, SplashViewModel>() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        if (getIsConnectedToInternet()) {
-            //viewModel.prepareTracks()
-        }
     }
 
     private fun splashViewStateObserver() =  Observer<SplashViewState> { viewState ->
@@ -71,8 +69,8 @@ class SplashFragment : BaseFragment<SplashFragmentBinding, SplashViewModel>() {
 
     override fun onInternetConnected() {
         showConnectionWarning(false)
-        //viewModel.prepareTracks()
-        navController.navigate(R.id.action_splashFragment_to_loginFragment)
+        viewModel.prepareTracks()
+        //navController.navigate(R.id.action_splashFragment_to_loginFragment)
     }
 
     override fun onInternetDisconnected() {

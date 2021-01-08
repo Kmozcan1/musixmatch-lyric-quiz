@@ -8,6 +8,9 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorOnPrimary">@color/colorOnPrimary</item>
         <item name="android:windowBackground">@color/colorOnPrimary</item>
+
+        <item name="bottomNavigationStyle">@style/BottomNavigationStyle</item>
+        <item name="materialButtonStyle">@style/ButtonStyle</item>
     </style>
     <style name="ToolBarStyle" parent="Theme.MaterialComponents.DayNight">
         <item name="android:textColorPrimary">@color/colorPrimary</item>
@@ -20,4 +23,32 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowBackground">@drawable/splash_logo_drawable</item>
     </style>
+    <style name="BottomNavigationStyle" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.BottomNavigationStyle</item>
+    </style>
+
+    <style name="ThemeOverlay.BottomNavigationStyle" parent="">
+        <item name="colorPrimary">@color/bottomNavBackground</item>
+    </style>
+
+    <style name="ButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.Button</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.App.SmallComponent</item>
+    </style>
+
+    <style name="ThemeOverlay.App.Button.TextButton" parent="">
+        <item name="colorPrimary">@color/colorPrimary</item>
+    </style>
+
+    <style name="ThemeOverlay.App.Button" parent="">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorOnPrimary">@color/white</item>
+    </style>
+
+    <style name="ShapeAppearance.App.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+
 </resources>

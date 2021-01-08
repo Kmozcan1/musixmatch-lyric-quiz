@@ -34,6 +34,7 @@ class HomeFragment : BaseFragment<HomeFragmentBinding, HomeViewModel>() {
 
     override fun onViewBound() {
         binding.homeFragment = this
+        showBottomNavigation(true)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
