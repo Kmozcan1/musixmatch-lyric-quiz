@@ -14,4 +14,6 @@
     <string name="quiz">Quiz</string>
     <string name="welcome">Welcome %s</string>
     <string name="home">Home</string>
+    <string name="logout_message">You will be returned to the login screen.</string>
+    <string name="cancel">Cancel</string>
 </resources>

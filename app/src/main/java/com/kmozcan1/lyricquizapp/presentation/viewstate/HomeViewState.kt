@@ -28,16 +28,11 @@ data class HomeViewState (
                 scoreList = scoreList
         )
 
-        fun logout(): HomeViewState = HomeViewState(
-            state = State.LOGOUT
-        )
-
     }
 
     enum class State {
         ERROR,
         LOADING,
-        USER_PROFILE,
-        LOGOUT
+        USER_PROFILE
     }
 }

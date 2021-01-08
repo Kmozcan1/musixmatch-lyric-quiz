@@ -2,13 +2,16 @@ package com.kmozcan1.lyricquizapp.presentation.viewmodel
 
 import androidx.hilt.lifecycle.ViewModelInject
 import com.kmozcan1.lyricquizapp.domain.interactor.ObserveInternetConnectionUseCase
+import com.kmozcan1.lyricquizapp.domain.interactor.UpdateCurrentUserUseCase
+import com.kmozcan1.lyricquizapp.presentation.viewstate.HomeViewState
 import com.kmozcan1.lyricquizapp.presentation.viewstate.MainViewState
 
 /**
  * Created by Kadir Mert Özcan on 19-Dec-20.
  */
 class MainViewModel @ViewModelInject constructor(
-    private val observeInternetConnectionUseCase: ObserveInternetConnectionUseCase
+    private val observeInternetConnectionUseCase: ObserveInternetConnectionUseCase,
+    private val updateCurrentUserUseCase: UpdateCurrentUserUseCase
 ) : BaseViewModel<MainViewState>() {
     fun observeInternetConnection() {
         observeInternetConnectionUseCase.execute(
@@ -19,6 +22,18 @@ class MainViewModel @ViewModelInject constructor(
                 onError = {
                     onError(it)
                 }
+        )
+    }
+
+    fun logout() {
+        updateCurrentUserUseCase.execute(
+            params = UpdateCurrentUserUseCase.Params(""),
+            onComplete = {
+                setViewState(MainViewState.logout())
+            },
+            onError = {
+                onError(it)
+            }
         )
     }
 

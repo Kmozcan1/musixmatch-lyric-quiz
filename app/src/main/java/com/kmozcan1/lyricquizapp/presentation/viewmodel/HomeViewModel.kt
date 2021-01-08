@@ -23,18 +23,6 @@ class HomeViewModel @ViewModelInject constructor(
         )
     }
 
-    fun logout() {
-        updateCurrentUserUseCase.execute(
-            params = UpdateCurrentUserUseCase.Params(""),
-            onComplete = {
-                setViewState(HomeViewState.logout())
-            },
-            onError = {
-                onError(it)
-            }
-        )
-    }
-
     override fun onError(t: Throwable) {
         t.printStackTrace()
         setViewState(HomeViewState.error(t))

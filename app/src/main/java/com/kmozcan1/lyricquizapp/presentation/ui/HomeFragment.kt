@@ -76,22 +76,11 @@ class HomeFragment : BaseFragment<HomeFragmentBinding, HomeViewModel>() {
                         LinearLayoutManager(context),
                         scoreListAdapter)
             }
-            LOGOUT -> {
-                navController.navigate(R.id.action_homeFragment_to_loginFragment)
-            }
         }
-    }
-
-    fun onLeaderBoardButton(v: View) {
-        navController.navigate(R.id.action_homeFragment_to_leaderboardFragment)
     }
 
     fun onStartQuizButton(v: View) {
         navController.navigate(R.id.action_homeFragment_to_quizFragment)
-    }
-
-    fun onLogoutButton(v: View) {
-        viewModel.logout()
     }
 
     private fun showConnectionWarning(isVisible: Boolean) {

@@ -15,6 +15,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.kmozcan1.lyricquizapp.R
 import com.kmozcan1.lyricquizapp.presentation.viewmodel.MainViewModel
 import com.kmozcan1.lyricquizapp.presentation.viewstate.MainViewState
@@ -68,6 +69,25 @@ class MainActivity : AppCompatActivity() {
         // Sets the bottom navigation view with the nav graph
         bottomNavigationView.setupWithNavController(navController)
         actionBar.setupWithNavController(navController, appBarConfiguration)
+        actionBar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.logout -> {
+                    MaterialAlertDialogBuilder(this)
+                        .setTitle(resources.getString(R.string.logout))
+                        .setMessage(resources.getString(R.string.logout_message))
+                        .setNegativeButton(resources.getString(R.string.cancel)) { dialog, _ ->
+                            dialog.dismiss()
+                        }
+                        .setPositiveButton(resources.getString(R.string.logout)) { dialog, _ ->
+                            viewModel.logout()
+                            dialog.dismiss()
+                        }
+                        .show()
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     private fun observeViewState() = Observer<MainViewState> { viewState ->
@@ -88,6 +108,9 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             LOADING -> TODO()
+            LOGOUT -> {
+                navController.navigate(R.id.loginFragment)
+            }
         }
     }
 
