@@ -57,6 +57,6 @@ class LoginFragment : BaseFragment<LoginFragmentBinding, LoginViewModel>() {
     }
 
     fun onLoginButtonClick(v: View) {
-        viewModel.login(binding.userNameEditText.text.toString())
+        viewModel.login(binding.userNameEditText.editText?.text.toString())
     }
 }

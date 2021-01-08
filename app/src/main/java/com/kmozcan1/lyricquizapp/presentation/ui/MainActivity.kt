@@ -1,18 +1,17 @@
 package com.kmozcan1.lyricquizapp.presentation.ui
 
+import android.content.res.Resources
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.kmozcan1.lyricquizapp.R
 import com.kmozcan1.lyricquizapp.presentation.viewmodel.MainViewModel
 import com.kmozcan1.lyricquizapp.presentation.viewstate.MainViewState
 import com.kmozcan1.lyricquizapp.presentation.viewstate.MainViewState.State.*
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
+
 
 /**
  * Created by Kadir Mert Özcan on 14-Dec-20.
@@ -25,6 +24,7 @@ class MainActivity : AppCompatActivity() {
         private set
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         viewModel.viewState.observe(this, observeViewState())
@@ -54,9 +54,9 @@ class MainActivity : AppCompatActivity() {
 
     fun makeToast(toastMessage: String?) {
         Toast.makeText(
-                this,
-                toastMessage,
-                Toast.LENGTH_LONG
+            this,
+            toastMessage,
+            Toast.LENGTH_LONG
         ).show()
     }
 }

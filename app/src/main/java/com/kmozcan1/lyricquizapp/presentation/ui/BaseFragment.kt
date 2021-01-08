@@ -1,9 +1,12 @@
 package com.kmozcan1.lyricquizapp.presentation.ui
 
+import android.content.Context
 import android.os.Bundle
+import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.StyleRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
@@ -11,7 +14,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
+import com.kmozcan1.lyricquizapp.R
 import javax.inject.Inject
+
 
 /**
  * Created by Kadir Mert Özcan on 25-Dec-20.
@@ -49,12 +54,12 @@ abstract class BaseFragment<DataBindingClass: ViewDataBinding, ViewModelClass: V
     abstract fun observe()
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
-        // Type safe data binding from abstract class
         binding = DataBindingUtil.inflate(
-                inflater, layoutId(), container, false) as DataBindingClass
+            inflater, layoutId(), container, false
+        ) as DataBindingClass
         onViewBound()
         return binding.root
     }

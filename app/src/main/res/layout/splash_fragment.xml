@@ -5,21 +5,24 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/frameLayout"
+        style="@style/AppTheme.Launcher"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FFFFFF"
+        android:fitsSystemWindows="false"
         tools:context=".presentation.ui.SplashFragment">
 
         <ImageView
-            android:id="@+id/logoImageView"
-            android:layout_width="wrap_content"
+            android:id="@+id/imageView2"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="56dp"
+            android:fitsSystemWindows="false"
+            android:scaleType="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/android_icon"
-            android:contentDescription="@null" />
+            app:srcCompat="@drawable/splash_logo_620" />
 
         <TextView
             android:id="@+id/splashInternetTextView"
@@ -30,8 +33,7 @@
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/logoImageView" />
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
