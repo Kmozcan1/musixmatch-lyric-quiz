@@ -30,35 +30,35 @@ class QuizFragment : BaseFragment<QuizFragmentBinding, QuizViewModel>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setBackPressCallback()
+    }
 
-        // Custom back press handler
+    private fun setBackPressCallback() {
         val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
             if (quizFinished) {
-                navController.navigateUp()
+                navController.navigate(R.id.viewPagerFragment)
             } else {
                 MaterialAlertDialogBuilder(requireActivity())
-                    .setTitle(resources.getString(R.string.quit_quiz))
-                    .setMessage(resources.getString(R.string.quit_quiz_message))
-                    .setNegativeButton(resources.getString(R.string.cancel)) { dialog, _ ->
-                        dialog.dismiss()
-                    }
-                    .setPositiveButton(resources.getString(R.string.quit)) { dialog, _ ->
-                        navController.navigateUp()
-                        dialog.dismiss()
-                    }
-                    .show()
+                        .setTitle(resources.getString(R.string.quit_quiz))
+                        .setMessage(resources.getString(R.string.quit_quiz_message))
+                        .setNegativeButton(resources.getString(R.string.cancel)) { dialog, _ ->
+                            dialog.dismiss()
+                        }
+                        .setPositiveButton(resources.getString(R.string.quit)) { dialog, _ ->
+                            navController.navigate(R.id.viewPagerFragment)
+                            dialog.dismiss()
+                        }
+                        .show()
             }
-
         }
-
         callback.isEnabled = true
-
     }
 
     override fun onViewBound() {
         binding.quizFragment = this
-        setSupportActionBar(true, getString(R.string.quiz))
+        setSupportActionBar(true)
         showBottomNavigation(false)
+        setBottomNavigationNoSelectedItem()
     }
 
     override fun observe() {

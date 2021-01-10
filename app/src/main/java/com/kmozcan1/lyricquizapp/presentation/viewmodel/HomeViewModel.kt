@@ -8,6 +8,10 @@ import com.kmozcan1.lyricquizapp.presentation.viewstate.HomeViewState
 class HomeViewModel @ViewModelInject constructor(
     private val getUserProfileUseCase: GetUserProfileUseCase): BaseViewModel<HomeViewState>() {
 
+    init {
+        setViewState(HomeViewState.init())
+    }
+
     fun getUserProfile() {
         setViewState(HomeViewState.loading())
         getUserProfileUseCase.execute(

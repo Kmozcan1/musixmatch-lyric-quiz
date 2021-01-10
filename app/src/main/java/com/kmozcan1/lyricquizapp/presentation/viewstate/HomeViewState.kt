@@ -12,6 +12,10 @@ data class HomeViewState (
     val scoreList: List<ScoreDomainModel> = emptyList()
 ) {
     companion object {
+        fun init(): HomeViewState = HomeViewState(
+                state = State.INIT
+        )
+
         fun error(e: Throwable): HomeViewState = HomeViewState(
                 state = State.ERROR,
                 errorMessage = e.message
@@ -27,10 +31,10 @@ data class HomeViewState (
                 userName = userName,
                 scoreList = scoreList
         )
-
     }
 
     enum class State {
+        INIT,
         ERROR,
         LOADING,
         USER_PROFILE

@@ -43,7 +43,6 @@ class HomeFragment : BaseFragment<HomeFragmentBinding, HomeViewModel>() {
 
     override fun observe() {
         viewModel.viewState.observe(viewLifecycleOwner, viewStateObserver())
-        viewModel.getUserProfile()
     }
 
     private fun viewStateObserver() = Observer<HomeViewState> { viewState ->
@@ -51,16 +50,15 @@ class HomeFragment : BaseFragment<HomeFragmentBinding, HomeViewModel>() {
             ERROR -> {
                 makeToast(viewState.errorMessage)
             }
+            INIT -> {
+                viewModel.getUserProfile()
+            }
             LOADING -> {
                 binding.profileProgressBar.visibility = View.VISIBLE
             }
             USER_PROFILE -> {
                 // Hide progress bar
                 binding.profileProgressBar.visibility = View.GONE
-
-                // Set ActionBar title
-                setSupportActionBar(true,
-                        getString(R.string.welcome, viewState.userName))
                 // Set list items
                 scoreListAdapter = ScoreListAdapter(
                         viewState.scoreList
@@ -73,7 +71,7 @@ class HomeFragment : BaseFragment<HomeFragmentBinding, HomeViewModel>() {
     }
 
     fun onStartQuizButton(v: View) {
-        navController.navigate(R.id.action_homeFragment_to_quizFragment)
+        navController.navigate(R.id.action_viewPagerFragment_to_quizFragment)
     }
 
     private fun showConnectionWarning(isVisible: Boolean) {

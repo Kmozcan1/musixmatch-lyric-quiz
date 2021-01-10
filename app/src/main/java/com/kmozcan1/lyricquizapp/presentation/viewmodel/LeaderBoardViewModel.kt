@@ -8,6 +8,10 @@ class LeaderBoardViewModel @ViewModelInject constructor(
     private val getTopScoresUseCase: GetTopScoresUseCase
 ) : BaseViewModel<LeaderBoardViewState>() {
 
+    init {
+        setViewState(LeaderBoardViewState.init())
+    }
+
     fun getTopScores() {
         getTopScoresUseCase.execute(
             params = null,
@@ -15,7 +19,7 @@ class LeaderBoardViewModel @ViewModelInject constructor(
                 setViewState(LeaderBoardViewState.scoreList(scoreList))
             },
             onError = {
-
+                onError(it)
             }
         )
     }

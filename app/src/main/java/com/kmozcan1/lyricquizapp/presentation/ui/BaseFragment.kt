@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.kmozcan1.lyricquizapp.presentation.Constants
 
 
 /**
@@ -46,11 +48,11 @@ abstract class BaseFragment<DataBindingClass: ViewDataBinding, ViewModelClass: V
     abstract fun observe()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(
-            inflater, layoutId, container, false
+                inflater, layoutId, container, false
         ) as DataBindingClass
         onViewBound()
         return binding.root
@@ -62,15 +64,16 @@ abstract class BaseFragment<DataBindingClass: ViewDataBinding, ViewModelClass: V
         observe()
     }
 
-    open fun onInternetConnected() { }
+    open fun onInternetConnected() {}
 
-    open fun onInternetDisconnected() { }
+    open fun onInternetDisconnected() {}
 
 
     internal fun setSupportActionBar(isVisible: Boolean, title: String? = null) {
         mainActivity.actionBar.run {
-            //this.title = title
-
+            if (title != null) {
+                this.title = title
+            }
             visibility = if (isVisible) {
                 View.VISIBLE
             } else {
@@ -81,6 +84,13 @@ abstract class BaseFragment<DataBindingClass: ViewDataBinding, ViewModelClass: V
 
     internal fun showBottomNavigation(isVisible: Boolean) {
         mainActivity.showBottomNavigation(isVisible)
+    }
+
+    internal fun setBottomNavigationNoSelectedItem() {
+        mainActivity.bottomNavigationView.menu[0].run {
+            isCheckable = false
+            isChecked = false
+        }
     }
 
     internal fun makeToast(toastMessage: String?) {

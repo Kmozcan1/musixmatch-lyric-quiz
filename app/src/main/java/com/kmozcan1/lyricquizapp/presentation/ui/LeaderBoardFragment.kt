@@ -25,7 +25,6 @@ class LeaderBoardFragment : BaseFragment<LeaderboardFragmentBinding, LeaderBoard
     override val viewModelClass: Class<LeaderBoardViewModel> = LeaderBoardViewModel::class.java
 
     override fun onViewBound() {
-        setSupportActionBar(true, getString(R.string.leader_board))
         showBottomNavigation(true)
     }
 
@@ -38,9 +37,12 @@ class LeaderBoardFragment : BaseFragment<LeaderboardFragmentBinding, LeaderBoard
         when (viewState.state){
             ERROR -> {
                 makeToast(viewState.errorMessage)
-                navController.navigateUp()
+            }
+            INIT -> {
+                viewModel.getTopScores()
             }
             LOADING -> {
+
             }
             SCORE_LIST -> {
                 viewState.scoreList?.let {

@@ -11,8 +11,8 @@
         android:label="login_fragment"
         tools:layout="@layout/login_fragment" >
         <action
-            android:id="@+id/action_loginFragment_to_homeFragment"
-            app:destination="@id/homeFragment"
+            android:id="@+id/action_loginFragment_to_viewPagerFragment"
+            app:destination="@id/viewPagerFragment"
             app:popUpTo="@id/nav_graph"
             app:popUpToInclusive="true"/>
     </fragment>
@@ -22,36 +22,11 @@
         android:label="@string/quiz"
         tools:layout="@layout/quiz_fragment" >
         <action
-            android:id="@+id/action_quizFragment_to_leaderboardFragment2"
-            app:destination="@id/leaderboardFragment"
-            app:popUpTo="@id/homeFragment" />
-        <action
-            android:id="@+id/action_quizFragment_to_homeFragment"
-            app:destination="@id/homeFragment"
-            app:popUpTo="@id/homeFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.kmozcan1.lyricquizapp.presentation.ui.HomeFragment"
-        android:label="@string/home"
-        tools:layout="@layout/home_fragment" >
-        <action
-            android:id="@+id/action_homeFragment_to_quizFragment"
-            app:destination="@id/quizFragment" />
-        <action
-            android:id="@+id/action_homeFragment_to_leaderboardFragment"
-            app:destination="@id/leaderboardFragment" />
-        <action
-            android:id="@+id/action_homeFragment_to_loginFragment"
-            app:destination="@id/loginFragment"
-            app:popUpTo="@id/nav_graph"
+            android:id="@+id/action_quizFragment_to_viewPagerFragment"
+            app:destination="@id/viewPagerFragment"
+            app:popUpTo="@id/quizFragment"
             app:popUpToInclusive="true" />
     </fragment>
-    <fragment
-        android:id="@+id/leaderboardFragment"
-        android:name="com.kmozcan1.lyricquizapp.presentation.ui.LeaderBoardFragment"
-        android:label="@string/leader_board"
-        tools:layout="@layout/leaderboard_fragment" />
     <fragment
         android:id="@+id/splashFragment"
         android:name="com.kmozcan1.lyricquizapp.presentation.ui.SplashFragment"
@@ -62,10 +37,21 @@
             app:popUpTo="@id/nav_graph"
             app:popUpToInclusive="true"/>
         <action
-            android:id="@+id/action_splashFragment_to_homeFragment"
-            app:destination="@id/homeFragment"
+            android:id="@+id/action_splashFragment_to_viewPagerFragment"
+            app:destination="@id/viewPagerFragment"
             app:popUpTo="@id/nav_graph"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true" />
     </fragment>
-
+    <fragment
+        android:id="@+id/viewPagerFragment"
+        android:name="com.kmozcan1.lyricquizapp.presentation.ui.ViewPagerFragment"
+        android:label="ViewPagerFragment">
+        <argument
+            android:name="pageIndex"
+            app:argType="integer"
+            android:defaultValue="0" />
+        <action
+            android:id="@+id/action_viewPagerFragment_to_quizFragment"
+            app:destination="@id/quizFragment" />
+    </fragment>
 </navigation>

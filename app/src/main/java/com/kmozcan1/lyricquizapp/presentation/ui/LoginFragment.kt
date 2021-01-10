@@ -46,7 +46,7 @@ class LoginFragment : BaseFragment<LoginFragmentBinding, LoginViewModel>() {
                 makeToast(viewState.errorMessage)
             }
             LOGIN -> {
-                navController.navigate(R.id.action_loginFragment_to_homeFragment)
+                navController.navigate(R.id.action_loginFragment_to_viewPagerFragment)
             }
             LOADING -> {
 

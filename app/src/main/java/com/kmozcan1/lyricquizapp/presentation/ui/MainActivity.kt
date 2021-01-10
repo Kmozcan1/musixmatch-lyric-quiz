@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -15,6 +17,9 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.kmozcan1.lyricquizapp.R
+import com.kmozcan1.lyricquizapp.presentation.Constants
+import com.kmozcan1.lyricquizapp.presentation.Constants.HOME_PAGE_INDEX
+import com.kmozcan1.lyricquizapp.presentation.Constants.LEADER_BOARD_PAGE_INDEX
 import com.kmozcan1.lyricquizapp.presentation.viewmodel.MainViewModel
 import com.kmozcan1.lyricquizapp.presentation.viewstate.MainViewState
 import com.kmozcan1.lyricquizapp.presentation.viewstate.MainViewState.State.*
@@ -33,6 +38,9 @@ class MainActivity : AppCompatActivity() {
 
     var userName: String = ""
 
+    var userScoresPendingUpdate = true
+    var leaderBoardPendingUpdate = true
+
     private val navHostFragment : NavHostFragment by lazy {
         supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
     }
@@ -42,14 +50,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val appBarConfiguration: AppBarConfiguration by lazy {
-        AppBarConfiguration(setOf(R.id.homeFragment, R.id.leaderboardFragment, R.id.quizFragment))
+        AppBarConfiguration(setOf(R.id.viewPagerFragment, R.id.quizFragment))
     }
 
     val actionBar: MaterialToolbar by lazy {
         findViewById(R.id.topAppBar)
     }
 
-    private val bottomNavigationView: BottomNavigationView by lazy {
+    val bottomNavigationView: BottomNavigationView by lazy {
         findViewById(R.id.bottomNavigationView)
     }
 
@@ -66,18 +74,59 @@ class MainActivity : AppCompatActivity() {
 
     private fun setViews() {
         setContentView(R.layout.activity_main)
-        // Sets the bottom navigation view with the nav graph
-        bottomNavigationView.setupWithNavController(navController)
+
+        // Set app bar
         actionBar.setupWithNavController(navController, appBarConfiguration)
-        actionBar.setOnMenuItemClickListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.logout -> {
-                    displayLogoutAlert()
-                    true
+        actionBar.setOnMenuItemClickListener(actionBarMenuItemClickListener())
+
+        // Set bottom nav bar
+        bottomNavigationView.setupWithNavController(navController)
+        bottomNavigationView
+                .setOnNavigationItemSelectedListener(bottomNavigationItemSelectedListener())
+    }
+
+    private fun actionBarMenuItemClickListener() = Toolbar.OnMenuItemClickListener { menuItem ->
+        when (menuItem.itemId) {
+            R.id.logout -> {
+                displayLogoutAlert()
+                true
+            }
+            else -> false
+        }
+    }
+
+    // If the viewPager is active, navigate between pages
+    // If the quiz fragment is active, navigate to viewPager with the page index safe arg
+    private fun bottomNavigationItemSelectedListener() = BottomNavigationView.OnNavigationItemSelectedListener { menuItem ->
+        when (val activeFragment = getActiveFragment()) {
+            is ViewPagerFragment -> {
+                when(menuItem.itemId) {
+                    R.id.homeFragment -> {
+                        menuItem.isCheckable = true;
+                        activeFragment.setCurrentItem(HOME_PAGE_INDEX)
+                    }
+                    R.id.leaderboardFragment -> {
+                        activeFragment.setCurrentItem(LEADER_BOARD_PAGE_INDEX)
+                    }
                 }
-                else -> false
+            }
+            is QuizFragment -> {
+                when(menuItem.itemId) {
+                    R.id.homeFragment -> {
+                        menuItem.isCheckable = true;
+                        val navAction =  QuizFragmentDirections
+                                .actionQuizFragmentToViewPagerFragment(HOME_PAGE_INDEX)
+                        navController.navigate(navAction)
+                    }
+                    R.id.leaderboardFragment -> {
+                        val navAction =  QuizFragmentDirections
+                                .actionQuizFragmentToViewPagerFragment(LEADER_BOARD_PAGE_INDEX)
+                        navController.navigate(navAction)
+                    }
+                }
             }
         }
+        true
     }
 
     private fun displayLogoutAlert() {
@@ -135,5 +184,10 @@ class MainActivity : AppCompatActivity() {
         } else {
             bottomNavigationView.visibility = View.GONE
         }
+    }
+
+    private fun getActiveFragment(): Fragment? {
+        return supportFragmentManager.fragments
+                .first()?.childFragmentManager?.fragments?.get(0)
     }
 }

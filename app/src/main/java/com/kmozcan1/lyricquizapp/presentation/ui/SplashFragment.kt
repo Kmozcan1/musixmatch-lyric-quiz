@@ -39,7 +39,7 @@ class SplashFragment : BaseFragment<SplashFragmentBinding, SplashViewModel>() {
             LOGIN_CHECK -> {
                 when {
                     viewState.isLoggedIn -> {
-                        navController.navigate(R.id.action_splashFragment_to_homeFragment)
+                        navController.navigate(R.id.action_splashFragment_to_viewPagerFragment)
                     }
                     !viewState.isLoggedIn -> {
                         navController.navigate(R.id.action_splashFragment_to_loginFragment)
