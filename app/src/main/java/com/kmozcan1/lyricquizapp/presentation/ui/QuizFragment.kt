@@ -8,8 +8,8 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.kmozcan1.lyricquizapp.R
 import com.kmozcan1.lyricquizapp.databinding.QuizFragmentBinding
-import com.kmozcan1.lyricquizapp.presentation.viewstate.QuizViewState
 import com.kmozcan1.lyricquizapp.presentation.viewmodel.QuizViewModel
+import com.kmozcan1.lyricquizapp.presentation.viewstate.QuizViewState
 import com.kmozcan1.lyricquizapp.presentation.viewstate.QuizViewState.State.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -22,25 +22,33 @@ class QuizFragment : BaseFragment<QuizFragmentBinding, QuizViewModel>() {
         fun newInstance() = QuizFragment()
     }
 
-    override fun layoutId() = R.layout.quiz_fragment
+    override val layoutId = R.layout.quiz_fragment
 
-    override fun getViewModelClass(): Class<QuizViewModel> = QuizViewModel::class.java
+    override val viewModelClass: Class<QuizViewModel> = QuizViewModel::class.java
+
+    var quizFinished: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Custom back press handler
         val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
-            MaterialAlertDialogBuilder(requireActivity())
-                .setTitle(resources.getString(R.string.quit_quiz))
-                .setMessage(resources.getString(R.string.quit_quiz_message))
-                .setNegativeButton(resources.getString(R.string.cancel)) { dialog, _ ->
-                    dialog.dismiss()
-                }
-                .setPositiveButton(resources.getString(R.string.quit)) { dialog, _ ->
-                    navController.navigateUp()
-                    dialog.dismiss()
-                }
-                .show()
+            if (quizFinished) {
+                navController.navigateUp()
+            } else {
+                MaterialAlertDialogBuilder(requireActivity())
+                    .setTitle(resources.getString(R.string.quit_quiz))
+                    .setMessage(resources.getString(R.string.quit_quiz_message))
+                    .setNegativeButton(resources.getString(R.string.cancel)) { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .setPositiveButton(resources.getString(R.string.quit)) { dialog, _ ->
+                        navController.navigateUp()
+                        dialog.dismiss()
+                    }
+                    .show()
+            }
+
         }
 
         callback.isEnabled = true
@@ -93,7 +101,8 @@ class QuizFragment : BaseFragment<QuizFragmentBinding, QuizViewModel>() {
                 showScoreScreen()
             }
             QUIZ_FINISHED -> {
-                hideOptionView()
+                hideQuizView()
+                quizFinished = true
             }
         }
     }
@@ -109,6 +118,7 @@ class QuizFragment : BaseFragment<QuizFragmentBinding, QuizViewModel>() {
     private fun setOptions(viewState: QuizViewState) {
         viewState.question?.let { question ->
             with(binding.quizOptionsView) {
+                // If the buttons are being set for the first time
                 if (!buttonsAreSet) {
                     setOptionButtons(question.options)
                     visibility = View.VISIBLE
@@ -128,8 +138,8 @@ class QuizFragment : BaseFragment<QuizFragmentBinding, QuizViewModel>() {
         showBottomNavigation(true)
     }
 
-    private fun hideOptionView() {
-        binding.quizOptionsView.visibility = View.GONE
+    private fun hideQuizView() {
+        binding.quizView.visibility = View.GONE
     }
 
     private fun timerObserver() = Observer<String> {  time ->
@@ -138,8 +148,11 @@ class QuizFragment : BaseFragment<QuizFragmentBinding, QuizViewModel>() {
 
     private fun optionButtonClickListener() = object : OptionsView.OptionButtonClickListener {
         override fun onOptionButtonClicked(artistId: Int) {
-            binding.quizOptionsView.isClickable = false
-            viewModel.validateAnswer(artistId)
+            if (binding.quizOptionsView.buttonsAreEnabled) {
+                binding.quizOptionsView.buttonsAreEnabled = false
+                viewModel.validateAnswer(artistId)
+            }
+
         }
     }
 

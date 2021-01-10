@@ -3,7 +3,6 @@ package com.kmozcan1.lyricquizapp.presentation.viewmodel
 import androidx.hilt.lifecycle.ViewModelInject
 import com.kmozcan1.lyricquizapp.domain.interactor.ObserveInternetConnectionUseCase
 import com.kmozcan1.lyricquizapp.domain.interactor.UpdateCurrentUserUseCase
-import com.kmozcan1.lyricquizapp.presentation.viewstate.HomeViewState
 import com.kmozcan1.lyricquizapp.presentation.viewstate.MainViewState
 
 /**

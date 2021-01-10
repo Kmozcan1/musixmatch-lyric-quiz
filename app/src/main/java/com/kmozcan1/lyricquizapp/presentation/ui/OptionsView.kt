@@ -22,6 +22,7 @@ class OptionsView : ConstraintLayout {
     private var optionButtonClickListener: OptionButtonClickListener? = null
     private val buttonMap = mutableMapOf<Int, MaterialButton>()
     var buttonsAreSet: Boolean = false
+    var buttonsAreEnabled: Boolean = false
     private lateinit var correctButton: MaterialButton
 
     constructor(context: Context) : super(context) {
@@ -56,13 +57,6 @@ class OptionsView : ConstraintLayout {
             Paris.styleBuilder(button).add(R.style.ButtonStyle).apply()
 
             this.addView(button)
-
-            // Set onClickListener
-            button.setOnClickListener {
-                if (optionButtonClickListener != null) {
-                    optionButtonClickListener?.onOptionButtonClicked(options[i].id)
-                }
-            }
 
             // Attach to bottom if it's the first button, otherwise the previous button's top if not
             if (previousButtonId == 0) {
@@ -99,11 +93,21 @@ class OptionsView : ConstraintLayout {
                 ConstraintSet.LEFT,
                 0
             )
-            buttonsAreSet = true
+
+            buttonMap[options[i].id] = button
+
+            // Set onClickListener
+            button.setOnClickListener {
+                if (optionButtonClickListener != null) {
+                    optionButtonClickListener?.onOptionButtonClicked(options[i].id)
+                }
+            }
+
             set.constrainHeight(button.id, 200)
             set.applyTo(this)
-            buttonMap[options[i].id] = button
         }
+        buttonsAreSet = true
+        buttonsAreEnabled = true
     }
 
     fun showCorrectAnswer(selectedArtistId: Int?, correctArtistId: Int) {
@@ -138,10 +142,12 @@ class OptionsView : ConstraintLayout {
                     button.backgroundTintList =
                         ContextCompat.getColorStateList(context, R.color.colorDarkRed)
                     buttonMap[artist.id] = button
+                    button.isEnabled = true
                     refreshDrawableState()
                 }
             }
         }
+        buttonsAreEnabled = true
     }
 
     // Listener to inform fragment

@@ -1,15 +1,12 @@
 package com.kmozcan1.lyricquizapp.presentation.ui
 
 import android.content.DialogInterface
-import android.content.res.Resources
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavArgument
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -45,7 +42,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val appBarConfiguration: AppBarConfiguration by lazy {
-        AppBarConfiguration(setOf(R.id.homeFragment, R.id.leaderboardFragment))
+        AppBarConfiguration(setOf(R.id.homeFragment, R.id.leaderboardFragment, R.id.quizFragment))
     }
 
     val actionBar: MaterialToolbar by lazy {
@@ -114,7 +111,9 @@ class MainActivity : AppCompatActivity() {
                     baseFragment.onInternetDisconnected()
                 }
             }
-            LOADING -> TODO()
+            LOADING -> {
+
+            }
             LOGOUT -> {
                 logoutDialog?.dismiss()
                 navController.navigate(R.id.loginFragment)

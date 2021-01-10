@@ -8,10 +8,10 @@ package com.kmozcan1.lyricquizapp.data.api.musixmatch
 
 import com.kmozcan1.lyricquizapp.data.apimodel.InlineResponse2009
 import io.reactivex.rxjava3.core.Single
-import java.math.BigDecimal
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Query
+import java.math.BigDecimal
 
 @JvmSuppressWildcards
 interface TrackApi {

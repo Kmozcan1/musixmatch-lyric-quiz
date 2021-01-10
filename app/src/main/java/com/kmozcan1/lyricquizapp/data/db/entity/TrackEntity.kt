@@ -3,7 +3,6 @@ package com.kmozcan1.lyricquizapp.data.db.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import com.kmozcan1.lyricquizapp.data.db.entity.TrackEntity.Companion.ID
-import java.math.BigDecimal
 
 /**
  * Created by Kadir Mert Özcan on 19-Dec-20.

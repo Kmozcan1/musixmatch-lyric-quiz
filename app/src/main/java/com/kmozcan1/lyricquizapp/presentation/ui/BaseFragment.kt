@@ -1,22 +1,15 @@
 package com.kmozcan1.lyricquizapp.presentation.ui
 
-import android.content.Context
 import android.os.Bundle
-import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.StyleRes
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
-import com.kmozcan1.lyricquizapp.R
-import javax.inject.Inject
 
 
 /**
@@ -41,10 +34,10 @@ abstract class BaseFragment<DataBindingClass: ViewDataBinding, ViewModelClass: V
         private set
 
     // Layout res id for to inflate with data binding
-    abstract fun layoutId(): Int
+    abstract val layoutId: Int
 
     // Must be set for providing type safe view model
-    abstract fun getViewModelClass(): Class<ViewModelClass>
+    abstract val viewModelClass: Class<ViewModelClass>
 
     // Called just before onCreateView is finished
     abstract fun onViewBound()
@@ -57,7 +50,7 @@ abstract class BaseFragment<DataBindingClass: ViewDataBinding, ViewModelClass: V
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(
-            inflater, layoutId(), container, false
+            inflater, layoutId, container, false
         ) as DataBindingClass
         onViewBound()
         return binding.root
@@ -65,7 +58,7 @@ abstract class BaseFragment<DataBindingClass: ViewDataBinding, ViewModelClass: V
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(getViewModelClass())
+        viewModel = ViewModelProvider(this).get(viewModelClass)
         observe()
     }
 

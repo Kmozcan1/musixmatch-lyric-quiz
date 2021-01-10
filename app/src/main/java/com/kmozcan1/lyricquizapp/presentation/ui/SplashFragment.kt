@@ -1,9 +1,6 @@
 package com.kmozcan1.lyricquizapp.presentation.ui
 
-import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import com.kmozcan1.lyricquizapp.R
 import com.kmozcan1.lyricquizapp.databinding.SplashFragmentBinding
@@ -20,9 +17,9 @@ class SplashFragment : BaseFragment<SplashFragmentBinding, SplashViewModel>() {
         fun newInstance() = SplashFragment()
     }
 
-    override fun layoutId() = R.layout.splash_fragment
+    override val layoutId = R.layout.splash_fragment
 
-    override fun getViewModelClass(): Class<SplashViewModel> = SplashViewModel::class.java
+    override val viewModelClass: Class<SplashViewModel> = SplashViewModel::class.java
 
     override fun onViewBound() {
         setSupportActionBar(false)

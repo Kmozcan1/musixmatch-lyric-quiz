@@ -1,22 +1,15 @@
 package com.kmozcan1.lyricquizapp.presentation.ui
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kmozcan1.lyricquizapp.R
 import com.kmozcan1.lyricquizapp.databinding.HomeFragmentBinding
-import com.kmozcan1.lyricquizapp.presentation.viewstate.HomeViewState
 import com.kmozcan1.lyricquizapp.presentation.adapter.ScoreListAdapter
-import com.kmozcan1.lyricquizapp.presentation.adapter.setAdapterWithCustomDivider
+import com.kmozcan1.lyricquizapp.presentation.adapter.setAdapter
 import com.kmozcan1.lyricquizapp.presentation.viewmodel.HomeViewModel
+import com.kmozcan1.lyricquizapp.presentation.viewstate.HomeViewState
 import com.kmozcan1.lyricquizapp.presentation.viewstate.HomeViewState.State.*
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -29,9 +22,9 @@ class HomeFragment : BaseFragment<HomeFragmentBinding, HomeViewModel>() {
 
     private lateinit var scoreListAdapter: ScoreListAdapter
 
-    override fun layoutId(): Int = R.layout.home_fragment
+    override val layoutId: Int = R.layout.home_fragment
 
-    override fun getViewModelClass(): Class<HomeViewModel> = HomeViewModel::class.java
+    override val viewModelClass: Class<HomeViewModel> = HomeViewModel::class.java
 
     override fun onViewBound() {
         binding.homeFragment = this
@@ -72,7 +65,7 @@ class HomeFragment : BaseFragment<HomeFragmentBinding, HomeViewModel>() {
                 scoreListAdapter = ScoreListAdapter(
                         viewState.scoreList
                 )
-                binding.userQuizHistoryRecyclerView.setAdapterWithCustomDivider(
+                binding.userQuizHistoryRecyclerView.setAdapter(
                         LinearLayoutManager(context),
                         scoreListAdapter)
             }

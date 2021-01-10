@@ -1,7 +1,5 @@
 package com.kmozcan1.lyricquizapp.domain.model
 
-import java.math.BigDecimal
-
 /**
  * Created by Kadir Mert Özcan on 17-Dec-20.
  */

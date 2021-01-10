@@ -5,7 +5,6 @@ import com.kmozcan1.lyricquizapp.domain.datasource.SharedPreferencesDataSource
 import com.kmozcan1.lyricquizapp.domain.repository.SharedPreferencesRepository
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
-import java.lang.Exception
 import javax.inject.Inject
 
 /**

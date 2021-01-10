@@ -5,7 +5,6 @@ import com.kmozcan1.lyricquizapp.domain.interactor.base.ObservableUseCase
 import io.reactivex.rxjava3.core.Observable
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
-import java.util.concurrent.atomic.AtomicLong
 import javax.inject.Inject
 
 

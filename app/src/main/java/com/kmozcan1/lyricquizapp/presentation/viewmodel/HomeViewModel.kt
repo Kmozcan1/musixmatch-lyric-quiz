@@ -1,15 +1,15 @@
 package com.kmozcan1.lyricquizapp.presentation.viewmodel
 
 import androidx.hilt.lifecycle.ViewModelInject
-import com.kmozcan1.lyricquizapp.domain.interactor.*
+import com.kmozcan1.lyricquizapp.domain.interactor.GetUserProfileUseCase
+import com.kmozcan1.lyricquizapp.domain.interactor.UpdateCurrentUserUseCase
 import com.kmozcan1.lyricquizapp.presentation.viewstate.HomeViewState
 
 class HomeViewModel @ViewModelInject constructor(
-    private val getUserProfileUseCase: GetUserProfileUseCase,
-    private val updateCurrentUserUseCase: UpdateCurrentUserUseCase
-    ): BaseViewModel<HomeViewState>() {
+    private val getUserProfileUseCase: GetUserProfileUseCase): BaseViewModel<HomeViewState>() {
 
     fun getUserProfile() {
+        setViewState(HomeViewState.loading())
         getUserProfileUseCase.execute(
             onSuccess = { userProfile ->
                 if (userProfile.scoreHistory != null) {

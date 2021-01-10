@@ -8,7 +8,7 @@
         style="@style/AppTheme.Launcher"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="false"
+        android:fitsSystemWindows="true"
         tools:context=".presentation.ui.SplashFragment">
 
         <ImageView

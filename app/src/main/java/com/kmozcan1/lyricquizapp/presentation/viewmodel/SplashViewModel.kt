@@ -4,7 +4,8 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.kmozcan1.lyricquizapp.domain.interactor.*
+import com.kmozcan1.lyricquizapp.domain.interactor.GetCurrentUserUseCase
+import com.kmozcan1.lyricquizapp.domain.interactor.PrepareTracksUseCase
 import com.kmozcan1.lyricquizapp.presentation.viewstate.SplashViewState
 
 class SplashViewModel @ViewModelInject constructor(

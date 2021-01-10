@@ -1,6 +1,5 @@
 package com.kmozcan1.lyricquizapp.application.di
 
-import android.util.Base64
 import com.kmozcan1.lyricquizapp.BuildConfig
 import com.kmozcan1.lyricquizapp.data.api.musixmatch.LyricsApi
 import com.kmozcan1.lyricquizapp.data.api.musixmatch.TrackApi

@@ -5,14 +5,10 @@ import com.kmozcan1.lyricquizapp.domain.enumeration.QuizDifficulty
 import com.kmozcan1.lyricquizapp.domain.factory.QuizManagerFactory
 import com.kmozcan1.lyricquizapp.domain.interactor.base.ObservableUseCase
 import com.kmozcan1.lyricquizapp.domain.manager.QuizManager
-import com.kmozcan1.lyricquizapp.domain.model.Answer
 import com.kmozcan1.lyricquizapp.domain.model.LyricsDomainModel
-import com.kmozcan1.lyricquizapp.domain.model.Quiz
 import com.kmozcan1.lyricquizapp.domain.model.QuizResponse
 import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.subjects.PublishSubject
-import io.reactivex.rxjava3.subjects.SingleSubject
 import javax.inject.Inject
 
 /**

@@ -4,8 +4,8 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.kmozcan1.lyricquizapp.domain.interactor.CountdownUseCase
-import com.kmozcan1.lyricquizapp.domain.interactor.QuizUseCase
 import com.kmozcan1.lyricquizapp.domain.interactor.InsertScoreUseCase
+import com.kmozcan1.lyricquizapp.domain.interactor.QuizUseCase
 import com.kmozcan1.lyricquizapp.domain.model.Question
 import com.kmozcan1.lyricquizapp.domain.model.QuizResponse
 import com.kmozcan1.lyricquizapp.presentation.viewstate.QuizViewState
