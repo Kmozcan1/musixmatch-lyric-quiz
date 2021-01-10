@@ -6,15 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
-import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
-import com.google.android.material.tabs.TabLayoutMediator
 import com.kmozcan1.lyricquizapp.R
 import com.kmozcan1.lyricquizapp.databinding.ViewPagerFragmentBinding
 import com.kmozcan1.lyricquizapp.presentation.Constants.HOME_PAGE_INDEX
 import com.kmozcan1.lyricquizapp.presentation.Constants.LEADER_BOARD_PAGE_INDEX
 import com.kmozcan1.lyricquizapp.presentation.adapter.ViewPagerAdapter
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 /**
  * Created by Kadir Mert Özcan on 10-Jan-21.
@@ -46,7 +47,7 @@ class ViewPagerFragment: Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewPagerAdapter = ViewPagerAdapter(this, args.pageIndex)
+        viewPagerAdapter = ViewPagerAdapter(this)
         val viewPager = binding.viewPager
         viewPager.adapter = viewPagerAdapter
         viewPager.registerOnPageChangeCallback(viewPagerOnPageChangeCallback())
@@ -60,7 +61,7 @@ class ViewPagerFragment: Fragment() {
                 val mainActivity = (activity as MainActivity)
                 when(position) {
                     HOME_PAGE_INDEX -> {
-                        mainActivity.actionBar.title=
+                        mainActivity.actionBar.title =
                                 resources.getString(R.string.home)
                         mainActivity
                                 .bottomNavigationView.menu[HOME_PAGE_INDEX].isChecked = true
@@ -73,6 +74,14 @@ class ViewPagerFragment: Fragment() {
                     }
                 }
             }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // navigate to argument index in a coroutine, doesn't work in UI thread
+        lifecycleScope.launch(Dispatchers.Main) {
+            binding.viewPager.setCurrentItem(args.pageIndex, false)
         }
     }
 

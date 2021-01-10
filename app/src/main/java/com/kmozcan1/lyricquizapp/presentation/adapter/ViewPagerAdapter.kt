@@ -15,8 +15,7 @@ import javax.inject.Inject
  * Created by Kadir Mert Özcan on 10-Jan-21.
  */
 class ViewPagerAdapter @Inject constructor(
-        userViewPagerFragment: ViewPagerFragment,
-        pageIndex: Int
+        userViewPagerFragment: ViewPagerFragment
 ) : FragmentStateAdapter(userViewPagerFragment) {
 
     // Number of tabs

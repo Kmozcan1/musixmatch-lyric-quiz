@@ -2,6 +2,7 @@ package com.kmozcan1.lyricquizapp.presentation.ui
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
@@ -34,9 +35,9 @@ class OptionsView : ConstraintLayout {
     }
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(
-        context,
-        attrs,
-        defStyleAttr
+            context,
+            attrs,
+            defStyleAttr
     ) {
         init(context)
     }
@@ -50,61 +51,70 @@ class OptionsView : ConstraintLayout {
         set.clone(this)
         var previousButtonId = 0
         for (i in options.indices) {
-            val button = MaterialButton(context)
-            button.text = options[i].name
-            button.id = generateViewId()
+            // Programmatically create the buttons and add them to the map
+            buttonMap[options[i].id] = MaterialButton(context).apply {
+                text = options[i].name
+                id = generateViewId()
 
-            Paris.styleBuilder(button).add(R.style.ButtonStyle).apply()
+                Paris.styleBuilder(this).add(R.style.ButtonStyle).apply()
 
-            this.addView(button)
+                this@OptionsView.addView(this)
 
-            // Attach to bottom if it's the first button, otherwise the previous button's top if not
-            if (previousButtonId == 0) {
-                set.connect(
-                    button.id,
-                    ConstraintSet.BOTTOM,
-                    ConstraintSet.PARENT_ID,
-                    ConstraintSet.BOTTOM,
-                    0
-                )
-            } else {
-                set.connect(
-                    button.id,
-                    ConstraintSet.BOTTOM,
-                    previousButtonId,
-                    ConstraintSet.TOP,
-                    0
-                )
-            }
+                // Attach to bottom if it's the first button, otherwise the previous button's top if not
+                set.run {
+                    if (previousButtonId == 0) {
+                        connect(
+                                id,
+                                ConstraintSet.BOTTOM,
+                                ConstraintSet.PARENT_ID,
+                                ConstraintSet.BOTTOM,
+                                0
+                        )
+                    } else {
+                        connect(
+                                id,
+                                ConstraintSet.BOTTOM,
+                                previousButtonId,
+                                ConstraintSet.TOP,
+                                0
+                        )
+                    }
 
-            previousButtonId = button.id
+                    previousButtonId = id
 
-            set.connect(
-                button.id,
-                ConstraintSet.RIGHT,
-                ConstraintSet.PARENT_ID,
-                ConstraintSet.RIGHT,
-                0
-            )
-            set.connect(
-                button.id,
-                ConstraintSet.LEFT,
-                ConstraintSet.PARENT_ID,
-                ConstraintSet.LEFT,
-                0
-            )
+                    // Right constraint
+                    connect(
+                            id,
+                            ConstraintSet.RIGHT,
+                            ConstraintSet.PARENT_ID,
+                            ConstraintSet.RIGHT,
+                            0
+                    )
 
-            buttonMap[options[i].id] = button
+                    // Left constraint
+                    connect(
+                            id,
+                            ConstraintSet.LEFT,
+                            ConstraintSet.PARENT_ID,
+                            ConstraintSet.LEFT,
+                            0
+                    )
 
-            // Set onClickListener
-            button.setOnClickListener {
-                if (optionButtonClickListener != null) {
-                    optionButtonClickListener?.onOptionButtonClicked(options[i].id)
+                    // Min height is 200, wrap content if the text is larger
+                    // for rap songs that feature like 10 artists
+                    constrainMinHeight(id, 200)
+                    constrainHeight(id, ViewGroup.LayoutParams.WRAP_CONTENT)
+
+                    set.applyTo(this@OptionsView)
+                }
+            }.also{ button ->
+                // Set onClick listener
+                button.setOnClickListener {
+                    if (optionButtonClickListener != null) {
+                        optionButtonClickListener?.onOptionButtonClicked(options[i].id)
+                    }
                 }
             }
-
-            set.constrainHeight(button.id, 200)
-            set.applyTo(this)
         }
         buttonsAreSet = true
         buttonsAreEnabled = true
@@ -129,20 +139,24 @@ class OptionsView : ConstraintLayout {
             buttonList.add(button)
         }
         buttonMap.clear()
+
+        // Reset color and visibility, set text and height of all buttons
         for (i in options.indices) {
             options[i].let{ artist ->
-                buttonList[i].let { button ->
-                    button.setOnClickListener {
+                buttonList[i].run {
+                    setOnClickListener {
                         if (optionButtonClickListener != null) {
                             optionButtonClickListener?.onOptionButtonClicked(options[i].id)
                         }
                     }
-                    button.text = artist.name
-                    button.visibility = VISIBLE
-                    button.backgroundTintList =
+                    text = artist.name
+                    visibility = VISIBLE
+                    backgroundTintList =
                         ContextCompat.getColorStateList(context, R.color.colorDarkRed)
-                    buttonMap[artist.id] = button
-                    button.isEnabled = true
+                    minHeight = 200
+                    height = LayoutParams.WRAP_CONTENT
+                    buttonMap[artist.id] = this
+                    isEnabled = true
                     refreshDrawableState()
                 }
             }

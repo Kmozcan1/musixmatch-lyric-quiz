@@ -102,7 +102,7 @@ class MainActivity : AppCompatActivity() {
             is ViewPagerFragment -> {
                 when(menuItem.itemId) {
                     R.id.homeFragment -> {
-                        menuItem.isCheckable = true;
+                        menuItem.isCheckable = true
                         activeFragment.setCurrentItem(HOME_PAGE_INDEX)
                     }
                     R.id.leaderboardFragment -> {
