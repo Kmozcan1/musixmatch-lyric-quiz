@@ -1,11 +1,11 @@
 package com.kmozcan1.lyricquizapp.data.repository
 
 import com.kmozcan1.lyricquizapp.data.api.musixmatch.TrackApi
-import com.kmozcan1.lyricquizapp.domain.enumeration.Country
 import com.kmozcan1.lyricquizapp.data.apimodel.InlineResponse2006MessageBody
 import com.kmozcan1.lyricquizapp.data.db.QuizDatabase
 import com.kmozcan1.lyricquizapp.data.db.entity.TrackEntity
-import com.kmozcan1.lyricquizapp.domain.model.domainmodel.TrackDomainModel
+import com.kmozcan1.lyricquizapp.domain.enumeration.Country
+import com.kmozcan1.lyricquizapp.domain.model.TrackDomainModel
 import com.kmozcan1.lyricquizapp.domain.repository.TrackRepository
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
@@ -26,10 +26,10 @@ class TrackRepositoryImpl @Inject constructor(
     }
 
     override fun getTracksFromChart(
-        country: Country,
-        pageSize: Int,
-        page: Int
-    ): Single<List<InlineResponse2006MessageBody>?> {
+            country: Country,
+            pageSize: Int,
+            page: Int
+    ): Single<List<InlineResponse2006MessageBody>> {
 
         return trackApi.chartTracksGetGet(
             page = page.toBigDecimal(),

@@ -1,6 +1,6 @@
 package com.kmozcan1.lyricquizapp.presentation.viewstate
 
-import com.kmozcan1.lyricquizapp.domain.model.domainmodel.ScoreDomainModel
+import com.kmozcan1.lyricquizapp.domain.model.ScoreDomainModel
 
 /**
  * Created by Kadir Mert Özcan on 20-Dec-20.
@@ -12,23 +12,28 @@ data class LeaderBoardViewState  (
 )  {
 
     companion object {
+        fun init(): LeaderBoardViewState = LeaderBoardViewState(
+                state = State.INIT
+        )
+
         fun error(e: Throwable): LeaderBoardViewState = LeaderBoardViewState(
-            state = State.ERROR,
-            errorMessage = e.message
+                state = State.ERROR,
+                errorMessage = e.message
         )
 
         fun scoreList(scoreList: List<ScoreDomainModel>) : LeaderBoardViewState = LeaderBoardViewState(
-            state = State.SCORE_LIST,
-            scoreList = scoreList
+                state = State.SCORE_LIST,
+                scoreList = scoreList
         )
 
         fun loading(): LeaderBoardViewState = LeaderBoardViewState(
-            state = State.LOADING
+                state = State.LOADING
         )
     }
 
 
     enum class State {
+        INIT,
         ERROR,
         LOADING,
         SCORE_LIST

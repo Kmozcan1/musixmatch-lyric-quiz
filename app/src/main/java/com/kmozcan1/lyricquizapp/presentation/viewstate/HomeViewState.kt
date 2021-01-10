@@ -1,6 +1,6 @@
 package com.kmozcan1.lyricquizapp.presentation.viewstate
 
-import com.kmozcan1.lyricquizapp.domain.model.domainmodel.ScoreDomainModel
+import com.kmozcan1.lyricquizapp.domain.model.ScoreDomainModel
 
 /**
  * Created by Kadir Mert Özcan on 20-Dec-20.
@@ -12,6 +12,10 @@ data class HomeViewState (
     val scoreList: List<ScoreDomainModel> = emptyList()
 ) {
     companion object {
+        fun init(): HomeViewState = HomeViewState(
+                state = State.INIT
+        )
+
         fun error(e: Throwable): HomeViewState = HomeViewState(
                 state = State.ERROR,
                 errorMessage = e.message
@@ -27,17 +31,12 @@ data class HomeViewState (
                 userName = userName,
                 scoreList = scoreList
         )
-
-        fun logout(): HomeViewState = HomeViewState(
-            state = State.LOGOUT
-        )
-
     }
 
     enum class State {
+        INIT,
         ERROR,
         LOADING,
-        USER_PROFILE,
-        LOGOUT
+        USER_PROFILE
     }
 }

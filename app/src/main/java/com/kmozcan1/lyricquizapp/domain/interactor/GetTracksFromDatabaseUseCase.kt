@@ -1,7 +1,7 @@
 package com.kmozcan1.lyricquizapp.domain.interactor
 
 import com.kmozcan1.lyricquizapp.domain.interactor.base.SingleUseCase
-import com.kmozcan1.lyricquizapp.domain.model.domainmodel.TrackDomainModel
+import com.kmozcan1.lyricquizapp.domain.model.TrackDomainModel
 import com.kmozcan1.lyricquizapp.domain.repository.TrackRepository
 import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject

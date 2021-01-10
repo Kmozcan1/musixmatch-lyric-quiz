@@ -1,13 +1,11 @@
 package com.kmozcan1.lyricquizapp.domain.interactor
 
-import com.kmozcan1.lyricquizapp.domain.Constants
 import com.kmozcan1.lyricquizapp.domain.Constants.MAX_CHART_PAGE_SIZE
 import com.kmozcan1.lyricquizapp.domain.Constants.NUMBER_OF_TRACKS_TO_FETCH
 import com.kmozcan1.lyricquizapp.domain.enumeration.Country
 import com.kmozcan1.lyricquizapp.domain.interactor.base.FlowableUseCase
 import com.kmozcan1.lyricquizapp.domain.mapper.TrackRepositoryToDomainModelMapper
-import com.kmozcan1.lyricquizapp.domain.model.domainmodel.LyricsDomainModel
-import com.kmozcan1.lyricquizapp.domain.model.domainmodel.TrackDomainModel
+import com.kmozcan1.lyricquizapp.domain.model.TrackDomainModel
 import com.kmozcan1.lyricquizapp.domain.repository.TrackRepository
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Single
@@ -45,8 +43,8 @@ class GetTracksFromApiUseCase @Inject constructor(
             taskList.add(
                 trackRepository.getTracksFromChart(params!!.country, pageSize, page)
                     .map { response ->
-                        response?.mapNotNull {
-                            trackRepositoryToDomainModelMapper.map(it.track)
+                        response.map {
+                            trackRepositoryToDomainModelMapper.map(it.track!!)
                         }
                     }
             )

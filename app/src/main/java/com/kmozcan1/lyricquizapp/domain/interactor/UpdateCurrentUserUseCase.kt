@@ -1,10 +1,8 @@
 package com.kmozcan1.lyricquizapp.domain.interactor
 
 import com.kmozcan1.lyricquizapp.domain.interactor.base.CompletableUseCase
-import com.kmozcan1.lyricquizapp.domain.interactor.base.SingleUseCase
 import com.kmozcan1.lyricquizapp.domain.repository.SharedPreferencesRepository
 import io.reactivex.rxjava3.core.Completable
-import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject
 
 /**

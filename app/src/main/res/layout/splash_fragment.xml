@@ -5,33 +5,47 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/frameLayout"
+        style="@style/AppTheme.Launcher"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FFFFFF"
+        android:fitsSystemWindows="true"
         tools:context=".presentation.ui.SplashFragment">
 
         <ImageView
-            android:id="@+id/logoImageView"
-            android:layout_width="wrap_content"
+            android:id="@+id/splashImageView"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:fitsSystemWindows="false"
+            android:scaleType="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/android_icon"
-            android:contentDescription="@null" />
+            app:srcCompat="@drawable/splash_logo_620" />
 
         <TextView
             android:id="@+id/splashInternetTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="36dp"
             android:text="@string/no_internet_text"
             android:textSize="18sp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/loadingTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fetching_tracks"
+            android:textSize="24sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/logoImageView" />
+            app:layout_constraintTop_toBottomOf="@+id/splashImageView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

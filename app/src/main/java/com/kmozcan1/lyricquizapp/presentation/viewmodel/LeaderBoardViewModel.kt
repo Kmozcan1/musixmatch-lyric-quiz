@@ -1,16 +1,16 @@
 package com.kmozcan1.lyricquizapp.presentation.viewmodel
 
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-
 import com.kmozcan1.lyricquizapp.domain.interactor.GetTopScoresUseCase
 import com.kmozcan1.lyricquizapp.presentation.viewstate.LeaderBoardViewState
 
 class LeaderBoardViewModel @ViewModelInject constructor(
     private val getTopScoresUseCase: GetTopScoresUseCase
 ) : BaseViewModel<LeaderBoardViewState>() {
+
+    init {
+        setViewState(LeaderBoardViewState.init())
+    }
 
     fun getTopScores() {
         getTopScoresUseCase.execute(
@@ -19,7 +19,7 @@ class LeaderBoardViewModel @ViewModelInject constructor(
                 setViewState(LeaderBoardViewState.scoreList(scoreList))
             },
             onError = {
-
+                onError(it)
             }
         )
     }

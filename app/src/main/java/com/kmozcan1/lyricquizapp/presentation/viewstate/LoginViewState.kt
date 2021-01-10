@@ -5,8 +5,7 @@ package com.kmozcan1.lyricquizapp.presentation.viewstate
  */
 data class LoginViewState (
     val state: State,
-    val errorMessage: String? = null,
-    var isLoginSuccess: Boolean = false
+    val errorMessage: String? = null
 ) {
     companion object {
 
@@ -15,14 +14,14 @@ data class LoginViewState (
             errorMessage = e.message
         )
 
+        //fun validationError(): LoginViewState = Login
+
         fun loading(): LoginViewState = LoginViewState(
             state = State.LOADING
         )
 
-        fun login(isLoginSuccess: Boolean) : LoginViewState = LoginViewState(
-            state = State.LOGIN,
-            isLoginSuccess = isLoginSuccess
-        )
+        fun login() : LoginViewState = LoginViewState(
+            state = State.LOGIN)
     }
 
     enum class State {

@@ -1,13 +1,13 @@
 package com.kmozcan1.lyricquizapp.domain.interactor.base
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.functions.Consumer
 import io.reactivex.rxjava3.kotlin.plusAssign
 import io.reactivex.rxjava3.schedulers.Schedulers
+import io.reactivex.rxjava3.subjects.Subject
 import timber.log.Timber
 
 
@@ -31,8 +31,6 @@ abstract class SingleUseCase<Results, in Params> : Disposable {
             .subscribe({}, Timber::w)
     }
 
-
-
     override fun dispose() {
         if (!disposables.isDisposed) {
             disposables.dispose()
@@ -41,5 +39,11 @@ abstract class SingleUseCase<Results, in Params> : Disposable {
 
     override fun isDisposed(): Boolean {
         return disposables.isDisposed
+    }
+
+    internal fun onChildObservableError(error: Throwable, subject: Subject<Any>) {
+        if (!isDisposed) {
+            subject.onError(error)
+        }
     }
 }

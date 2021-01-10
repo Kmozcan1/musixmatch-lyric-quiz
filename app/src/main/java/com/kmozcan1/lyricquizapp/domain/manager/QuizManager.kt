@@ -19,7 +19,7 @@ import com.kmozcan1.lyricquizapp.domain.manager.QuizManager.DefaultQuizRuleConst
 import com.kmozcan1.lyricquizapp.domain.manager.QuizManager.DefaultQuizRuleConstants.DEFAULT_TIME_LIMIT
 import com.kmozcan1.lyricquizapp.domain.manager.QuizManager.DefaultQuizRuleConstants.DISCLAIMER_LINE
 import com.kmozcan1.lyricquizapp.domain.manager.QuizManager.DefaultQuizRuleConstants.FILTER_REGEX_STRING
-import com.kmozcan1.lyricquizapp.domain.model.domainmodel.*
+import com.kmozcan1.lyricquizapp.domain.model.*
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.properties.Delegates
 import kotlin.random.Random
@@ -33,9 +33,10 @@ import kotlin.random.Random
 class QuizManager constructor(difficulty: QuizDifficulty) {
 
     private val artistMap = mutableMapOf<Int, ArtistDomainModel>()
-    private val chosenTracksMap = mutableMapOf<Int, TrackDomainModel>()
-    private val questionList = mutableListOf<Question>()
     private var quizRules: QuizRules
+    private lateinit var quiz: Quiz
+    private var questionIndex by Delegates.notNull<Int>()
+    private var score by Delegates.notNull<Int>()
 
     init {
         quizRules = QuizRules(difficulty)
@@ -47,8 +48,26 @@ class QuizManager constructor(difficulty: QuizDifficulty) {
     fun selectTracks(
         trackList: List<TrackDomainModel>
     ) : MutableMap<Int, TrackDomainModel> {
-        // Extracts the artists from trackList. They'll be later used as options in the questions.
         setArtistMap(trackList)
+        val selectedTracksMap = selectRandomTracks(trackList)
+
+        // Not all chunks will be divisible by their percentage.
+        // I complete the list by adding random songs from the list
+        while (selectedTracksMap.size < quizRules.numberOfQuestions) {
+            var rand = Random.nextInt(0, trackList.size)
+            while (selectedTracksMap.containsKey(trackList[rand].trackId )) {
+                rand = Random.nextInt(0, trackList.size)
+            }
+            val randomTrack = trackList[rand]
+            selectedTracksMap[randomTrack.trackId] = randomTrack
+        }
+
+        return selectedTracksMap
+    }
+
+    private fun selectRandomTracks(trackList: List<TrackDomainModel>): MutableMap<Int, TrackDomainModel> {
+        // Map where the chosen tracks will be added
+        val selectedTracksMap = mutableMapOf<Int, TrackDomainModel>()
 
         // Take distinct random Track objects for each tier from designated indexes
         // Number depends tier weight. Since the range is small, it's okay to use shuffled take
@@ -60,49 +79,44 @@ class QuizManager constructor(difficulty: QuizDifficulty) {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                 // Random indices to take random tracks for a tier
                 val randomIndices = ThreadLocalRandom.current()
-                        .ints(tier.startIndex, tier.endIndex)
-                        .distinct().limit(tierQuestionCount.toLong())
+                    .ints(tier.startIndex, tier.endIndex)
+                    .distinct().limit(tierQuestionCount.toLong())
                 for (i in randomIndices) {
                     trackList[i].let { track ->
-                        chosenTracksMap[track.trackId!!] = track
+                        selectedTracksMap[track.trackId] = track
                     }
                 }
+            // SDK < 24 version with shuffle
             } else {
                 trackList.subList(tier.startIndex, tier.endIndex).shuffled()
-                        .take(tierQuestionCount)
-                        .forEach { track ->
-                            chosenTracksMap[track.trackId!!] = track
-                        }
+                    .take(tierQuestionCount)
+                    .forEach { track ->
+                        selectedTracksMap[track.trackId] = track
+                    }
             }
         }
 
-        // Not all chunks will be divisible by their percentage.
-        // I complete the list by adding random songs from the list
-        while (chosenTracksMap.size < quizRules.numberOfQuestions) {
-            var rand = Random.nextInt(0, trackList.size)
-            while (chosenTracksMap.containsKey(trackList[rand].trackId )) {
-                rand = Random.nextInt(0, trackList.size)
-            }
-            val randomTrack = trackList[rand]
-            chosenTracksMap[randomTrack.trackId!!] = randomTrack
-        }
-
-        return chosenTracksMap
+        return selectedTracksMap
     }
 
+    // Extracts the artists from trackList. They'll be later used as options in the questions.
     private fun setArtistMap(trackList: List<TrackDomainModel>) {
+        artistMap.clear()
         for (i in trackList.indices) {
             val track = trackList[i]
-            track.artistId?.let{ artistId ->
-                artistMap[artistId] = ArtistDomainModel(track.artistId, track.artistName!!)
+            track.artistId.let{ artistId ->
+                artistMap[artistId] = ArtistDomainModel(track.artistId, track.artistName)
             }
 
         }
     }
 
-    fun generateQuiz(lyricsList: List<LyricsDomainModel>): Quiz {
-        for (i in lyricsList.indices) {
-            val track = chosenTracksMap[lyricsList[i].trackId]
+    // Generate quiz questions and answers
+    fun generateQuiz(trackMap: Map<Int, TrackDomainModel>,
+                     lyricsList: List<LyricsDomainModel>) {
+        val questionList = mutableListOf<Question>()
+        for (i in lyricsList.shuffled().indices) {
+            val track = trackMap[lyricsList[i].trackId]
             val answer = artistMap[track!!.artistId]
             val optionList = generateOptions(track.artistId)
             val selectedQuestion = selectQuestionLyrics(lyricsList[i])
@@ -110,8 +124,7 @@ class QuizManager constructor(difficulty: QuizDifficulty) {
             val question = Question(i, selectedQuestion, answer!!, optionList)
             questionList.add(question)
         }
-
-        return Quiz(questionList, quizRules.timeLimit)
+        quiz = Quiz(questionList, quizRules.timeLimit)
     }
 
     // Selects 3 random artists and the artist of the question lyric to present the user as options
@@ -135,7 +148,7 @@ class QuizManager constructor(difficulty: QuizDifficulty) {
 
     // Returns a random lyric to ask as a question
     private fun selectQuestionLyrics(lyrics: LyricsDomainModel): String {
-        val lyricLines = lyrics.lyricsBody?.lines()!!.toMutableList()
+        val lyricLines = lyrics.lyricsBody.lines().toMutableList()
         val filterRegex = FILTER_REGEX_STRING.toRegex()
 
         // Filter out the disclaimer lines
@@ -153,6 +166,35 @@ class QuizManager constructor(difficulty: QuizDifficulty) {
 
         return possibleQuestions[Random.nextInt(0, possibleQuestions.size)]
     }
+
+    fun startQuiz() {
+        questionIndex = 0
+        score = 0
+    }
+
+    fun getCurrentQuestion(): QuizResponse {
+        // If no question remained, finalize the quiz
+        return if (questionIndex == quiz.questions.size) {
+            QuizResponse.finalizeQuiz(score)
+        } else {
+            QuizResponse.question(quiz.questions[questionIndex])
+        }
+    }
+
+    fun validateAnswer(selectedArtistId: Int?, remainingTime: Int): Answer {
+        // If the answer is correct, add the remaining time to the score
+        val correctArtistId = quiz.questions[questionIndex].correctAnswer.id
+        if (selectedArtistId == correctArtistId) {
+            score += remainingTime
+        }
+        questionIndex++
+        return Answer(selectedArtistId, correctArtistId, score)
+    }
+
+    fun getTimeLimit(): Long {
+        return quiz.timeLimit
+    }
+
 
     /**
      * QuizRules class for the possibility of introducing additional difficulty modes in the future.
@@ -236,7 +278,7 @@ class QuizManager constructor(difficulty: QuizDifficulty) {
         const val DISCLAIMER_LINE = "******* This Lyrics is NOT for Commercial use *******"
 
         // Regular expression string to filter out line that comes after he disclaimer
-        const val FILTER_REGEX_STRING = """^\(\ ?\d+\ ?\)"""
+        const val FILTER_REGEX_STRING = """^\( ?\d+ ?\)"""
 
         // Default number of questions that will be presented to the player
         const val DEFAULT_NUMBER_OF_QUESTIONS = 15

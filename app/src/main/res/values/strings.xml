@@ -13,4 +13,14 @@
     <string name="no_internet_text">Please make sure you are connected to the Internet</string>
     <string name="quiz">Quiz</string>
     <string name="welcome">Welcome %s</string>
+    <string name="home">Home</string>
+    <string name="logout_message">You will be returned to the login screen.</string>
+    <string name="cancel">Cancel</string>
+    <string name="score_history">Score History</string>
+    <string name="quit_quiz">Quit Quiz</string>
+    <string name="quit">Quit</string>
+    <string name="quit_quiz_message">Are you sure you want to exit the quiz?</string>
+    <string name="no_scores_has_been_posted_yet">No scores has been posted yet.</string>
+    <string name="fetching_tracks_param">Fetching Tracks%s</string>
+    <string name="fetching_tracks">Fetching Tracks</string>
 </resources>

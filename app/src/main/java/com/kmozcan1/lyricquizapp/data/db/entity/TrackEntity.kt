@@ -3,7 +3,6 @@ package com.kmozcan1.lyricquizapp.data.db.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import com.kmozcan1.lyricquizapp.data.db.entity.TrackEntity.Companion.ID
-import java.math.BigDecimal
 
 /**
  * Created by Kadir Mert Özcan on 19-Dec-20.
@@ -11,11 +10,11 @@ import java.math.BigDecimal
 @Entity (tableName = TrackEntity.TABLE_NAME, primaryKeys = [ID])
 data class TrackEntity(
     @ColumnInfo(name = ID)
-    var trackId: Int? = null,
+    var trackId: Int,
     @ColumnInfo(name = ARTIST_ID)
-    var artistId: Int? = null,
+    var artistId: Int,
     @ColumnInfo(name = ARTIST_NAME)
-    var artistName: String? = null
+    var artistName: String
 ){
     companion object{
         const val TABLE_NAME="tracks"

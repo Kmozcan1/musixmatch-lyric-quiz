@@ -1,18 +1,11 @@
 package com.kmozcan1.lyricquizapp.application.di
 
 import android.app.Activity
-import android.view.View
-import androidx.databinding.ViewDataBinding
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModel
-import com.kmozcan1.lyricquizapp.R
-import com.kmozcan1.lyricquizapp.presentation.ui.BaseFragment
 import com.kmozcan1.lyricquizapp.presentation.ui.MainActivity
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
-import dagger.hilt.android.components.FragmentComponent
 
 
 /**

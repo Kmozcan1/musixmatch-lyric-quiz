@@ -7,6 +7,7 @@ import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.functions.Consumer
 import io.reactivex.rxjava3.kotlin.plusAssign
 import io.reactivex.rxjava3.schedulers.Schedulers
+import io.reactivex.rxjava3.subjects.CompletableSubject
 import timber.log.Timber
 
 /**
@@ -36,5 +37,11 @@ abstract class CompletableUseCase<in Params> : Disposable {
 
     override fun isDisposed(): Boolean {
         return disposables.isDisposed
+    }
+
+    internal fun onChildObservableError(error: Throwable, subject: CompletableSubject) {
+        if (!isDisposed) {
+            subject.onError(error)
+        }
     }
 }

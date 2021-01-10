@@ -6,6 +6,6 @@ package com.kmozcan1.lyricquizapp.domain.mapper
  *
  * Created by Kadir Mert Özcan on 17-Dec-20.
  */
-interface Mapper<DomainModel, in RepositoryModel> {
+interface Mapper<in RepositoryModel, out DomainModel> {
     fun map(repositoryModel: RepositoryModel): DomainModel
 }

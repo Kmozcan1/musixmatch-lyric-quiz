@@ -4,14 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavController
-import javax.inject.Inject
+import androidx.navigation.fragment.findNavController
+
 
 /**
  * Created by Kadir Mert Özcan on 25-Dec-20.
@@ -20,14 +20,12 @@ import javax.inject.Inject
 abstract class BaseFragment<DataBindingClass: ViewDataBinding, ViewModelClass: ViewModel>
     : Fragment() {
 
-    @Inject
-    lateinit var mainActivity: MainActivity
+    private val mainActivity by lazy {
+        activity as MainActivity
+    }
 
-    @Inject
-    lateinit var navController: NavController
-
-    val appCompatActivity: AppCompatActivity by lazy {
-        activity as AppCompatActivity
+    val navController by lazy {
+        findNavController()
     }
 
     lateinit var binding: DataBindingClass
@@ -37,10 +35,10 @@ abstract class BaseFragment<DataBindingClass: ViewDataBinding, ViewModelClass: V
         private set
 
     // Layout res id for to inflate with data binding
-    abstract fun layoutId(): Int
+    abstract val layoutId: Int
 
     // Must be set for providing type safe view model
-    abstract fun getViewModelClass(): Class<ViewModelClass>
+    abstract val viewModelClass: Class<ViewModelClass>
 
     // Called just before onCreateView is finished
     abstract fun onViewBound()
@@ -52,32 +50,45 @@ abstract class BaseFragment<DataBindingClass: ViewDataBinding, ViewModelClass: V
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View {
-        // Type safe data binding from abstract class
         binding = DataBindingUtil.inflate(
-                inflater, layoutId(), container, false) as DataBindingClass
+                inflater, layoutId, container, false
+        ) as DataBindingClass
         onViewBound()
         return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(getViewModelClass())
+        viewModel = ViewModelProvider(this).get(viewModelClass)
         observe()
     }
 
-    open fun onInternetConnected() { }
+    open fun onInternetConnected() {}
 
-    open fun onInternetDisconnected() { }
+    open fun onInternetDisconnected() {}
+
 
     internal fun setSupportActionBar(isVisible: Boolean, title: String? = null) {
-        mainActivity.supportActionBar?.run {
-            this.title = title
-
-            if (isVisible) {
-                show()
-            } else {
-                hide()
+        mainActivity.actionBar.run {
+            if (title != null) {
+                this.title = title
             }
+            visibility = if (isVisible) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
+        }
+    }
+
+    internal fun showBottomNavigation(isVisible: Boolean) {
+        mainActivity.showBottomNavigation(isVisible)
+    }
+
+    internal fun setBottomNavigationNoSelectedItem() {
+        mainActivity.bottomNavigationView.menu[0].run {
+            isCheckable = false
+            isChecked = false
         }
     }
 
@@ -87,5 +98,9 @@ abstract class BaseFragment<DataBindingClass: ViewDataBinding, ViewModelClass: V
 
     internal fun getIsConnectedToInternet(): Boolean {
         return mainActivity.isConnectedToInternet
+    }
+
+    internal fun setUserName(userName: String) {
+        mainActivity.userName = userName
     }
 }

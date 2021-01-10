@@ -10,9 +10,9 @@ import com.kmozcan1.lyricquizapp.data.apimodel.InlineResponse20010
 import com.kmozcan1.lyricquizapp.data.apimodel.InlineResponse2002
 import com.kmozcan1.lyricquizapp.data.apimodel.InlineResponse2004
 import io.reactivex.rxjava3.core.Single
-import java.math.BigDecimal
 import retrofit2.http.GET
 import retrofit2.http.Headers
+import java.math.BigDecimal
 
 @JvmSuppressWildcards
 interface ArtistApi {

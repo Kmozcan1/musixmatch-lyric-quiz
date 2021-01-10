@@ -1,22 +1,13 @@
 package com.kmozcan1.lyricquizapp.presentation.ui
 
-import androidx.lifecycle.ViewModelProvider
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kmozcan1.lyricquizapp.R
-import com.kmozcan1.lyricquizapp.databinding.HomeFragmentBinding
 import com.kmozcan1.lyricquizapp.databinding.LeaderboardFragmentBinding
 import com.kmozcan1.lyricquizapp.presentation.adapter.ScoreListAdapter
-import com.kmozcan1.lyricquizapp.presentation.adapter.setAdapterWithCustomDivider
+import com.kmozcan1.lyricquizapp.presentation.adapter.setAdapter
 import com.kmozcan1.lyricquizapp.presentation.viewmodel.LeaderBoardViewModel
-import com.kmozcan1.lyricquizapp.presentation.viewstate.HomeViewState
 import com.kmozcan1.lyricquizapp.presentation.viewstate.LeaderBoardViewState
 import com.kmozcan1.lyricquizapp.presentation.viewstate.LeaderBoardViewState.State.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,12 +21,12 @@ class LeaderBoardFragment : BaseFragment<LeaderboardFragmentBinding, LeaderBoard
 
     private lateinit var scoreListAdapter: ScoreListAdapter
 
-    override fun layoutId(): Int = R.layout.leaderboard_fragment
+    override val layoutId: Int = R.layout.leaderboard_fragment
 
-    override fun getViewModelClass(): Class<LeaderBoardViewModel> = LeaderBoardViewModel::class.java
+    override val viewModelClass: Class<LeaderBoardViewModel> = LeaderBoardViewModel::class.java
 
     override fun onViewBound() {
-        setSupportActionBar(true, getString(R.string.leader_board))
+        showBottomNavigation(true)
     }
 
     override fun observe() {
@@ -44,21 +35,32 @@ class LeaderBoardFragment : BaseFragment<LeaderboardFragmentBinding, LeaderBoard
     }
 
     private fun viewStateObserver() = Observer<LeaderBoardViewState> { viewState ->
-        when (viewState.state){
-            ERROR -> {
-                makeToast(viewState.errorMessage)
-                navController.navigateUp()
-            }
-            LOADING -> {
-            }
-            SCORE_LIST -> {
-                viewState.scoreList?.let {
-                    scoreListAdapter = ScoreListAdapter(viewState.scoreList)
-                    binding.leaderBoardRecyclerView.setAdapterWithCustomDivider(
-                            LinearLayoutManager(context),
-                            scoreListAdapter)
+        binding.run {
+            when (viewState.state) {
+                ERROR -> {
+                    makeToast(viewState.errorMessage)
+                }
+                INIT -> {
+                    viewModel.getTopScores()
+                }
+                LOADING -> {
+                    leaderBoardProgressBar.visibility = View.VISIBLE
+                }
+                SCORE_LIST -> {
+                    leaderBoardProgressBar.visibility = View.GONE
+                    viewState.scoreList?.let { scoreList ->
+                        if (scoreList.isEmpty()) {
+                            noLeaderBoardScoreTextView.visibility = View.VISIBLE
+                        } else {
+                            scoreListAdapter = ScoreListAdapter(scoreList)
+                            leaderBoardRecyclerView.setAdapter(
+                                    LinearLayoutManager(context), scoreListAdapter)
+                        }
+
+                    }
                 }
             }
         }
+
     }
 }

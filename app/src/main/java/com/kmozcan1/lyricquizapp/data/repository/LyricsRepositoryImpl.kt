@@ -13,7 +13,7 @@ class LyricsRepositoryImpl @Inject constructor(
         private val lyricsApi: LyricsApi,
         private val apiKey: String
 ): LyricsRepository {
-    override fun getLyricsForTrack(trackId: Int): Single<ALyricsObject?> {
+    override fun getLyricsForTrack(trackId: Int): Single<ALyricsObject> {
         return lyricsApi.trackLyricsGetGet(
                 trackId = trackId.toString(),
                 apiKey = apiKey

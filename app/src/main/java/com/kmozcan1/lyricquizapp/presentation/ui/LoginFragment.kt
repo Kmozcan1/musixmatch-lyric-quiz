@@ -1,19 +1,12 @@
 package com.kmozcan1.lyricquizapp.presentation.ui
 
-import android.os.Bundle
-import android.view.LayoutInflater
+import android.view.KeyEvent
 import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import com.kmozcan1.lyricquizapp.R
 import com.kmozcan1.lyricquizapp.databinding.LoginFragmentBinding
-import com.kmozcan1.lyricquizapp.presentation.viewstate.LoginViewState
 import com.kmozcan1.lyricquizapp.presentation.viewmodel.LoginViewModel
-import com.kmozcan1.lyricquizapp.presentation.viewmodel.SplashViewModel
+import com.kmozcan1.lyricquizapp.presentation.viewstate.LoginViewState
 import com.kmozcan1.lyricquizapp.presentation.viewstate.LoginViewState.State.*
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -25,18 +18,23 @@ class LoginFragment : BaseFragment<LoginFragmentBinding, LoginViewModel>() {
         fun newInstance() = LoginFragment()
     }
 
-    override fun layoutId() = R.layout.login_fragment
+    override val layoutId = R.layout.login_fragment
 
-    override fun getViewModelClass(): Class<LoginViewModel> = LoginViewModel::class.java
+    override val viewModelClass: Class<LoginViewModel> = LoginViewModel::class.java
 
     override fun onViewBound() {
         binding.loginFragment = this
+        binding.userNameEditText.editText?.setOnKeyListener { _, keyCode, keyEvent ->
+            if (keyEvent.keyCode == KeyEvent.KEYCODE_ENTER) {
+                viewModel.login(binding.userNameEditText.editText?.text.toString())
+                return@setOnKeyListener true
+            }
+            return@setOnKeyListener false
+        }
         setSupportActionBar(false)
+        showBottomNavigation(false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-    }
 
     override fun observe() {
         viewModel.viewState.observe(viewLifecycleOwner, observeViewState())
@@ -48,7 +46,7 @@ class LoginFragment : BaseFragment<LoginFragmentBinding, LoginViewModel>() {
                 makeToast(viewState.errorMessage)
             }
             LOGIN -> {
-                navController.navigate(R.id.action_loginFragment_to_homeFragment)
+                navController.navigate(R.id.action_loginFragment_to_viewPagerFragment)
             }
             LOADING -> {
 
@@ -57,6 +55,6 @@ class LoginFragment : BaseFragment<LoginFragmentBinding, LoginViewModel>() {
     }
 
     fun onLoginButtonClick(v: View) {
-        viewModel.login(binding.userNameEditText.text.toString())
+        viewModel.login(binding.userNameEditText.editText?.text.toString())
     }
 }

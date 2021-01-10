@@ -1,21 +1,19 @@
 package com.kmozcan1.lyricquizapp.presentation.ui
 
-import android.os.Bundle
-import android.view.LayoutInflater
+import android.os.Build
 import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
+import androidx.lifecycle.lifecycleScope
 import com.kmozcan1.lyricquizapp.R
 import com.kmozcan1.lyricquizapp.databinding.SplashFragmentBinding
 import com.kmozcan1.lyricquizapp.presentation.viewmodel.SplashViewModel
 import com.kmozcan1.lyricquizapp.presentation.viewstate.SplashViewState
 import com.kmozcan1.lyricquizapp.presentation.viewstate.SplashViewState.State.*
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -23,25 +21,33 @@ class SplashFragment : BaseFragment<SplashFragmentBinding, SplashViewModel>() {
 
     companion object {
         fun newInstance() = SplashFragment()
+        const val DOT_STRING = "."
     }
 
-    override fun layoutId() = R.layout.splash_fragment
+    override val layoutId = R.layout.splash_fragment
 
-    override fun getViewModelClass(): Class<SplashViewModel> = SplashViewModel::class.java
+    override val viewModelClass: Class<SplashViewModel> = SplashViewModel::class.java
+
+    private val task: Job by lazy { loadingAnimation() }
 
     override fun onViewBound() {
         setSupportActionBar(false)
+        showBottomNavigation(false)
+
+        //TODO this aligns the cold launch image with splash fragment image. Need to test with more devices
+        if (Build.MANUFACTURER != "google") {
+            binding.splashImageView.layoutParams =
+                    (binding.splashImageView.layoutParams as ConstraintLayout.LayoutParams).apply {
+                        topMargin = 24
+                        leftMargin = 0
+                        rightMargin = 0
+                        bottomMargin = 0
+            }
+        }
     }
 
     override fun observe() {
-        viewModel.splashViewState.observe(viewLifecycleOwner, splashViewStateObserver())
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        if (getIsConnectedToInternet()) {
-            viewModel.prepareTracks()
-        }
+        viewModel.viewState.observe(viewLifecycleOwner, splashViewStateObserver())
     }
 
     private fun splashViewStateObserver() =  Observer<SplashViewState> { viewState ->
@@ -50,18 +56,19 @@ class SplashFragment : BaseFragment<SplashFragmentBinding, SplashViewModel>() {
                 makeToast(viewState.errorMessage)
                 navController.navigateUp()
             }
+            LOADING -> {
+                task.start()
+            }
             LOGIN_CHECK -> {
+                task.cancel()
                 when {
                     viewState.isLoggedIn -> {
-                        navController.navigate(R.id.action_splashFragment_to_homeFragment)
+                        navController.navigate(R.id.action_splashFragment_to_viewPagerFragment)
                     }
                     !viewState.isLoggedIn -> {
                         navController.navigate(R.id.action_splashFragment_to_loginFragment)
                     }
                 }
-            }
-            LOADING -> {
-
             }
         }
     }
@@ -81,5 +88,17 @@ class SplashFragment : BaseFragment<SplashFragmentBinding, SplashViewModel>() {
 
     override fun onInternetDisconnected() {
         showConnectionWarning(true)
+    }
+
+    // Animate text view dots
+    private fun loadingAnimation(): Job = viewLifecycleOwner.lifecycleScope.launch{
+        var counter = 0
+        binding.loadingTextView.visibility = View.VISIBLE
+        while(true) {
+            binding.loadingTextView.text =
+                    getString(R.string.fetching_tracks_param, DOT_STRING.repeat(counter % 4))
+            counter++
+            delay(500)
+        }
     }
 }

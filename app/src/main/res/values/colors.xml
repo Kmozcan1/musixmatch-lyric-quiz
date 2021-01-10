@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <color name="colorDarkRed">#FF2239</color>
+    <color name="colorPrimaryDark">#080C0F</color>
+    <color name="colorOnPrimary">#080C0F</color>
+    <color name="colorPrimary">#FF5353</color>
     <color name="colorAccent">#03DAC5</color>
     <color name="white">#FFFFFF</color>
+    <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">#FF5353</color>
+    <color name="bottomNavInactive">#ABABAB</color>
+    <color name="bottomNavActive">#E25C59</color>
+    <color name="bottomNavBackground">#141C1F</color>
+    <color name="colorCorrectOption">#2e7d32</color>
 </resources>

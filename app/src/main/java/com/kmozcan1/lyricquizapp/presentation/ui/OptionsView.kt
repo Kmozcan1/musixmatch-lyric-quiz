@@ -2,13 +2,14 @@ package com.kmozcan1.lyricquizapp.presentation.ui
 
 import android.content.Context
 import android.util.AttributeSet
-import android.widget.Button
+import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
-import androidx.databinding.BindingMethod
-import androidx.databinding.BindingMethods
+import androidx.core.content.ContextCompat
+import com.airbnb.paris.Paris
+import com.google.android.material.button.MaterialButton
 import com.kmozcan1.lyricquizapp.R
-import com.kmozcan1.lyricquizapp.domain.model.domainmodel.ArtistDomainModel
+import com.kmozcan1.lyricquizapp.domain.model.ArtistDomainModel
 
 
 /**
@@ -20,8 +21,10 @@ class OptionsView : ConstraintLayout {
 
 
     private var optionButtonClickListener: OptionButtonClickListener? = null
-    private val buttonList = mutableListOf<Button>()
+    private val buttonMap = mutableMapOf<Int, MaterialButton>()
     var buttonsAreSet: Boolean = false
+    var buttonsAreEnabled: Boolean = false
+    private lateinit var correctButton: MaterialButton
 
     constructor(context: Context) : super(context) {
         init(context)
@@ -32,9 +35,9 @@ class OptionsView : ConstraintLayout {
     }
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(
-        context,
-        attrs,
-        defStyleAttr
+            context,
+            attrs,
+            defStyleAttr
     ) {
         init(context)
     }
@@ -48,70 +51,127 @@ class OptionsView : ConstraintLayout {
         set.clone(this)
         var previousButtonId = 0
         for (i in options.indices) {
-            val button = Button(context)
-            button.text = options[i].name
-            button.id = generateViewId()
-            this.addView(button)
+            // Programmatically create the buttons and add them to the map
+            buttonMap[options[i].id] = MaterialButton(context).apply {
+                text = options[i].name
+                id = generateViewId()
 
-            // Set onClickListener
-            button.setOnClickListener {
-                if (optionButtonClickListener != null) {
-                    optionButtonClickListener?.onOptionButtonClicked(button.text.toString())
+                Paris.styleBuilder(this).add(R.style.ButtonStyle).apply()
+
+                this@OptionsView.addView(this)
+
+                // Attach to bottom if it's the first button, otherwise the previous button's top if not
+                if (previousButtonId == 0) {
+                    set.connect(
+                            id,
+                            ConstraintSet.BOTTOM,
+                            ConstraintSet.PARENT_ID,
+                            ConstraintSet.BOTTOM,
+                            0
+                    )
+                } else {
+                    set.connect(
+                            id,
+                            ConstraintSet.BOTTOM,
+                            previousButtonId,
+                            ConstraintSet.TOP,
+                            0
+                    )
+                }
+
+                previousButtonId = id
+
+                // Right constraint
+                set.connect(
+                        id,
+                        ConstraintSet.RIGHT,
+                        ConstraintSet.PARENT_ID,
+                        ConstraintSet.RIGHT,
+                        0
+                )
+
+                // Left constraint
+                set.connect(
+                        id,
+                        ConstraintSet.LEFT,
+                        ConstraintSet.PARENT_ID,
+                        ConstraintSet.LEFT,
+                        0
+                )
+
+                // Min height is 200, wrap content if the text is larger
+                // for rap songs that feature like 10 artists
+                set.constrainMinHeight(id, 200)
+                set.constrainHeight(id, ViewGroup.LayoutParams.WRAP_CONTENT)
+
+                set.applyTo(this@OptionsView)
+            }.also{ button ->
+                // Set onClick listener
+                button.setOnClickListener {
+                    if (optionButtonClickListener != null) {
+                        optionButtonClickListener?.onOptionButtonClicked(options[i].id)
+                    }
                 }
             }
+        }
+        buttonsAreSet = true
+        buttonsAreEnabled = true
+    }
 
-            // Attach to bottom if it's the first button, otherwise the previous button's top if not
-            if (previousButtonId == 0) {
-                set.connect(
-                    button.id,
-                    ConstraintSet.BOTTOM,
-                    ConstraintSet.PARENT_ID,
-                    ConstraintSet.BOTTOM,
-                    0
-                )
-            } else {
-                set.connect(
-                    button.id,
-                    ConstraintSet.BOTTOM,
-                    previousButtonId,
-                    ConstraintSet.TOP,
-                    0
-                )
+    fun showCorrectAnswer(selectedArtistId: Int?, correctArtistId: Int) {
+        buttonMap[correctArtistId]?.backgroundTintList =
+            ContextCompat.getColorStateList(context, R.color.colorCorrectOption)
+
+        // Hide all but the correct and selected buttons
+        for ((id, button) in buttonMap) {
+            if (id != selectedArtistId && id != correctArtistId) {
+                button.visibility = INVISIBLE
             }
-
-            previousButtonId = button.id
-
-            set.connect(
-                button.id,
-                ConstraintSet.RIGHT,
-                ConstraintSet.PARENT_ID,
-                ConstraintSet.RIGHT,
-                0
-            )
-            set.connect(
-                button.id,
-                ConstraintSet.LEFT,
-                ConstraintSet.PARENT_ID,
-                ConstraintSet.LEFT,
-                0
-            )
-            buttonsAreSet = true
-            set.constrainHeight(button.id, 200)
-            set.applyTo(this)
-            buttonList.add(button)
         }
     }
 
-    fun renameOptionButtons(options: List<ArtistDomainModel>) {
-        for (i in buttonList.indices) {
-            buttonList[i].refreshDrawableState()
-            buttonList[i].text = options[i].name
+    fun refreshOptionButtons(options: List<ArtistDomainModel>) {
+        val buttonList = mutableListOf<MaterialButton>()
+        // Refill the buttonMap with the new set of artistIds (used for showing the correct answer)
+        for ((_, button) in buttonMap) {
+            buttonList.add(button)
         }
+        buttonMap.clear()
+
+        // Reset color and visibility, set text and height of all buttons
+        for (i in options.indices) {
+            options[i].let{ artist ->
+                buttonList[i].run {
+                    setOnClickListener {
+                        if (optionButtonClickListener != null) {
+                            optionButtonClickListener?.onOptionButtonClicked(options[i].id)
+                        }
+                    }
+                    text = artist.name
+                    visibility = VISIBLE
+                    backgroundTintList =
+                        ContextCompat.getColorStateList(context, R.color.colorDarkRed)
+
+
+                    ConstraintSet().run {
+                        clone(this@OptionsView)
+                        constrainMinHeight(id, 200)
+                        constrainHeight(id, ViewGroup.LayoutParams.WRAP_CONTENT)
+                        applyTo(this@OptionsView)
+                    }
+
+                    buttonMap[artist.id] = this
+                    isEnabled = true
+                    refreshDrawableState()
+                }
+            }
+        }
+        buttonsAreEnabled = true
     }
 
     // Listener to inform fragment
     interface OptionButtonClickListener {
-        fun onOptionButtonClicked(artistName: String)
+        fun onOptionButtonClicked(artistId: Int)
     }
 
     fun setOptionButtonClickListener(optionButtonClickListener: OptionButtonClickListener?) {

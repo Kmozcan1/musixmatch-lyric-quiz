@@ -20,8 +20,7 @@ data class SplashViewState (
 
         fun loginCheck(isLoggedIn: Boolean) : SplashViewState = SplashViewState(
             state = State.LOGIN_CHECK,
-            isLoggedIn = isLoggedIn
-        )
+            isLoggedIn = isLoggedIn)
     }
 
     enum class State {

@@ -22,12 +22,17 @@ data class MainViewState(
             state = State.CONNECTION_CHANGE,
             isConnected = isConnected
         )
+
+        fun logout(): MainViewState = MainViewState(
+            state = State.LOGOUT
+        )
     }
 
     enum class State {
         LOADING,
         ERROR,
-        CONNECTION_CHANGE
+        CONNECTION_CHANGE,
+        LOGOUT
     }
 
 }
