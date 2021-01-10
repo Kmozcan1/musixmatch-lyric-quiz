@@ -5,6 +5,7 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.functions.Consumer
 import io.reactivex.rxjava3.schedulers.Schedulers
+import io.reactivex.rxjava3.subjects.Subject
 import timber.log.Timber
 
 
@@ -46,6 +47,12 @@ abstract class ObservableUseCase<Result, in Params> : Disposable {
             disposable.isDisposed
         } else {
             true
+        }
+    }
+
+    internal fun onChildObservableError(error: Throwable, subject: Subject<*>) {
+        if (!isDisposed) {
+            subject.onError(error)
         }
     }
 }

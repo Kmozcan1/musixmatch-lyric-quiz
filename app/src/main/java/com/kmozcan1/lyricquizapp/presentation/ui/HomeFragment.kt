@@ -54,11 +54,11 @@ class HomeFragment : BaseFragment<HomeFragmentBinding, HomeViewModel>() {
                 viewModel.getUserProfile()
             }
             LOADING -> {
-                binding.profileProgressBar.visibility = View.VISIBLE
+                binding.homeProgressBar.visibility = View.VISIBLE
             }
             USER_PROFILE -> {
                 // Hide progress bar
-                binding.profileProgressBar.visibility = View.GONE
+                binding.homeProgressBar.visibility = View.GONE
                 // Set list items
                 scoreListAdapter = ScoreListAdapter(
                         viewState.scoreList

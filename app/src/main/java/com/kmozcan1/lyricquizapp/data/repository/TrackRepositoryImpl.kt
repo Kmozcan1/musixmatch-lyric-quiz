@@ -26,10 +26,10 @@ class TrackRepositoryImpl @Inject constructor(
     }
 
     override fun getTracksFromChart(
-        country: Country,
-        pageSize: Int,
-        page: Int
-    ): Single<List<InlineResponse2006MessageBody>?> {
+            country: Country,
+            pageSize: Int,
+            page: Int
+    ): Single<List<InlineResponse2006MessageBody>> {
 
         return trackApi.chartTracksGetGet(
             page = page.toBigDecimal(),

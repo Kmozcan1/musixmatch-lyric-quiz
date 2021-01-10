@@ -17,7 +17,6 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.kmozcan1.lyricquizapp.R
-import com.kmozcan1.lyricquizapp.presentation.Constants
 import com.kmozcan1.lyricquizapp.presentation.Constants.HOME_PAGE_INDEX
 import com.kmozcan1.lyricquizapp.presentation.Constants.LEADER_BOARD_PAGE_INDEX
 import com.kmozcan1.lyricquizapp.presentation.viewmodel.MainViewModel

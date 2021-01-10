@@ -56,7 +56,7 @@ class QuizUseCase @Inject constructor(
                 val timeLimit = quizManager.getTimeLimit()
                 quizSubject.onNext(QuizResponse.quizGenerated(timeLimit))
             }
-        }.subscribe()
+        }.subscribe({}, { error -> onChildObservableError(error, quizSubject) })
     }
 
     fun startQuiz() {

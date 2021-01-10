@@ -12,7 +12,7 @@
         tools:context=".presentation.ui.SplashFragment">
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/splashImageView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:fitsSystemWindows="false"
@@ -34,6 +34,18 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/loadingTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fetching_tracks"
+            android:textSize="24sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/splashImageView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

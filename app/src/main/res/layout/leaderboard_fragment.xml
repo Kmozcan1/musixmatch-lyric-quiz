@@ -8,6 +8,17 @@
         android:layout_height="match_parent"
         tools:context=".presentation.ui.LeaderBoardFragment" >
 
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/leaderBoardProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:indeterminate="true"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/leaderBoardRecyclerView" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/leaderBoardRecyclerView"
             android:layout_width="0dp"
@@ -17,6 +28,18 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/noLeaderBoardScoreTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/no_scores_has_been_posted_yet"
+            android:textSize="18sp"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

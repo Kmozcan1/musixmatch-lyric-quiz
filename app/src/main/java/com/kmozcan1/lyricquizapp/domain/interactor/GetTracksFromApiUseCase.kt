@@ -43,8 +43,8 @@ class GetTracksFromApiUseCase @Inject constructor(
             taskList.add(
                 trackRepository.getTracksFromChart(params!!.country, pageSize, page)
                     .map { response ->
-                        response?.mapNotNull {
-                            trackRepositoryToDomainModelMapper.map(it.track)
+                        response.map {
+                            trackRepositoryToDomainModelMapper.map(it.track!!)
                         }
                     }
             )

@@ -1,5 +1,6 @@
 package com.kmozcan1.lyricquizapp.presentation.ui
 
+import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kmozcan1.lyricquizapp.R
@@ -34,24 +35,32 @@ class LeaderBoardFragment : BaseFragment<LeaderboardFragmentBinding, LeaderBoard
     }
 
     private fun viewStateObserver() = Observer<LeaderBoardViewState> { viewState ->
-        when (viewState.state){
-            ERROR -> {
-                makeToast(viewState.errorMessage)
-            }
-            INIT -> {
-                viewModel.getTopScores()
-            }
-            LOADING -> {
+        binding.run {
+            when (viewState.state) {
+                ERROR -> {
+                    makeToast(viewState.errorMessage)
+                }
+                INIT -> {
+                    viewModel.getTopScores()
+                }
+                LOADING -> {
+                    leaderBoardProgressBar.visibility = View.VISIBLE
+                }
+                SCORE_LIST -> {
+                    leaderBoardProgressBar.visibility = View.GONE
+                    viewState.scoreList?.let { scoreList ->
+                        if (scoreList.isEmpty()) {
+                            noLeaderBoardScoreTextView.visibility = View.VISIBLE
+                        } else {
+                            scoreListAdapter = ScoreListAdapter(scoreList)
+                            leaderBoardRecyclerView.setAdapter(
+                                    LinearLayoutManager(context), scoreListAdapter)
+                        }
 
-            }
-            SCORE_LIST -> {
-                viewState.scoreList?.let {
-                    scoreListAdapter = ScoreListAdapter(viewState.scoreList)
-                    binding.leaderBoardRecyclerView.setAdapter(
-                            LinearLayoutManager(context),
-                            scoreListAdapter)
+                    }
                 }
             }
         }
+
     }
 }

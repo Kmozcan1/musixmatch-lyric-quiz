@@ -11,10 +11,21 @@
         android:layout_height="match_parent"
         tools:context=".presentation.ui.QuizFragment">
 
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/quizProgressBar"
+            android:layout_width="198dp"
+            android:layout_height="162dp"
+            android:indeterminate="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/quizView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -29,16 +40,6 @@
                 android:textAlignment="center"
                 android:textSize="48sp"
                 app:layout_constraintBottom_toTopOf="@+id/quizOptionsView"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <com.google.android.material.progressindicator.CircularProgressIndicator
-                android:id="@+id/quizProgressBar"
-                android:layout_width="174dp"
-                android:layout_height="124dp"
-                android:indeterminate="true"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

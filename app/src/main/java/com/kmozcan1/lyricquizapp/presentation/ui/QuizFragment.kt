@@ -73,36 +73,39 @@ class QuizFragment : BaseFragment<QuizFragmentBinding, QuizViewModel>() {
     }
 
     private fun viewStateObserver() = Observer<QuizViewState> { viewState ->
-        when (viewState.state) {
-            ERROR -> {
-                makeToast(viewState.errorMessage)
-                navController.navigateUp()
-            }
-            LOADING -> {
-                binding.quizProgressBar.visibility = View.VISIBLE
-            }
-            QUIZ_GENERATED -> {
-                binding.quizProgressBar.visibility = View.GONE
-                binding.scoreTextView.text = 0.toString()
-                viewModel.startQuiz()
-            }
-            QUESTION -> {
-                setOptions(viewState)
-                binding.questionTextView.text = viewState.question!!.lyric
-            }
-            ANSWER -> {
-                viewModel.stopTimer()
-                with(viewState.answer!!) {
-                    binding.scoreTextView.text = updatedScore.toString()
-                    showCorrectAnswer(selectedArtistId, correctArtistId)
+        binding.run {
+            when (viewState.state) {
+                ERROR -> {
+                    makeToast(viewState.errorMessage)
+                    navController.navigateUp()
                 }
-            }
-            SCORE_POSTED -> {
-                showScoreScreen()
-            }
-            QUIZ_FINISHED -> {
-                hideQuizView()
-                quizFinished = true
+                LOADING -> {
+                    quizProgressBar.visibility = View.VISIBLE
+                }
+                QUIZ_GENERATED -> {
+                    quizProgressBar.visibility = View.GONE
+                    quizView.visibility = View.VISIBLE
+                    scoreTextView.text = 0.toString()
+                    viewModel.startQuiz()
+                }
+                QUESTION -> {
+                    setOptions(viewState)
+                    questionTextView.text = viewState.question!!.lyric
+                }
+                ANSWER -> {
+                    viewModel.stopTimer()
+                    with(viewState.answer!!) {
+                        scoreTextView.text = updatedScore.toString()
+                        showCorrectAnswer(selectedArtistId, correctArtistId)
+                    }
+                }
+                SCORE_POSTED -> {
+                    showScoreScreen()
+                }
+                QUIZ_FINISHED -> {
+                    hideQuizView()
+                    quizFinished = true
+                }
             }
         }
     }
@@ -110,7 +113,7 @@ class QuizFragment : BaseFragment<QuizFragmentBinding, QuizViewModel>() {
     private fun showCorrectAnswer(selectedArtistId: Int?, correctArtistId: Int) {
         viewLifecycleOwner.lifecycleScope.launch {
             binding.quizOptionsView.showCorrectAnswer(selectedArtistId, correctArtistId)
-            delay(1000)
+            delay(750)
             viewModel.askNextQuestion()
         }
     }

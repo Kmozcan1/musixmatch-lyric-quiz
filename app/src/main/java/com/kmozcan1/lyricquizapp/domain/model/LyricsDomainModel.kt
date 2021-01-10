@@ -3,4 +3,4 @@ package com.kmozcan1.lyricquizapp.domain.model
 /**
  * Created by Kadir Mert Özcan on 18-Dec-20.
  */
-class LyricsDomainModel (val lyricsBody: String?, val trackId: Int?)
+class LyricsDomainModel (val lyricsBody: String, val trackId: Int)

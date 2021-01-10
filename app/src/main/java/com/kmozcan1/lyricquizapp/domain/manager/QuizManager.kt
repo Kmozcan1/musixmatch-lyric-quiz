@@ -59,7 +59,7 @@ class QuizManager constructor(difficulty: QuizDifficulty) {
                 rand = Random.nextInt(0, trackList.size)
             }
             val randomTrack = trackList[rand]
-            selectedTracksMap[randomTrack.trackId!!] = randomTrack
+            selectedTracksMap[randomTrack.trackId] = randomTrack
         }
 
         return selectedTracksMap
@@ -83,7 +83,7 @@ class QuizManager constructor(difficulty: QuizDifficulty) {
                     .distinct().limit(tierQuestionCount.toLong())
                 for (i in randomIndices) {
                     trackList[i].let { track ->
-                        selectedTracksMap[track.trackId!!] = track
+                        selectedTracksMap[track.trackId] = track
                     }
                 }
             // SDK < 24 version with shuffle
@@ -91,7 +91,7 @@ class QuizManager constructor(difficulty: QuizDifficulty) {
                 trackList.subList(tier.startIndex, tier.endIndex).shuffled()
                     .take(tierQuestionCount)
                     .forEach { track ->
-                        selectedTracksMap[track.trackId!!] = track
+                        selectedTracksMap[track.trackId] = track
                     }
             }
         }
@@ -104,8 +104,8 @@ class QuizManager constructor(difficulty: QuizDifficulty) {
         artistMap.clear()
         for (i in trackList.indices) {
             val track = trackList[i]
-            track.artistId?.let{ artistId ->
-                artistMap[artistId] = ArtistDomainModel(track.artistId, track.artistName!!)
+            track.artistId.let{ artistId ->
+                artistMap[artistId] = ArtistDomainModel(track.artistId, track.artistName)
             }
 
         }
@@ -148,7 +148,7 @@ class QuizManager constructor(difficulty: QuizDifficulty) {
 
     // Returns a random lyric to ask as a question
     private fun selectQuestionLyrics(lyrics: LyricsDomainModel): String {
-        val lyricLines = lyrics.lyricsBody?.lines()!!.toMutableList()
+        val lyricLines = lyrics.lyricsBody.lines().toMutableList()
         val filterRegex = FILTER_REGEX_STRING.toRegex()
 
         // Filter out the disclaimer lines
@@ -278,7 +278,7 @@ class QuizManager constructor(difficulty: QuizDifficulty) {
         const val DISCLAIMER_LINE = "******* This Lyrics is NOT for Commercial use *******"
 
         // Regular expression string to filter out line that comes after he disclaimer
-        const val FILTER_REGEX_STRING = """^\(\ ?\d+\ ?\)"""
+        const val FILTER_REGEX_STRING = """^\( ?\d+ ?\)"""
 
         // Default number of questions that will be presented to the player
         const val DEFAULT_NUMBER_OF_QUESTIONS = 15

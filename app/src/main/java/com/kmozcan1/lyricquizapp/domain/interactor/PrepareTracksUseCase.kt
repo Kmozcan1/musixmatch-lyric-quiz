@@ -33,8 +33,8 @@ class PrepareTracksUseCase @Inject constructor(
             }.doOnComplete {
                 // Emits that the process is completed
                 prepareTracksSubject.onComplete()
-            }.subscribe()
-        }.subscribe()
+            }.subscribe({}, { error -> onChildObservableError(error, prepareTracksSubject) })
+        }.subscribe({}, { error -> onChildObservableError(error, prepareTracksSubject) })
 
         return prepareTracksSubject
     }

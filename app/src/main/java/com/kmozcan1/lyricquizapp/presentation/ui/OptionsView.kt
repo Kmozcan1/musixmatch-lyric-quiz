@@ -61,52 +61,50 @@ class OptionsView : ConstraintLayout {
                 this@OptionsView.addView(this)
 
                 // Attach to bottom if it's the first button, otherwise the previous button's top if not
-                set.run {
-                    if (previousButtonId == 0) {
-                        connect(
-                                id,
-                                ConstraintSet.BOTTOM,
-                                ConstraintSet.PARENT_ID,
-                                ConstraintSet.BOTTOM,
-                                0
-                        )
-                    } else {
-                        connect(
-                                id,
-                                ConstraintSet.BOTTOM,
-                                previousButtonId,
-                                ConstraintSet.TOP,
-                                0
-                        )
-                    }
-
-                    previousButtonId = id
-
-                    // Right constraint
-                    connect(
+                if (previousButtonId == 0) {
+                    set.connect(
                             id,
-                            ConstraintSet.RIGHT,
+                            ConstraintSet.BOTTOM,
                             ConstraintSet.PARENT_ID,
-                            ConstraintSet.RIGHT,
+                            ConstraintSet.BOTTOM,
                             0
                     )
-
-                    // Left constraint
-                    connect(
+                } else {
+                    set.connect(
                             id,
-                            ConstraintSet.LEFT,
-                            ConstraintSet.PARENT_ID,
-                            ConstraintSet.LEFT,
+                            ConstraintSet.BOTTOM,
+                            previousButtonId,
+                            ConstraintSet.TOP,
                             0
                     )
-
-                    // Min height is 200, wrap content if the text is larger
-                    // for rap songs that feature like 10 artists
-                    constrainMinHeight(id, 200)
-                    constrainHeight(id, ViewGroup.LayoutParams.WRAP_CONTENT)
-
-                    set.applyTo(this@OptionsView)
                 }
+
+                previousButtonId = id
+
+                // Right constraint
+                set.connect(
+                        id,
+                        ConstraintSet.RIGHT,
+                        ConstraintSet.PARENT_ID,
+                        ConstraintSet.RIGHT,
+                        0
+                )
+
+                // Left constraint
+                set.connect(
+                        id,
+                        ConstraintSet.LEFT,
+                        ConstraintSet.PARENT_ID,
+                        ConstraintSet.LEFT,
+                        0
+                )
+
+                // Min height is 200, wrap content if the text is larger
+                // for rap songs that feature like 10 artists
+                set.constrainMinHeight(id, 200)
+                set.constrainHeight(id, ViewGroup.LayoutParams.WRAP_CONTENT)
+
+                set.applyTo(this@OptionsView)
             }.also{ button ->
                 // Set onClick listener
                 button.setOnClickListener {
@@ -153,8 +151,15 @@ class OptionsView : ConstraintLayout {
                     visibility = VISIBLE
                     backgroundTintList =
                         ContextCompat.getColorStateList(context, R.color.colorDarkRed)
-                    minHeight = 200
-                    height = LayoutParams.WRAP_CONTENT
+
+
+                    ConstraintSet().run {
+                        clone(this@OptionsView)
+                        constrainMinHeight(id, 200)
+                        constrainHeight(id, ViewGroup.LayoutParams.WRAP_CONTENT)
+                        applyTo(this@OptionsView)
+                    }
+
                     buttonMap[artist.id] = this
                     isEnabled = true
                     refreshDrawableState()

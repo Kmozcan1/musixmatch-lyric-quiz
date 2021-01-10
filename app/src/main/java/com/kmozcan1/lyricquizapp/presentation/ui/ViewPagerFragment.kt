@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.doOnPreDraw
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.kmozcan1.lyricquizapp.R
@@ -14,8 +14,6 @@ import com.kmozcan1.lyricquizapp.databinding.ViewPagerFragmentBinding
 import com.kmozcan1.lyricquizapp.presentation.Constants.HOME_PAGE_INDEX
 import com.kmozcan1.lyricquizapp.presentation.Constants.LEADER_BOARD_PAGE_INDEX
 import com.kmozcan1.lyricquizapp.presentation.adapter.ViewPagerAdapter
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 /**
  * Created by Kadir Mert Özcan on 10-Jan-21.
@@ -39,6 +37,7 @@ class ViewPagerFragment: Fragment() {
             savedInstanceState: Bundle?
     ): View {
         (activity as MainActivity).actionBar.visibility = View.VISIBLE
+        (activity as MainActivity).bottomNavigationView.visibility = View.VISIBLE
 
         binding = ViewPagerFragmentBinding.inflate(
                 inflater, container, false
@@ -48,9 +47,11 @@ class ViewPagerFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewPagerAdapter = ViewPagerAdapter(this)
-        val viewPager = binding.viewPager
-        viewPager.adapter = viewPagerAdapter
-        viewPager.registerOnPageChangeCallback(viewPagerOnPageChangeCallback())
+        binding.viewPager.run {
+            adapter = viewPagerAdapter
+            visibility = View.GONE
+            registerOnPageChangeCallback(viewPagerOnPageChangeCallback())
+        }
     }
 
     private fun viewPagerOnPageChangeCallback(): OnPageChangeCallback {
@@ -79,9 +80,11 @@ class ViewPagerFragment: Fragment() {
 
     override fun onResume() {
         super.onResume()
-        // navigate to argument index in a coroutine, doesn't work in UI thread
-        lifecycleScope.launch(Dispatchers.Main) {
-            binding.viewPager.setCurrentItem(args.pageIndex, false)
+        binding.viewPager.run {
+            doOnPreDraw {
+                setCurrentItem(args.pageIndex, false)
+                visibility = View.VISIBLE
+            }
         }
     }
 

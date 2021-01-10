@@ -1,9 +1,7 @@
 package com.kmozcan1.lyricquizapp.presentation.adapter
 
-import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.kmozcan1.lyricquizapp.presentation.Constants
 import com.kmozcan1.lyricquizapp.presentation.Constants.HOME_PAGE_INDEX
 import com.kmozcan1.lyricquizapp.presentation.Constants.LEADER_BOARD_PAGE_INDEX
 import com.kmozcan1.lyricquizapp.presentation.ui.HomeFragment

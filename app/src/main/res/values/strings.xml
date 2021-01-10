@@ -20,4 +20,7 @@
     <string name="quit_quiz">Quit Quiz</string>
     <string name="quit">Quit</string>
     <string name="quit_quiz_message">Are you sure you want to exit the quiz?</string>
+    <string name="no_scores_has_been_posted_yet">No scores has been posted yet.</string>
+    <string name="fetching_tracks_param">Fetching Tracks%s</string>
+    <string name="fetching_tracks">Fetching Tracks</string>
 </resources>

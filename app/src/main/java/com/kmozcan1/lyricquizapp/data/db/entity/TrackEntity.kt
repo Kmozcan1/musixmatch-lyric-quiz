@@ -10,11 +10,11 @@ import com.kmozcan1.lyricquizapp.data.db.entity.TrackEntity.Companion.ID
 @Entity (tableName = TrackEntity.TABLE_NAME, primaryKeys = [ID])
 data class TrackEntity(
     @ColumnInfo(name = ID)
-    var trackId: Int? = null,
+    var trackId: Int,
     @ColumnInfo(name = ARTIST_ID)
-    var artistId: Int? = null,
+    var artistId: Int,
     @ColumnInfo(name = ARTIST_NAME)
-    var artistName: String? = null
+    var artistName: String
 ){
     companion object{
         const val TABLE_NAME="tracks"

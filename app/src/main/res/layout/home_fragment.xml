@@ -17,11 +17,12 @@
             android:id="@+id/userQuizHistoryRecyclerView"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
             app:layout_constraintBottom_toTopOf="@+id/startQuizButton"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/scoreHistoryTextView"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/scoreHistoryTextView" />
 
         <Button
@@ -51,7 +52,7 @@
             app:layout_constraintTop_toTopOf="@+id/startQuizButton" />
 
         <com.google.android.material.progressindicator.CircularProgressIndicator
-            android:id="@+id/profileProgressBar"
+            android:id="@+id/homeProgressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="36dp"
@@ -67,8 +68,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
             android:text="@string/score_history"
             android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
