@@ -49,7 +49,6 @@ class ViewPagerFragment: Fragment() {
         viewPagerAdapter = ViewPagerAdapter(this)
         binding.viewPager.run {
             adapter = viewPagerAdapter
-            visibility = View.GONE
             registerOnPageChangeCallback(viewPagerOnPageChangeCallback())
         }
     }
