@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/leaderBoardFragmentLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.ui.LeaderBoardFragment" >
+        tools:context=".presentation.ui.LeaderBoardFragment">
 
         <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/leaderBoardProgressBar"
