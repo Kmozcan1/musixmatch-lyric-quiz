@@ -35,14 +35,8 @@ class SplashFragment : BaseFragment<SplashFragmentBinding, SplashViewModel>() {
         showBottomNavigation(false)
 
         //TODO this aligns the cold launch image with splash fragment image. Need to test with more devices
-        if (Build.MANUFACTURER != "google") {
-            binding.splashImageView.layoutParams =
-                    (binding.splashImageView.layoutParams as ConstraintLayout.LayoutParams).apply {
-                        topMargin = 24
-                        leftMargin = 0
-                        rightMargin = 0
-                        bottomMargin = 0
-            }
+        if (Build.MANUFACTURER != "Google") {
+            binding.frameLayout.fitsSystemWindows = true
         }
     }
 
