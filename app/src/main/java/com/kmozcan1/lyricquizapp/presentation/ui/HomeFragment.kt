@@ -66,6 +66,9 @@ class HomeFragment : BaseFragment<HomeFragmentBinding, HomeViewModel>() {
                 binding.userQuizHistoryRecyclerView.setAdapter(
                         LinearLayoutManager(context),
                         scoreListAdapter)
+                if (viewState.scoreList.isEmpty()) {
+                    binding.scoreHistoryTextView.visibility = View.GONE
+                }
             }
         }
     }
